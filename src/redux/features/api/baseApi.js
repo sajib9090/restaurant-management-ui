@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logout, setUser } from "../auth/authSlice";
 
-const baseUrl = "https://restaurant-management-backend-ten.vercel.app/api/v2";
+const baseUrl = "https://restaurant-management-backend-tau.vercel.app/api/v2";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: baseUrl,
