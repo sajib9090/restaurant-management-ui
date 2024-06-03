@@ -20,6 +20,9 @@ const ExpiredCredentials = lazy(() =>
 const Profile = lazy(() => import("../pages/Dashboard/Profile/Profile"));
 const ReportBugs = lazy(() => import("../pages/ReportBugs/ReportBugs"));
 const SelectOrder = lazy(() => import("../pages/Sell/SelectOrder/SelectOrder"));
+const MaintainTable = lazy(() =>
+  import("../pages/Dashboard/Features/MaintainTable/MaintainTable")
+);
 
 export const router = createBrowserRouter([
   {
@@ -136,6 +139,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<h1>Loading...</h1>}>
             <DailySellReport />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/user/dashboard/features/maintain-tables",
+        element: (
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <MaintainTable />
           </Suspense>
         ),
       },
