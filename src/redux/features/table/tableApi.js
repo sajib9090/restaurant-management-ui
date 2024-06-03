@@ -26,6 +26,14 @@ const tableApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Table"],
     }),
+    updateTable: builder.mutation({
+      query: ({ id, ...data }) => ({
+        url: `/tables/update-table/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["Table"],
+    }),
   }),
 });
 
@@ -33,4 +41,5 @@ export const {
   useGetAllTablesQuery,
   useAddTableMutation,
   useDeleteTableMutation,
+  useUpdateTableMutation,
 } = tableApi;
