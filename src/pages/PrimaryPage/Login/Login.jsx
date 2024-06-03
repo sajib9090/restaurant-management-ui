@@ -1,18 +1,12 @@
 import { EyeFilled, EyeInvisibleFilled } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Lottie from "lottie-react";
 import restaurant from "../../../../public/animation/Animation - 1716694632912.json";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  useGetUserByIdQuery,
-  useLoginMutation,
-} from "../../../redux/features/auth/authApi";
+import { useLoginMutation } from "../../../redux/features/auth/authApi";
 import { jwtDecode } from "jwt-decode";
-import {
-  setUser,
-  setUserDetails,
-} from "../../../redux/features/auth/authSlice";
+import { setUser } from "../../../redux/features/auth/authSlice";
 import PrimaryLoading from "../../../components/Loading/PrimaryLoading/PrimaryLoading";
 
 const Login = () => {
@@ -51,27 +45,6 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [login, { isLoading }] = useLoginMutation();
-  const [userId, setUserId] = useState("");
-  const [userLoading, setUserLoading] = useState(false);
-  const { data: userData, error: userError } = useGetUserByIdQuery(userId, {
-    skip: !userId,
-  });
-
-  useEffect(() => {
-    if (userId) {
-      setUserLoading(true);
-    }
-    if (userData && userId) {
-      dispatch(setUserDetails({ info: userData.data }));
-      navigate("/user");
-      setUserLoading(false);
-    }
-    if (userError) {
-      setErrorMessage("Failed to fetch user details: " + userError?.message);
-      setUserLoading(false);
-      navigate("/login");
-    }
-  }, [userId, userData, userError, dispatch, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -90,14 +63,13 @@ const Login = () => {
       const token = res?.accessToken;
       const decoded = jwtDecode(token);
 
-      setUserId(decoded?._id);
-
       const user = {
         user: decoded,
         token: token,
       };
 
       dispatch(setUser(user));
+      navigate("/user");
     } catch (error) {
       setErrorMessage("Login failed: " + error?.data?.message);
     }
@@ -169,13 +141,12 @@ const Login = () => {
               disabled={
                 formData?.email?.length == 0 ||
                 formData?.password?.length == 0 ||
-                isLoading ||
-                userLoading
+                isLoading
               }
               type="submit"
               className="w-full flex justify-center items-center bg-[#001529] text-white p-3 rounded-lg hover:bg-[#E6F4FF] transition duration-500 hover:text-[#5977FF]"
             >
-              {isLoading || userLoading ? <PrimaryLoading /> : "LOGIN"}
+              {isLoading ? <PrimaryLoading /> : "LOGIN"}
             </button>
 
             {/* <div className="flex items-center my-4">

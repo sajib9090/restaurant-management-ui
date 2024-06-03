@@ -1,9 +1,10 @@
 import { Table } from "antd";
 import {
   useAddTableMutation,
+  useDeleteTableMutation,
   useGetAllTablesQuery,
 } from "../../../../redux/features/table/tableApi";
-import { EditFilled, PlusSquareFilled } from "@ant-design/icons";
+import { EditFilled, PlusSquareFilled, DeleteFilled } from "@ant-design/icons";
 import { useState } from "react";
 import { Modal } from "antd";
 import { Toaster, toast } from "sonner";
@@ -39,7 +40,7 @@ const MaintainTable = () => {
 
   const data =
     tables?.data?.map((table) => ({
-      key: table?._id,
+      key: table?.table_id,
       table_name: table?.table_name,
       createdAt: new Date(table?.createdAt).toLocaleString(),
       actions: (
@@ -59,6 +60,7 @@ const MaintainTable = () => {
   const [tableName, setTableName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [addTable, { isLoading: addTableLoading }] = useAddTableMutation();
+  const [deleteTable, { isLoading: deleteLoading }] = useDeleteTableMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,10 +71,27 @@ const MaintainTable = () => {
       const res = await addTable(data).unwrap();
       if (res) {
         toast.success("New Table has been created");
+        setSelectedRowKeys([]);
         setIsModalOpen(!isModalOpen);
+        setTableName("");
       }
     } catch (error) {
       setErrorMessage(error.data.message);
+    }
+  };
+
+  const handleDelete = async () => {
+    const data = {
+      ids: selectedRowKeys,
+    };
+    try {
+      const res = await deleteTable(data).unwrap();
+      if (res) {
+        toast.success(`${selectedRowKeys?.length} -Table has been deleted`);
+        setSelectedRowKeys([]);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -83,17 +102,34 @@ const MaintainTable = () => {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <button
-          onClick={() => setIsModalOpen(!isModalOpen)}
-          className="h-[40px] px-4 border border-gray-300 text-blue-500 text-lg my-6 rounded flex items-center justify-center gap-2"
-        >
-          <PlusSquareFilled />
-          Add New Table
-        </button>
-        {selectedRowKeys?.length > 0 && (
-          <button className="h-[40px] px-4 border border-gray-300 text-red-500 text-lg my-6 rounded flex items-center justify-center gap-2">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setIsModalOpen(!isModalOpen)}
+            className="h-[40px] px-4 border border-gray-300 text-blue-500 text-lg my-6 rounded flex items-center justify-center gap-2"
+          >
             <PlusSquareFilled />
-            Delete Selected-({selectedRowKeys?.length})
+            Add New Table
+          </button>
+          <button>Table Found: {tables?.data?.length}</button>
+        </div>
+
+        {selectedRowKeys?.length > 0 && (
+          <button
+            disabled={deleteLoading}
+            onClick={handleDelete}
+            className="h-[40px] w-[220px] border border-gray-300 text-red-500 text-lg my-6 rounded flex items-center justify-center gap-2"
+          >
+            {deleteLoading ? (
+              <>
+                Deleting ...
+                <PrimaryLoading />
+              </>
+            ) : (
+              <>
+                <DeleteFilled />
+                Delete Selected-({selectedRowKeys?.length})
+              </>
+            )}
           </button>
         )}
       </div>
@@ -103,7 +139,6 @@ const MaintainTable = () => {
         dataSource={data}
         pagination={false}
       />
-
       <>
         <Modal
           open={isModalOpen}
@@ -136,10 +171,10 @@ const MaintainTable = () => {
             </div>
 
             <button
-              disabled={!tableName}
+              disabled={!tableName || addTableLoading}
               type="submit"
               className={`w-full flex justify-center items-center bg-[#001529] text-white p-3 rounded-lg hover:bg-[#E6F4FF] transition duration-500 hover:text-[#5977FF] ${
-                !tableName && "cursor-not-allowed"
+                !tableName || (addTableLoading && "cursor-not-allowed")
               }`}
             >
               {addTableLoading ? <PrimaryLoading /> : "ADD"}
@@ -147,7 +182,6 @@ const MaintainTable = () => {
           </form>
         </Modal>
       </>
-
       <Toaster position="top-right" richColors />
     </div>
   );

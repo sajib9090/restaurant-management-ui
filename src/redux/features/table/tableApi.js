@@ -18,7 +18,19 @@ const tableApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Table"],
     }),
+    deleteTable: builder.mutation({
+      query: (ids) => ({
+        url: `/tables/delete-table`,
+        method: "DELETE",
+        body: ids,
+      }),
+      invalidatesTags: ["Table"],
+    }),
   }),
 });
 
-export const { useGetAllTablesQuery, useAddTableMutation } = tableApi;
+export const {
+  useGetAllTablesQuery,
+  useAddTableMutation,
+  useDeleteTableMutation,
+} = tableApi;

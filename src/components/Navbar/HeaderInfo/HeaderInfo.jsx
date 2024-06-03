@@ -1,7 +1,7 @@
 import { Dropdown } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  currentUserDetails,
+  currentUser,
   logout,
 } from "../../../redux/features/auth/authSlice";
 import avatar from "../../../../public/image/avatar/6791548_avatar_person_profile_profile icon_user_icon.png";
@@ -9,7 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
 
 const HeaderInfo = () => {
-  const user = useSelector(currentUserDetails);
+  const user = useSelector(currentUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

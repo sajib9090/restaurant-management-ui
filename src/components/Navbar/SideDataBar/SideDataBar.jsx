@@ -1,10 +1,11 @@
 import { useSelector } from "react-redux";
-import { currentUserDetails } from "../../../redux/features/auth/authSlice";
+import { currentUser } from "../../../redux/features/auth/authSlice";
 import brandLogo from "../../../../public/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
 
 /* eslint-disable react/prop-types */
 const SideDataBar = ({ collapsed, dark }) => {
-  const user = useSelector(currentUserDetails);
+  const user = useSelector(currentUser);
+
   const firstLetters = user?.brand?.brand_name
     ?.split(" ")
     .map((word) => word.charAt(0))
