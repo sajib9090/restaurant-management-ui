@@ -9,7 +9,7 @@ const MaintainCategories = () => {
     <div>
       <div className="grid grid-cols-5 gap-6">
         <StatisticsCard
-          bg="bg-blue-100"
+          bg="bg-gray-200"
           title="Total Categories"
           value={categories?.data?.length}
         />

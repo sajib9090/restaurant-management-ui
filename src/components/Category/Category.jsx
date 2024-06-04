@@ -7,6 +7,7 @@ import CustomModal from "../Modal/Modal";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import {
   useAddCategoryMutation,
+  useDeleteCategoryMutation,
   useUpdateCategoryMutation,
 } from "../../redux/features/category/categoryApi";
 import PrimaryLoading from "../Loading/PrimaryLoading/PrimaryLoading";
@@ -73,6 +74,8 @@ const Category = ({ categories }) => {
     useAddCategoryMutation();
   const [updateCategory, { isLoading: updateLoading }] =
     useUpdateCategoryMutation();
+  const [deleteCategoy, { isLoading: deleteLoading }] =
+    useDeleteCategoryMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -116,6 +119,22 @@ const Category = ({ categories }) => {
     }
   };
 
+  const handleDelete = async () => {
+    const data = {
+      ids: selectedRowKeys,
+    };
+
+    try {
+      const res = await deleteCategoy(data).unwrap();
+      if (res) {
+        toast.success(`${selectedRowKeys?.length} -Category has been deleted`);
+        setSelectedRowKeys([]);
+      }
+    } catch (error) {
+      toast.error(error?.data?.message);
+    }
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -132,11 +151,22 @@ const Category = ({ categories }) => {
           Add New Category
         </button>
         {selectedRowKeys?.length > 0 && (
-          <button className="h-[40px] w-[220px] border border-gray-300 text-red-500 text-lg my-6 rounded flex items-center justify-center gap-2">
-            <>
-              <DeleteFilled />
-              Delete Selected-({selectedRowKeys?.length})
-            </>
+          <button
+            onClick={handleDelete}
+            disabled={deleteLoading}
+            className="h-[40px] w-[220px] border border-gray-300 text-red-500 text-lg my-6 rounded flex items-center justify-center gap-2"
+          >
+            {deleteLoading ? (
+              <>
+                Deleting ...
+                <PrimaryLoading />
+              </>
+            ) : (
+              <>
+                <DeleteFilled />
+                Delete Selected-({selectedRowKeys?.length})
+              </>
+            )}
           </button>
         )}
       </div>

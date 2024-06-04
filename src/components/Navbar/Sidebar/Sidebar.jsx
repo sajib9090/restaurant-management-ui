@@ -24,6 +24,7 @@ import {
   MoonOutlined,
   LogoutOutlined,
   BugOutlined,
+  GoldenFilled,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { useEffect, useState } from "react";
@@ -55,21 +56,31 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
       label: <Link to="/user">Home</Link>,
       key: "/user",
       icon: <HomeOutlined />,
+      title: "Home",
     },
     {
       label: <Link to="/user/sell">Sell</Link>,
       key: "/user/sell",
       icon: <CalendarOutlined />,
+      title: "Sell",
     },
     {
       label: "Dashboard",
       key: "/user/dashboard",
       icon: <AppstoreOutlined />,
+      title: "Dashboard",
       children: [
+        {
+          label: "Overview",
+          key: "/user/dashboard/overview",
+          icon: <BarChartOutlined />,
+          title: "Overview",
+        },
         {
           label: "Sell Report",
           key: "/user/dashboard/sell-report",
           icon: <SignalFilled />,
+          title: "Sell Report",
           children: [
             {
               label: (
@@ -79,6 +90,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
               ),
               key: `/user/dashboard/sell-report/daily-sell-report`,
               icon: <PrinterFilled />,
+              title: "Daily Sell Report",
             },
             {
               label: (
@@ -88,6 +100,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
               ),
               key: "/user/dashboard/sell-report/find-sold-invoice",
               icon: <FileSearchOutlined />,
+              title: "Find Sold Invoice",
             },
             {
               label: (
@@ -97,6 +110,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
               ),
               key: "/user/dashboard/sell-report/sell-history",
               icon: <HistoryOutlined />,
+              title: "Sell History",
             },
             {
               label: (
@@ -106,6 +120,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
               ),
               key: "/user/dashboard/sell-report/find-void",
               icon: <FileSearchOutlined />,
+              title: "Find Void",
             },
             {
               label: (
@@ -115,6 +130,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
               ),
               key: "/user/dashboard/sell-report/unsuccessful-sell",
               icon: <StopOutlined />,
+              title: "Unsuccessful Sell",
             },
           ],
         },
@@ -122,6 +138,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
           label: "Features",
           key: "/user/dashboard/features",
           icon: <ReadFilled />,
+          title: "Features",
           children: [
             {
               label: (
@@ -131,6 +148,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
               ),
               key: "/user/dashboard/features/maintain-tables",
               icon: <BgColorsOutlined />,
+              title: "Maintain Tables",
             },
             {
               label: (
@@ -140,6 +158,17 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
               ),
               key: "/user/dashboard/features/maintain-categories",
               icon: <JavaOutlined />,
+              title: "Maintain Categories",
+            },
+            {
+              label: (
+                <Link to="/user/dashboard/features/maintain-menu-items">
+                  Maintain Menu Items
+                </Link>
+              ),
+              key: "/user/dashboard/features/maintain-menu-items",
+              icon: <GoldenFilled />,
+              title: "Maintain Menu Items",
             },
             {
               label: (
@@ -149,6 +178,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
               ),
               key: "/user/dashboard/features/maintain-void",
               icon: <ScissorOutlined />,
+              title: "Maintain Void",
             },
             {
               label: (
@@ -158,6 +188,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
               ),
               key: "/user/dashboard/features/maintain-members",
               icon: <TeamOutlined />,
+              title: "Maintain Members",
             },
             {
               label: (
@@ -167,6 +198,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
               ),
               key: "/user/dashboard/features/maintain-users",
               icon: <UserSwitchOutlined />,
+              title: "Maintain Users",
             },
           ],
         },
@@ -174,6 +206,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
           label: "Staff Records",
           key: "/user/dashboard/staff-records",
           icon: <GithubFilled />,
+          title: "Staff Records",
           children: [
             {
               label: (
@@ -183,6 +216,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
               ),
               key: "/user/dashboard/staff-records/add-new-staff",
               icon: <UserAddOutlined />,
+              title: "Add New Staff",
             },
             {
               label: (
@@ -192,6 +226,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
               ),
               key: "/user/dashboard/staff-records/staffs-sell-records",
               icon: <BarChartOutlined />,
+              title: "Staff Sell Records",
             },
           ],
         },
@@ -199,6 +234,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
           label: "Expense Reports",
           key: "/user/dashboard/expense-reports",
           icon: <DeleteFilled />,
+          title: "Expense Reports",
           children: [
             {
               label: (
@@ -208,6 +244,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
               ),
               key: "/user/dashboard/expense-reports/add-daily-expenses",
               icon: <PlusCircleOutlined />,
+              title: "Add Daily Expenses",
             },
             {
               label: (
@@ -217,6 +254,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
               ),
               key: "/user/dashboard/expense-reports/find-expenses",
               icon: <FileSearchOutlined />,
+              title: "Find Expenses",
             },
             {
               label: (
@@ -226,6 +264,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
               ),
               key: "/user/dashboard/expense-reports/expense-history",
               icon: <HistoryOutlined />,
+              title: "Expend History",
             },
           ],
         },
@@ -235,6 +274,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
       label: "Settings",
       key: "/user/settings",
       icon: <SettingOutlined />,
+      title: "Settings",
       children: [
         {
           label: (
@@ -243,6 +283,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
             </button>
           ),
           key: "100",
+          title: "Menu Mode",
         },
         {
           label: (
@@ -262,6 +303,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
             </button>
           ),
           key: "101",
+          title: "Theme Mode",
         },
       ],
     },
@@ -269,11 +311,13 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
       label: <Link to="/user/report-bugs">Report Bugs</Link>,
       key: "/user/report-bugs",
       icon: <BugOutlined />,
+      title: "Report Bugs",
     },
     user && {
       label: <button onClick={handleLogout}>Logout</button>,
       key: "/user/logout",
       icon: <LogoutOutlined />,
+      title: "Logout",
     },
   ];
 

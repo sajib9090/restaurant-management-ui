@@ -24,12 +24,12 @@ const AppLayout = () => {
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
-        {/* <div className="sticky top-0 left-0"> */}
-        <div className="demo-logo-vertical" />
-        <SideDataBar collapsed={collapsed} dark={dark} />
-        <Sidebar dark={dark} setDark={setDark} collapsed={collapsed} />
-        {!collapsed && <DownBar dark={dark} />}
-        {/* </div> */}
+        <div className="sticky top-0 left-0">
+          <div className="demo-logo-vertical" />
+          <SideDataBar collapsed={collapsed} dark={dark} />
+          <Sidebar dark={dark} setDark={setDark} collapsed={collapsed} />
+          {!collapsed && <DownBar dark={dark} />}
+        </div>
       </Sider>
       <Layout>
         <Header

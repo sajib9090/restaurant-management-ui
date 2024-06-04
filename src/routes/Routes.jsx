@@ -26,6 +26,9 @@ const MaintainTable = lazy(() =>
 const MaintainCategories = lazy(() =>
   import("../pages/Dashboard/Features/MaintainCategories/MaintainCategories")
 );
+const MaintainMenuItems = lazy(() =>
+  import("../pages/Dashboard/Features/MaintainMenuItems/MaintainMenuItems")
+);
 
 export const router = createBrowserRouter([
   {
@@ -158,6 +161,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<h1>Loading...</h1>}>
             <MaintainCategories />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/user/dashboard/features/maintain-menu-items",
+        element: (
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <MaintainMenuItems />
           </Suspense>
         ),
       },

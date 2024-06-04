@@ -11,6 +11,7 @@ import { Toaster, toast } from "sonner";
 import PrimaryLoading from "../../../../components/Loading/PrimaryLoading/PrimaryLoading";
 import CustomModal from "../../../../components/Modal/Modal";
 import ErrorMessage from "../../../../components/ErrorMessage/ErrorMessage";
+import StatisticsCard from "../../../../components/StatisticsCard/StatisticsCard";
 
 const MaintainTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -138,6 +139,13 @@ const MaintainTable = () => {
 
   return (
     <div>
+      <div className="grid grid-cols-5 gap-6">
+        <StatisticsCard
+          bg="bg-gray-200"
+          title="Total Tables"
+          value={tables?.data?.length}
+        />
+      </div>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <button
@@ -152,9 +160,6 @@ const MaintainTable = () => {
             <PlusSquareFilled />
             Add New Table
           </button>
-          {tables?.data?.length > 0 && (
-            <button>Table Found: {tables?.data?.length}</button>
-          )}
         </div>
 
         {selectedRowKeys?.length > 0 && (
