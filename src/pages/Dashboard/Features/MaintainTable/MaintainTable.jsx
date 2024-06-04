@@ -10,6 +10,7 @@ import { useState } from "react";
 import { Toaster, toast } from "sonner";
 import PrimaryLoading from "../../../../components/Loading/PrimaryLoading/PrimaryLoading";
 import CustomModal from "../../../../components/Modal/Modal";
+import ErrorMessage from "../../../../components/ErrorMessage/ErrorMessage";
 
 const MaintainTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -151,7 +152,9 @@ const MaintainTable = () => {
             <PlusSquareFilled />
             Add New Table
           </button>
-          <button>Table Found: {tables?.data?.length}</button>
+          {tables?.data?.length > 0 && (
+            <button>Table Found: {tables?.data?.length}</button>
+          )}
         </div>
 
         {selectedRowKeys?.length > 0 && (
@@ -182,14 +185,7 @@ const MaintainTable = () => {
       />
       <>
         <CustomModal setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen}>
-          {errorMessage && (
-            <div
-              className="mb-4 mt-8 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-              role="alert"
-            >
-              <span className="block sm:inline">{errorMessage}</span>
-            </div>
-          )}
+          {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
           {modalContent === "add" ? (
             <form onSubmit={handleSubmit} className="py-4">
               <div className="mb-4">
@@ -222,7 +218,7 @@ const MaintainTable = () => {
             <form onSubmit={handleEdit} className="py-4">
               <div className="mb-4">
                 <label className="block text-gray-700" htmlFor="email">
-                  Write New Table Name
+                  Edit Table Name
                 </label>
                 <input
                   className="w-full p-3 border border-gray-300 rounded mt-1"

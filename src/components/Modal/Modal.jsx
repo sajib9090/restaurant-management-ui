@@ -8,7 +8,7 @@ const CustomModal = ({ setIsModalOpen, isModalOpen, children }) => {
       onCancel={() => setIsModalOpen(false)}
       footer={null}
     >
-     {children}
+      {children}
     </Modal>
   );
 };

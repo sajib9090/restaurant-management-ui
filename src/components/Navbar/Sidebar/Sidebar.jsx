@@ -134,11 +134,11 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
             },
             {
               label: (
-                <Link to="/user/dashboard/features/maintain-menu-items">
-                  Maintain Menu Items
+                <Link to="/user/dashboard/features/maintain-categories">
+                  Maintain Categories
                 </Link>
               ),
-              key: "/user/dashboard/features/maintain-menu-items",
+              key: "/user/dashboard/features/maintain-categories",
               icon: <JavaOutlined />,
             },
             {

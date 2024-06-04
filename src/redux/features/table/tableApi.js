@@ -5,7 +5,8 @@ const tableApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllTables: builder.query({
       query: () => ({
-        url: "/tables/get-all",
+        // url: `/tables/get-all?brand_id=${brand_id}&user_id=${user_id}`,
+        url: `/tables/get-all`,
         method: "GET",
       }),
       providesTags: ["Table"],
