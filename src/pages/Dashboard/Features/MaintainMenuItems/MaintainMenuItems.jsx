@@ -1,10 +1,6 @@
 import { useState } from "react";
 import MenuCategory from "../../../../components/MenuItem/MenuCategory";
-import StatisticsCard from "../../../../components/StatisticsCard/StatisticsCard";
-import {
-  useAddMenuItemMutation,
-  useGetAllMenuItemsQuery,
-} from "../../../../redux/features/menuItemApi/menuItemApi";
+import { useAddMenuItemMutation } from "../../../../redux/features/menuItemApi/menuItemApi";
 import { PlusSquareFilled } from "@ant-design/icons";
 import CustomModal from "../../../../components/Modal/Modal";
 import PrimaryLoading from "../../../../components/Loading/PrimaryLoading/PrimaryLoading";
@@ -14,7 +10,6 @@ import { Toaster, toast } from "sonner";
 import { useGetAllCategoriesQuery } from "../../../../redux/features/category/categoryApi";
 
 const MaintainMenuItems = () => {
-  const { data: menuItems } = useGetAllMenuItemsQuery();
   const { data: categoriesData } = useGetAllCategoriesQuery();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -23,9 +18,6 @@ const MaintainMenuItems = () => {
     category: "",
     price: "",
   });
-
-  const categories = menuItems?.data?.map((item) => item?.category);
-  const uniqueCategories = [...new Set(categories)];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -87,31 +79,26 @@ const MaintainMenuItems = () => {
 
   return (
     <div>
-      <div className="grid grid-cols-4 gap-6 mb-6">
-        <StatisticsCard
-          bg="bg-gray-200"
-          title="Total Menu Items"
-          value={menuItems?.data_found}
-        />
-      </div>
-      <div>
-        <button
-          onClick={() => {
-            setIsModalOpen(!isModalOpen);
-            setErrorMessage("");
-            setFormData({
-              item_name: "",
-              category: "",
-              price: "",
-            });
-          }}
-          className="h-[40px] px-4 border border-gray-300 text-blue-500 text-lg my-6 rounded flex items-center justify-center gap-2"
-        >
-          <PlusSquareFilled />
-          Add New Menu Item
-        </button>
-      </div>
-      <MenuCategory uniqueCategories={uniqueCategories} menuItems={menuItems} />
+        <div>
+          <button
+            onClick={() => {
+              setIsModalOpen(!isModalOpen);
+              setErrorMessage("");
+              setFormData({
+                item_name: "",
+                category: "",
+                price: "",
+              });
+            }}
+            className="h-[40px] px-4 border border-gray-300 text-blue-500 text-lg my-6 rounded flex items-center justify-center gap-2"
+          >
+            <PlusSquareFilled />
+            Add New Menu Item
+          </button>
+        </div>
+        <MenuCategory categoriesData={categoriesData} />
+      
+
       <CustomModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}>
         {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
         <div className="pt-4">
@@ -134,7 +121,7 @@ const MaintainMenuItems = () => {
                   to="/user/dashboard/features/maintain-categories"
                   className="underline hover:text-blue-600"
                 >
-                  Add a new Category
+                  Add a Category
                   <span className="animate-pulse text-blue-600 ml-2">
                     click here
                   </span>
