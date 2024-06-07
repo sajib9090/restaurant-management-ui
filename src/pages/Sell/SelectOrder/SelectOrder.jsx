@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
 
 const SelectOrder = () => {
-  const params = useParams();
-  console.log(params);
+  const { name } = useParams();
+  console.log(name);
   return (
     <div>
       <h1>Select order</h1>

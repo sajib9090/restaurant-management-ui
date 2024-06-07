@@ -4,8 +4,8 @@ const menuItemApi = baseApi.injectEndpoints({
   tagTypes: ["MenuItem"],
   endpoints: (builder) => ({
     getAllMenuItems: builder.query({
-      query: ({ searchValue = "", categoryValue = "" }) => ({
-        url: `/menu-items/get-all?search=${searchValue}&category=${categoryValue}`,
+      query: ({ searchValue = "", categoryValue = "", priceFilterValue }) => ({
+        url: `/menu-items/get-all?search=${searchValue}&category=${categoryValue}&price=${priceFilterValue}`,
         method: "GET",
       }),
       providesTags: ["MenuItem"],

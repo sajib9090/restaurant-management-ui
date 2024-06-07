@@ -19,6 +19,7 @@ const MenuCategory = ({ categoriesData }) => {
   const [checkedItems, setCheckedItems] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [categoryValue, setCategoryValue] = useState("");
+  const [priceFilterValue, setPriceFilterValue] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedEditItem, setSelectedEditItem] = useState({});
@@ -31,7 +32,7 @@ const MenuCategory = ({ categoriesData }) => {
     data: menuItems,
     isLoading: menuItemLoading,
     error: menuItemError,
-  } = useGetAllMenuItemsQuery({ searchValue, categoryValue });
+  } = useGetAllMenuItemsQuery({ searchValue, categoryValue, priceFilterValue });
 
   const categories = menuItems?.data?.map((item) => item?.category);
   const uniqueCategories = [...new Set(categories)];
@@ -107,6 +108,7 @@ const MenuCategory = ({ categoriesData }) => {
             onChange={(e) => {
               setSearchValue(e.target.value);
               setCategoryValue("");
+              setPriceFilterValue("");
             }}
             className="rounded"
             type="search"
@@ -135,36 +137,55 @@ const MenuCategory = ({ categoriesData }) => {
         )}
 
         <div className="relative">
-          <div className="selectOp flex items-center">
-            <CiFilter className="h-6 w-6 mr-2" />
-            <select
-              value={categoryValue}
-              onChange={(e) => setCategoryValue(e.target.value)}
-              name=""
-              id=""
-              className="rounded"
-            >
-              <option value="" selected disabled>
-                Filter with Category
-              </option>
-              {categoriesData?.data?.map((ui) => (
-                <option
-                  key={ui?._id}
-                  value={ui?.category}
-                  className="capitalize"
-                >
-                  {ui?.category}
+          <div className="space-y-2">
+            <div className="selectOp flex items-center">
+              <CiFilter className="h-6 w-6 mr-2" />
+              <select
+                value={categoryValue}
+                onChange={(e) => setCategoryValue(e.target.value)}
+                name=""
+                id=""
+                className="rounded"
+              >
+                <option value="" selected disabled>
+                  Filter with Category
                 </option>
-              ))}
-            </select>
+                {categoriesData?.data?.map((ui) => (
+                  <option
+                    key={ui?._id}
+                    value={ui?.category}
+                    className="capitalize"
+                  >
+                    {ui?.category}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="selectOp flex items-center">
+              <CiFilter className="h-6 w-6 mr-2" />
+              <select
+                value={priceFilterValue}
+                onChange={(e) => setPriceFilterValue(e.target.value)}
+                name=""
+                id=""
+                className="rounded"
+              >
+                <option value="" selected disabled>
+                  Filter with Price
+                </option>
+                <option value="low-to-high">Low to High</option>
+                <option value="high-to-low">High to Low</option>
+              </select>
+            </div>
           </div>
 
-          {categoryValue ? (
+          {categoryValue || priceFilterValue ? (
             <div className="mt-2 flex items-center justify-end absolute right-2">
               <button
                 onClick={() => {
                   setSearchValue("");
                   setCategoryValue("");
+                  setPriceFilterValue("");
                 }}
                 className="flex items-center justify-center text-red-600 underline"
                 title="reset filter"
@@ -179,80 +200,76 @@ const MenuCategory = ({ categoriesData }) => {
         <table className="min-w-full border-collapse block md:table">
           <MenuItemTableHead />
           <tbody className="block md:table-row-group">
-            {uniqueCategories
-              ?.sort((a, b) => a?.localeCompare(b))
-              .map((category, categoryIndex) => (
-                <React.Fragment key={categoryIndex}>
-                  <tr className="bg-gray-100 border border-gray-200 md:border-none block md:table-row">
-                    <td
-                      className="p-2 text-left text-black font-bold md:border md:border-gray-300 block md:table-cell capitalize"
-                      colSpan="4"
+            {uniqueCategories?.map((category, categoryIndex) => (
+              <React.Fragment key={categoryIndex}>
+                <tr className="bg-gray-100 border border-gray-200 md:border-none block md:table-row">
+                  <td
+                    className="p-2 text-left text-black font-bold md:border md:border-gray-300 block md:table-cell capitalize"
+                    colSpan="4"
+                  >
+                    {category}
+                  </td>
+                </tr>
+                {menuItems?.data
+                  ?.filter((fItem) => fItem.category === category)
+                  .map((item, itemIndex) => (
+                    <tr
+                      key={itemIndex}
+                      className={` border border-gray-200 md:border-none block md:table-row hover:bg-blue-100 ${
+                        checkedItems?.includes(item?.item_id)
+                          ? "bg-blue-200 hover:bg-blue-300 duration-500"
+                          : "bg-white"
+                      }`}
                     >
-                      {category}
-                    </td>
-                  </tr>
-                  {menuItems?.data
-                    ?.filter((fItem) => fItem.category === category)
-                    .map((item, itemIndex) => (
-                      <tr
-                        key={itemIndex}
-                        className={` border border-gray-200 md:border-none block md:table-row hover:bg-blue-100 ${
-                          checkedItems?.includes(item?.item_id)
-                            ? "bg-blue-200 hover:bg-blue-300 duration-500"
-                            : "bg-white"
-                        }`}
-                      >
-                        <td className="p-2 md:border md:border-gray-200 text-left block md:table-cell">
-                          <div className="flex items-center">
-                            <input
-                              type="checkbox"
-                              checked={checkedItems.includes(item?.item_id)}
-                              onChange={(event) =>
-                                handleCheckboxChange(event, item?.item_id)
-                              }
-                              className="h-5 w-5 mr-2 cursor-pointer"
-                            />
-                            <span className="capitalize">
-                              {item?.item_name}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
-                          {item?.discount ? (
-                            <button className="bg-green-600 w-[30px] text-white rounded ml-2">
-                              On
-                            </button>
-                          ) : (
-                            <button className="bg-red-600 w-[30px] text-white rounded ml-2">
-                              Off
-                            </button>
-                          )}
-                        </td>
-                        <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
-                          {new Date(item?.createdAt).toLocaleString()}
-                        </td>
-                        <td className="p-2 md:border md:border-gray-200 text-end block md:table-cell">
-                          <CurrencyFormatter value={item?.item_price} />
-                        </td>
-                        <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
-                          <button
-                            onClick={() => {
-                              setSelectedEditItem(item);
-                              setIsModalOpen(!isModalOpen);
-                              setEditedItemName("");
-                              setEditedCategory("");
-                              setEditedDiscount("");
-                            }}
-                            className="text-blue-600 text-xl"
-                            title="Edit"
-                          >
-                            <EditFilled />
+                      <td className="p-2 md:border md:border-gray-200 text-left block md:table-cell">
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={checkedItems.includes(item?.item_id)}
+                            onChange={(event) =>
+                              handleCheckboxChange(event, item?.item_id)
+                            }
+                            className="h-5 w-5 mr-2 cursor-pointer"
+                          />
+                          <span className="capitalize">{item?.item_name}</span>
+                        </div>
+                      </td>
+                      <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
+                        {item?.discount ? (
+                          <button className="bg-green-600 w-[30px] text-white rounded ml-2">
+                            On
                           </button>
-                        </td>
-                      </tr>
-                    ))}
-                </React.Fragment>
-              ))}
+                        ) : (
+                          <button className="bg-red-600 w-[30px] text-white rounded ml-2">
+                            Off
+                          </button>
+                        )}
+                      </td>
+                      <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
+                        {new Date(item?.createdAt).toLocaleString()}
+                      </td>
+                      <td className="p-2 md:border md:border-gray-200 text-end block md:table-cell">
+                        <CurrencyFormatter value={item?.item_price} />
+                      </td>
+                      <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
+                        <button
+                          onClick={() => {
+                            setSelectedEditItem(item);
+                            setIsModalOpen(!isModalOpen);
+                            setEditedItemName("");
+                            setEditedCategory("");
+                            setEditedDiscount("");
+                          }}
+                          className="text-blue-600 text-xl"
+                          title="Edit"
+                        >
+                          <EditFilled />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </React.Fragment>
+            ))}
           </tbody>
         </table>
       ) : (
