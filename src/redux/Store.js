@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { baseApi } from "./features/api/baseApi";
 import authReducer from "../redux/features/auth/authSlice";
+import orderLogReducer from "../redux/features/OrderLog/orderLogSlice";
 import {
   persistReducer,
   persistStore,
@@ -18,12 +19,22 @@ const persistConfig = {
   storage,
 };
 
+const orderLogPersistConfig = {
+  key: "orderLog",
+  storage,
+};
+
 const persistedAuthReducer = persistReducer(persistConfig, authReducer);
+const persistedOrderLogReducer = persistReducer(
+  orderLogPersistConfig,
+  orderLogReducer
+);
 
 export const store = configureStore({
   reducer: {
     [baseApi.reducerPath]: baseApi.reducer,
     auth: persistedAuthReducer,
+    orderLog: persistedOrderLogReducer,
   },
   middleware: (getDefaultMiddlewares) =>
     getDefaultMiddlewares({

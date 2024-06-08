@@ -22,7 +22,7 @@ const Sell = () => {
         <h1 className="text-center text-blue-600 text-2xl font-semibold mb-4">
           Select a Table First
         </h1>
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {tables?.data?.map((table) => (
             <Table
               key={table?._id}

@@ -79,25 +79,24 @@ const MaintainMenuItems = () => {
 
   return (
     <div>
-        <div>
-          <button
-            onClick={() => {
-              setIsModalOpen(!isModalOpen);
-              setErrorMessage("");
-              setFormData({
-                item_name: "",
-                category: "",
-                price: "",
-              });
-            }}
-            className="h-[40px] px-4 border border-gray-300 text-blue-500 text-lg my-6 rounded flex items-center justify-center gap-2"
-          >
-            <PlusSquareFilled />
-            Add New Menu Item
-          </button>
-        </div>
-        <MenuCategory categoriesData={categoriesData} />
-      
+      <div>
+        <button
+          onClick={() => {
+            setIsModalOpen(!isModalOpen);
+            setErrorMessage("");
+            setFormData({
+              item_name: "",
+              category: "",
+              price: "",
+            });
+          }}
+          className="h-[40px] px-4 border border-gray-300 text-blue-500 text-lg my-6 rounded flex items-center justify-center gap-2"
+        >
+          <PlusSquareFilled />
+          Add New Menu Item
+        </button>
+      </div>
+      <MenuCategory categoriesData={categoriesData} />
 
       <CustomModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}>
         {errorMessage && <ErrorMessage errorMessage={errorMessage} />}

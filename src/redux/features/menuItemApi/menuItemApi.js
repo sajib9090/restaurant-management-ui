@@ -4,10 +4,34 @@ const menuItemApi = baseApi.injectEndpoints({
   tagTypes: ["MenuItem"],
   endpoints: (builder) => ({
     getAllMenuItems: builder.query({
-      query: ({ searchValue = "", categoryValue = "", priceFilterValue }) => ({
-        url: `/menu-items/get-all?search=${searchValue}&category=${categoryValue}&price=${priceFilterValue}`,
-        method: "GET",
-      }),
+      query: ({
+        searchValue = "",
+        pageValue = "",
+        limitValue,
+        categoryValue = "",
+        priceFilterValue = "",
+      } = {}) => {
+        let queryString = `/menu-items/get-all?search=${searchValue}`;
+        if (pageValue) {
+          queryString += `&page=${pageValue}`;
+        }
+        if (limitValue) {
+          queryString += `&limit=${limitValue}`;
+        }
+        if (limitValue) {
+          queryString += `&limit=${limitValue}`;
+        }
+        if (categoryValue) {
+          queryString += `&category=${categoryValue}`;
+        }
+        if (priceFilterValue) {
+          queryString += `&price=${priceFilterValue}`;
+        }
+        return {
+          url: queryString,
+          method: "GET",
+        };
+      },
       providesTags: ["MenuItem"],
     }),
     addMenuItem: builder.mutation({

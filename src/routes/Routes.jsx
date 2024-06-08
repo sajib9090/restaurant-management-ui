@@ -32,6 +32,9 @@ const MaintainMenuItems = lazy(() =>
 const MaintainMembers = lazy(() =>
   import("../pages/Dashboard/Features/MaintainMembers/MaintainMembers")
 );
+const StaffRecords = lazy(() =>
+  import("../pages/Dashboard/StaffRecords/StaffRecords")
+);
 
 export const router = createBrowserRouter([
   {
@@ -180,6 +183,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<h1>Loading...</h1>}>
             <MaintainMembers />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/user/dashboard/staff-records",
+        element: (
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <StaffRecords />
           </Suspense>
         ),
       },

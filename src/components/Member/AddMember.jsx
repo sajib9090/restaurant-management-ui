@@ -22,7 +22,7 @@ const AddMember = ({ setIsModalOpen, isModalOpen }) => {
     try {
       const res = await addMember(data).unwrap();
       if (res) {
-        toast.success("New Table has been created");
+        toast.success("New Member has been created");
         setIsModalOpen(!isModalOpen);
         setName("");
         setMobile("");

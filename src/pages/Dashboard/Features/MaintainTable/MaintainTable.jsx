@@ -1,4 +1,4 @@
-import { Table } from "antd";
+import { Popconfirm, Table } from "antd";
 import {
   useAddTableMutation,
   useDeleteTableMutation,
@@ -163,23 +163,31 @@ const MaintainTable = () => {
         </div>
 
         {selectedRowKeys?.length > 0 && (
-          <button
-            disabled={deleteLoading}
-            onClick={handleDelete}
-            className="h-[40px] w-[220px] border border-gray-300 text-red-500 text-lg my-6 rounded flex items-center justify-center gap-2"
+          <Popconfirm
+            title="Delete Staff"
+            description="Are you sure you want to delete the selected staff?"
+            onConfirm={handleDelete}
+            okText="Yes"
+            cancelText="No"
+            placement="topLeft"
           >
-            {deleteLoading ? (
-              <>
-                Deleting ...
-                <PrimaryLoading />
-              </>
-            ) : (
-              <>
-                <DeleteFilled />
-                Delete Selected-({selectedRowKeys?.length})
-              </>
-            )}
-          </button>
+            <button
+              disabled={deleteLoading}
+              className="h-[40px] w-[220px] border border-gray-300 text-red-500 text-lg my-6 rounded flex items-center justify-center gap-2"
+            >
+              {deleteLoading ? (
+                <>
+                  Deleting ...
+                  <PrimaryLoading />
+                </>
+              ) : (
+                <>
+                  <DeleteFilled />
+                  Delete Selected-({selectedRowKeys?.length})
+                </>
+              )}
+            </button>
+          </Popconfirm>
         )}
       </div>
       <Table

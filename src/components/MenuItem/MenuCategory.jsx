@@ -14,6 +14,7 @@ import PrimaryError from "../PrimaryError/PrimaryError";
 import { Toaster, toast } from "sonner";
 import PrimaryLoading from "../Loading/PrimaryLoading/PrimaryLoading";
 import CustomModal from "../Modal/Modal";
+import { Popconfirm } from "antd";
 
 const MenuCategory = ({ categoriesData }) => {
   const [checkedItems, setCheckedItems] = useState([]);
@@ -117,23 +118,31 @@ const MenuCategory = ({ categoriesData }) => {
         </div>
 
         {checkedItems?.length > 0 && (
-          <button
-            onClick={handleDelete}
-            disabled={deleteLoading}
-            className="h-[40px] w-[220px] border border-gray-300 text-red-500 text-lg rounded flex items-center justify-center gap-2 text-left"
+          <Popconfirm
+            title="Delete Staff"
+            description="Are you sure you want to delete the selected staff?"
+            onConfirm={handleDelete}
+            okText="Yes"
+            cancelText="No"
+            placement="topLeft"
           >
-            {deleteLoading ? (
-              <>
-                Deleting ...
-                <PrimaryLoading />
-              </>
-            ) : (
-              <>
-                <DeleteFilled />
-                Delete Selected-({checkedItems?.length})
-              </>
-            )}
-          </button>
+            <button
+              disabled={deleteLoading}
+              className="h-[40px] w-[220px] border border-gray-300 text-red-500 text-lg rounded flex items-center justify-center gap-2 text-left"
+            >
+              {deleteLoading ? (
+                <>
+                  Deleting ...
+                  <PrimaryLoading />
+                </>
+              ) : (
+                <>
+                  <DeleteFilled />
+                  Delete Selected-({checkedItems?.length})
+                </>
+              )}
+            </button>
+          </Popconfirm>
         )}
 
         <div className="relative">
@@ -211,7 +220,7 @@ const MenuCategory = ({ categoriesData }) => {
                   </td>
                 </tr>
                 {menuItems?.data
-                  ?.filter((fItem) => fItem.category === category)
+                  ?.filter((fItem) => fItem?.category === category)
                   .map((item, itemIndex) => (
                     <tr
                       key={itemIndex}

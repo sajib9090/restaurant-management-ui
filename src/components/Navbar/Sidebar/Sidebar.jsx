@@ -17,7 +17,6 @@ import {
   ScissorOutlined,
   TeamOutlined,
   UserSwitchOutlined,
-  UserAddOutlined,
   BarChartOutlined,
   PlusCircleOutlined,
   SunFilled,
@@ -207,32 +206,10 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
           ],
         },
         {
-          label: "Staff Records",
+          label: <Link to="/user/dashboard/staff-records">Staff Records</Link>,
           key: "/user/dashboard/staff-records",
           icon: <GithubFilled />,
           title: "Staff Records",
-          children: [
-            {
-              label: (
-                <Link to="/user/dashboard/staff-records/add-new-staff">
-                  Add New Staff
-                </Link>
-              ),
-              key: "/user/dashboard/staff-records/add-new-staff",
-              icon: <UserAddOutlined />,
-              title: "Add New Staff",
-            },
-            {
-              label: (
-                <Link to="/user/dashboard/staff-records/staffs-sell-records">
-                  Staffs Sell Records
-                </Link>
-              ),
-              key: "/user/dashboard/staff-records/staffs-sell-records",
-              icon: <BarChartOutlined />,
-              title: "Staff Sell Records",
-            },
-          ],
         },
         {
           label: "Expense Reports",
