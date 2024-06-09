@@ -11,7 +11,7 @@ import {
 import StatisticsCard from "../StatisticsCard/StatisticsCard";
 import MenuItemTableHead from "./MenuItemTableHead";
 import PrimaryError from "../PrimaryError/PrimaryError";
-import { Toaster, toast } from "sonner";
+import {toast } from "sonner";
 import PrimaryLoading from "../Loading/PrimaryLoading/PrimaryLoading";
 import CustomModal from "../Modal/Modal";
 import { Popconfirm } from "antd";
@@ -368,7 +368,6 @@ const MenuCategory = ({ categoriesData }) => {
           </button>
         </form>
       </CustomModal>
-      <Toaster position="top-right" richColors />
     </div>
   );
 };

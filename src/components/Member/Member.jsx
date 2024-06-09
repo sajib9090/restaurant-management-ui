@@ -8,7 +8,7 @@ import {
 import { EditFilled, DeleteFilled } from "@ant-design/icons";
 import CurrencyFormatter from "../Currencyformatter/CurrencyFormatter";
 import PrimaryLoading from "../Loading/PrimaryLoading/PrimaryLoading";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 
 const Member = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -282,8 +282,6 @@ const Member = () => {
           showSizeChanger
         />
       </div>
-
-      <Toaster position="top-right" richColors />
     </div>
   );
 };

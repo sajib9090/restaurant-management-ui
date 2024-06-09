@@ -6,7 +6,7 @@ import CustomModal from "../../../../components/Modal/Modal";
 import PrimaryLoading from "../../../../components/Loading/PrimaryLoading/PrimaryLoading";
 import ErrorMessage from "../../../../components/ErrorMessage/ErrorMessage";
 import { Link } from "react-router-dom";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import { useGetAllCategoriesQuery } from "../../../../redux/features/category/categoryApi";
 
 const MaintainMenuItems = () => {
@@ -171,8 +171,6 @@ const MaintainMenuItems = () => {
           </form>
         </div>
       </CustomModal>
-
-      <Toaster position="top-right" richColors />
     </div>
   );
 };

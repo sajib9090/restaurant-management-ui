@@ -16,6 +16,12 @@ const memberApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Member"],
     }),
+    getSingleMemberByMobile: builder.query({
+      query: ({ mobile = "" }) => ({
+        url: `/members/member/${mobile}`,
+        method: "GET",
+      }),
+    }),
     addMember: builder.mutation({
       query: (data) => ({
         url: "/members/create-member",
@@ -45,6 +51,7 @@ const memberApi = baseApi.injectEndpoints({
 
 export const {
   useGetAllMembersQuery,
+  useGetSingleMemberByMobileQuery,
   useAddMemberMutation,
   useDeleteMemberMutation,
   //   useUpdateMenuItemMutation,

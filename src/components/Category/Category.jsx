@@ -2,7 +2,7 @@
 import { Table, Popconfirm } from "antd";
 import { useState } from "react";
 import { EditFilled, PlusSquareFilled, DeleteFilled } from "@ant-design/icons";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import CustomModal from "../Modal/Modal";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import {
@@ -245,7 +245,7 @@ const Category = ({ categories }) => {
         ) : null}
       </CustomModal>
 
-      <Toaster position="top-right" richColors />
+      
     </div>
   );
 };

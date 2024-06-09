@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { PlusSquareFilled } from "@ant-design/icons";
 import { useState } from "react";
-import { Toaster, toast } from "sonner";
+import {  toast } from "sonner";
 import CustomModal from "../../Modal/Modal";
 import { useAddStaffMutation } from "../../../redux/features/staff/staffApi";
 import ErrorMessage from "../../ErrorMessage/ErrorMessage";
@@ -76,8 +76,6 @@ const AddStaff = ({ setSelectedRowKeys }) => {
           </button>
         </form>
       </CustomModal>
-
-      <Toaster position="top-right" richColors />
     </div>
   );
 };

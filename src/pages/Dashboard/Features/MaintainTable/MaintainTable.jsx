@@ -7,7 +7,7 @@ import {
 } from "../../../../redux/features/table/tableApi";
 import { EditFilled, PlusSquareFilled, DeleteFilled } from "@ant-design/icons";
 import { useState } from "react";
-import { Toaster, toast } from "sonner";
+import {toast } from "sonner";
 import PrimaryLoading from "../../../../components/Loading/PrimaryLoading/PrimaryLoading";
 import CustomModal from "../../../../components/Modal/Modal";
 import ErrorMessage from "../../../../components/ErrorMessage/ErrorMessage";
@@ -257,7 +257,6 @@ const MaintainTable = () => {
           ) : null}
         </CustomModal>
       </>
-      <Toaster position="top-right" richColors />
     </div>
   );
 };

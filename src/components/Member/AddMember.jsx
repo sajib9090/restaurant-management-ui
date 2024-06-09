@@ -3,7 +3,7 @@ import { useState } from "react";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import PrimaryLoading from "../Loading/PrimaryLoading/PrimaryLoading";
 import { useAddMemberMutation } from "../../redux/features/member/memberApi";
-import { Toaster, toast } from "sonner";
+import {  toast } from "sonner";
 
 const AddMember = ({ setIsModalOpen, isModalOpen }) => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -76,8 +76,6 @@ const AddMember = ({ setIsModalOpen, isModalOpen }) => {
           {isLoading ? <PrimaryLoading /> : "ADD"}
         </button>
       </form>
-
-      <Toaster position="top-right" richColors />
     </div>
   );
 };
