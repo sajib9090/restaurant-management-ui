@@ -9,8 +9,13 @@ import {
 } from "../../../redux/features/OrderLog/orderLogSlice";
 import { CiCircleRemove } from "react-icons/ci";
 
-const StaffSelection = ({ table_name, selectedStaff, setSelectedStaff, staffLoading, staffs }) => {
-
+const StaffSelection = ({
+  table_name,
+  selectedStaff,
+  setSelectedStaff,
+  staffLoading,
+  staffs,
+}) => {
   const dispatch = useDispatch();
   const orderStaff = useSelector(selectedStaffs);
 
@@ -26,6 +31,7 @@ const StaffSelection = ({ table_name, selectedStaff, setSelectedStaff, staffLoad
     const data = {
       table: table_name,
       staffName: value,
+      createdAt: new Date().toISOString(),
     };
     dispatch(setStaff(data));
   };

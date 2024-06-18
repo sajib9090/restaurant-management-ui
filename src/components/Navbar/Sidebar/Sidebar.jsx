@@ -74,7 +74,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
       title: "Dashboard",
       children: [
         {
-          label: "Overview",
+          label: <Link to={`/user/dashboard/overview`}>Overview</Link>,
           key: "/user/dashboard/overview",
           icon: <BarChartOutlined />,
           title: "Overview",
@@ -94,16 +94,6 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
               key: `/user/dashboard/sell-report/daily-sell-report`,
               icon: <PrinterFilled />,
               title: "Daily Sell Report",
-            },
-            {
-              label: (
-                <Link to="/user/dashboard/sell-report/find-sold-invoice">
-                  Find Sold Invoice
-                </Link>
-              ),
-              key: "/user/dashboard/sell-report/find-sold-invoice",
-              icon: <FileSearchOutlined />,
-              title: "Find Sold Invoice",
             },
             {
               label: (

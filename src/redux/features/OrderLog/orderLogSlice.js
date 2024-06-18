@@ -36,6 +36,13 @@ export const orderLogSlice = createSlice({
         state.selectedMenuItem.push({ ...data, item_quantity: 1 });
       }
     },
+    removeTableWiseMenuItems: (state, action) => {
+      const tablesToRemove = action?.payload?.map((item) => item?.table);
+
+      state.selectedMenuItem = state?.selectedMenuItem?.filter(
+        (item) => !tablesToRemove?.includes(item?.table)
+      );
+    },
     removeSingleMenuItem: (state, action) => {
       const { item_id, table } = action.payload;
       state.selectedMenuItem = state.selectedMenuItem?.filter(
@@ -72,6 +79,7 @@ export const {
   removeSingleMenuItem,
   increaseMenuItemQuantity,
   decreaseMenuItemQuantity,
+  removeTableWiseMenuItems,
 } = orderLogSlice.actions;
 
 export default orderLogSlice.reducer;

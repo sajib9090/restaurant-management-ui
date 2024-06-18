@@ -3,6 +3,7 @@ import { useGetAllStaffsQuery } from "../../../redux/features/staff/staffApi";
 import { Pagination, Table } from "antd";
 import AddStaff from "../../../components/Staff/AddStaff/AddStaff";
 import DeleteStaff from "../../../components/Staff/DeleteStaff/DeleteStaff";
+import DateFormatter from "../../../components/DateFormatter/DateFormatter";
 
 const StaffRecords = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -26,7 +27,7 @@ const StaffRecords = () => {
     },
   ];
 
-  const { data: staffs, isLoading } = useGetAllStaffsQuery({
+  const { data: staffs, isLoading: staffLoading } = useGetAllStaffsQuery({
     searchValue,
     pageValue: currentPage,
     limitValue: pageSize,
@@ -43,7 +44,11 @@ const StaffRecords = () => {
           {staff?.name}
         </div>
       ),
-      date: new Date(staff?.createdAt).toLocaleString(),
+      date: (
+        <span className="text-gray-400">
+          <DateFormatter dateString={staff?.createdAt} />
+        </span>
+      ),
     })) || [];
 
   const rowSelection = {

@@ -7,7 +7,7 @@ import {
 } from "../../../../redux/features/table/tableApi";
 import { EditFilled, PlusSquareFilled, DeleteFilled } from "@ant-design/icons";
 import { useState } from "react";
-import {toast } from "sonner";
+import { toast } from "sonner";
 import PrimaryLoading from "../../../../components/Loading/PrimaryLoading/PrimaryLoading";
 import CustomModal from "../../../../components/Modal/Modal";
 import ErrorMessage from "../../../../components/ErrorMessage/ErrorMessage";
@@ -31,13 +31,13 @@ const MaintainTable = () => {
       title: "Date",
       dataIndex: "createdAt",
       key: "createdAt",
-      className: "text-gray-500 uppercase",
+      className: "text-gray-500 uppercase w-[25%]",
     },
     {
       title: "Actions",
       dataIndex: "actions",
       key: "actions",
-      className: "uppercase",
+      className: "uppercase w-[7%]",
     },
   ];
 

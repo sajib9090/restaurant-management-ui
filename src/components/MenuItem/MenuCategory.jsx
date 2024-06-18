@@ -154,7 +154,7 @@ const MenuCategory = ({ categoriesData }) => {
                 onChange={(e) => setCategoryValue(e.target.value)}
                 name=""
                 id=""
-                className="rounded"
+                className="rounded px-2"
               >
                 <option value="" selected disabled>
                   Filter with Category
@@ -177,7 +177,7 @@ const MenuCategory = ({ categoriesData }) => {
                 onChange={(e) => setPriceFilterValue(e.target.value)}
                 name=""
                 id=""
-                className="rounded"
+                className="rounded px-2"
               >
                 <option value="" selected disabled>
                   Filter with Price

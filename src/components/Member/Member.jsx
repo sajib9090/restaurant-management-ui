@@ -9,6 +9,10 @@ import { EditFilled, DeleteFilled } from "@ant-design/icons";
 import CurrencyFormatter from "../Currencyformatter/CurrencyFormatter";
 import PrimaryLoading from "../Loading/PrimaryLoading/PrimaryLoading";
 import { toast } from "sonner";
+import DateFormatter from "../DateFormatter/DateFormatter";
+import ExpandDetails from "./ExpandDetails";
+import CustomModal from "../Modal/Modal";
+import EditMember from "./EditMember";
 
 const Member = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -17,6 +21,8 @@ const Member = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [memberData, setMemberData] = useState({});
 
   const columns = [
     Table.SELECTION_COLUMN,
@@ -31,8 +37,9 @@ const Member = () => {
       title: "Mobile",
       dataIndex: "mobile",
       key: "mobile",
-      className: "text-gray-500 w-[20%]",
+      className: "text-gray-500 w-[17%]",
     },
+
     {
       title: "Total Spent",
       dataIndex: "total_spent",
@@ -78,11 +85,12 @@ const Member = () => {
           {member?.name}
         </div>
       ),
+      member: member,
       mobile: (
         <div>
           <p className="text-blue-600 font-semibold">{member?.mobile}</p>
           <span className="text-xs">
-            {new Date(member?.createdAt).toLocaleString()}
+            <DateFormatter dateString={member?.createdAt} />
           </span>
         </div>
       ),
@@ -103,7 +111,10 @@ const Member = () => {
       discount: member?.discount_value + "%",
       actions: (
         <button
-          onClick={() => {}}
+          onClick={() => {
+            setMemberData(member);
+            setIsModalOpen(!isModalOpen);
+          }}
           title="Edit"
           className="text-blue-600 text-xl ml-4"
         >
@@ -121,11 +132,9 @@ const Member = () => {
 
   const expandedRowRender = (record) => {
     return (
-      <div>
-        <p>
-          <strong>Name:</strong> {record.name}
-        </p>
-      </div>
+      <>
+        <ExpandDetails record={record} />
+      </>
     );
   };
 
@@ -282,6 +291,19 @@ const Member = () => {
           showSizeChanger
         />
       </div>
+
+      {/* modal */}
+      <CustomModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        closeSymbolFalse={true}
+      >
+        <EditMember
+          setIsModalOpen={setIsModalOpen}
+          setSelectedRowKeys={setSelectedRowKeys}
+          memberData={memberData}
+        />
+      </CustomModal>
     </div>
   );
 };

@@ -3,8 +3,13 @@ import { useEffect, useState } from "react";
 import CurrencyFormatter from "../../Currencyformatter/CurrencyFormatter";
 import { useGetSingleMemberByMobileQuery } from "../../../redux/features/member/memberApi";
 import PrimaryLoading from "../../Loading/PrimaryLoading/PrimaryLoading";
+import KitchenInvoice from "./KitchenInvoice";
+import CustomerInvoice from "./CustomerInvoice";
+import PaymentInvoice from "./PaymentInvoice";
+import { useSelector } from "react-redux";
+import { currentUser } from "../../../redux/features/auth/authSlice";
 
-const PrimaryInvoice = ({ tableWiseOrder }) => {
+const PrimaryInvoice = ({ tableWiseOrder, selectedStaff, table_name }) => {
   const [mobileNumber, setMobileNumber] = useState("");
   const [membershipToggle, setMembershipToggle] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -12,6 +17,8 @@ const PrimaryInvoice = ({ tableWiseOrder }) => {
   const [totalDiscount, setTotalDiscount] = useState("");
   const [gotMoney, setGotMoney] = useState("");
   const [backMoney, setBackMoney] = useState("");
+
+  const user = useSelector(currentUser);
 
   const totalBill = tableWiseOrder?.reduce(
     (total, item) => total + item?.item_quantity * item?.item_price,
@@ -120,7 +127,7 @@ const PrimaryInvoice = ({ tableWiseOrder }) => {
             </div>
           </>
         )}
-        <div className="flex justify-between mt-2 text-green-600 font-bold text-lg font-bold">
+        <div className="flex justify-between mt-2 text-green-600 font-bold text-lg">
           <span>Customer will get:</span>
           <span>
             <CurrencyFormatter value={backMoney} />
@@ -156,16 +163,24 @@ const PrimaryInvoice = ({ tableWiseOrder }) => {
         )}
       </div>
 
-      <div className="flex justify-center gap-6">
-        <button className="px-4 py-2 bg-yellow-500 text-white rounded shadow hover:bg-yellow-600 transition duration-200">
-          Kitchen Copy
-        </button>
-        <button className="px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition duration-200">
-          Customer Copy
-        </button>
-        <button className="px-4 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600 transition duration-200">
-          Payment Done
-        </button>
+      <div className="flex justify-center gap-3">
+        <KitchenInvoice tableWiseOrder={tableWiseOrder} />
+        <CustomerInvoice
+          tableWiseOrder={tableWiseOrder}
+          totalDiscount={totalDiscount}
+          totalBill={totalBill}
+          selectedStaff={selectedStaff}
+          user={user}
+        />
+        <PaymentInvoice
+          user={user}
+          tableWiseOrder={tableWiseOrder}
+          totalDiscount={totalDiscount}
+          totalBill={totalBill}
+          selectedStaff={selectedStaff}
+          singleMemberData={singleMemberData}
+          table_name={table_name}
+        />
       </div>
     </>
   );

@@ -1,9 +1,11 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { addOrderMenuItem } from "../../../redux/features/OrderLog/orderLogSlice";
 import DisplayItem from "../DisplayItem/DisplayItem";
 import { useGetAllMenuItemsQuery } from "../../../redux/features/menuItemApi/menuItemApi";
+import MenuItemSkeleton from "../../Skeleton/MenuItemSkeleton";
 
 const DisplayCategory = ({
   selectedStaff,
@@ -22,13 +24,14 @@ const DisplayCategory = ({
   const uniqueCategories = [...new Set(menuCategories)];
 
   const handleAddToCart = (menu) => {
+    const { createdAt, createdBy, ...menuCopy } = menu;
     if (!selectedStaff) {
       toast.error("Please select a staff first");
     } else {
       const data = {
         table: table_name,
         served_by: selectedStaff,
-        ...menu,
+        ...menuCopy,
       };
       dispatch(addOrderMenuItem(data));
       toast.success(`${menu?.item_name} - has been added`);
@@ -43,6 +46,8 @@ const DisplayCategory = ({
 
   return (
     <div className="grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-2 mt-6">
+      {menuLoading &&
+        Array.from({ length: 4 }).map((_, i) => <MenuItemSkeleton key={i} />)}
       {uniqueCategories
         ?.sort((a, b) => a?.localeCompare(b))
         .map((category, index) => (
@@ -70,6 +75,7 @@ const DisplayCategory = ({
               index={index}
               handleAddToCart={handleAddToCart}
               commonMenuItems={commonMenuItems}
+              menuLoading={menuLoading}
             />
           </div>
         ))}

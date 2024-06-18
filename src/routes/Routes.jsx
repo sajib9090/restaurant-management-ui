@@ -35,6 +35,13 @@ const MaintainMembers = lazy(() =>
 const StaffRecords = lazy(() =>
   import("../pages/Dashboard/StaffRecords/StaffRecords")
 );
+const SoldInvoice = lazy(() => import("../pages/Sell/SoldInvoice/SoldInvoice"));
+const MaintainUsers = lazy(() =>
+  import("../pages/Dashboard/Features/MaintainUsers/MaintainUsers")
+);
+const SellHistory = lazy(() =>
+  import("../pages/Dashboard/SellReport/SellHistory/SellHistory")
+);
 
 export const router = createBrowserRouter([
   {
@@ -131,6 +138,14 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "/user/sell/:name/:invoice_id",
+        element: (
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <SoldInvoice />
+          </Suspense>
+        ),
+      },
+      {
         path: "/user/profile",
         element: (
           <Suspense fallback={<h1>Loading...</h1>}>
@@ -151,6 +166,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<h1>Loading...</h1>}>
             <DailySellReport />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/user/dashboard/sell-report/sell-history",
+        element: (
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <SellHistory />
           </Suspense>
         ),
       },
@@ -183,6 +206,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<h1>Loading...</h1>}>
             <MaintainMembers />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/user/dashboard/features/maintain-users",
+        element: (
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <MaintainUsers />
           </Suspense>
         ),
       },

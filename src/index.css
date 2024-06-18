@@ -71,3 +71,7 @@
   cursor: inherit;
   line-height: inherit;
 }
+
+.grayscale {
+  filter: grayscale(100%);
+}

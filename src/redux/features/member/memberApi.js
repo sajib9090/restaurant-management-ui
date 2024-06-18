@@ -5,15 +5,30 @@ const memberApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllMembers: builder.query({
       query: ({
-        searchValue = "",
-        spentValue = "",
-        discountValue = "",
-        pageValue = "",
-        limitValue = "",
-      }) => ({
-        url: `/members/get-all?limit=${limitValue}&page=${pageValue}&spent=${spentValue}&discount=${discountValue}&search=${searchValue}`,
-        method: "GET",
-      }),
+        searchValue,
+        spentValue,
+        discountValue,
+        pageValue,
+        limitValue,
+      }) => {
+        let url = "/members/get-all";
+        const params = new URLSearchParams();
+
+        if (searchValue) params.append("search", searchValue);
+        if (spentValue) params.append("spent", spentValue);
+        if (discountValue) params.append("discount", discountValue);
+        if (pageValue) params.append("page", pageValue);
+        if (limitValue) params.append("limit", limitValue);
+
+        if (params.toString()) {
+          url += `?${params.toString()}`;
+        }
+
+        return {
+          url,
+          method: "GET",
+        };
+      },
       providesTags: ["Member"],
     }),
     getSingleMemberByMobile: builder.query({
@@ -21,6 +36,7 @@ const memberApi = baseApi.injectEndpoints({
         url: `/members/member/${mobile}`,
         method: "GET",
       }),
+      providesTags: ["Member"],
     }),
     addMember: builder.mutation({
       query: (data) => ({
@@ -38,14 +54,14 @@ const memberApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Member"],
     }),
-    // updateMenuItem: builder.mutation({
-    //   query: ({ id, ...data }) => ({
-    //     url: `/menu-items/update-menu-item/${id}`,
-    //     method: "PATCH",
-    //     body: data,
-    //   }),
-    //   invalidatesTags: ["MenuItem"],
-    // }),
+    updateMember: builder.mutation({
+      query: ({ id, ...data }) => ({
+        url: `/members/update-member/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["Member"],
+    }),
   }),
 });
 
@@ -54,5 +70,5 @@ export const {
   useGetSingleMemberByMobileQuery,
   useAddMemberMutation,
   useDeleteMemberMutation,
-  //   useUpdateMenuItemMutation,
+  useUpdateMemberMutation,
 } = memberApi;

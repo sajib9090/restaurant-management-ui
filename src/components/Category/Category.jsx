@@ -32,13 +32,13 @@ const Category = ({ categories }) => {
       title: "Date",
       dataIndex: "createdAt",
       key: "createdAt",
-      className: "text-gray-500 uppercase",
+      className: "text-gray-500 uppercase w-[25%]",
     },
     {
       title: "Actions",
       dataIndex: "actions",
       key: "actions",
-      className: "uppercase",
+      className: "uppercase w-[7%]",
     },
   ];
 
@@ -244,8 +244,6 @@ const Category = ({ categories }) => {
           </form>
         ) : null}
       </CustomModal>
-
-      
     </div>
   );
 };
