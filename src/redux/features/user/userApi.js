@@ -1,29 +1,61 @@
 import { baseApi } from "../api/baseApi";
 
 const userApi = baseApi.injectEndpoints({
-  tagTypes: ["Users"],
   endpoints: (builder) => ({
     getAllUser: builder.query({
-      query: ({ pageValue = "", limitValue } = {}) => {
-        let queryString = `/users/find-users?page=${pageValue}`;
+      query: ({ pageValue, limitValue, searchValue } = {}) => {
+        let url = "/users/find-users";
+        const params = new URLSearchParams();
 
-        if (limitValue) {
-          queryString += `&limit=${limitValue}`;
+        if (searchValue) params.append("search", searchValue);
+        if (limitValue) params.append("limit", limitValue);
+        if (pageValue) params.append("page", pageValue);
+
+        if (params.toString()) {
+          url += `?${params.toString()}`;
         }
+
         return {
-          url: queryString,
+          url,
           method: "GET",
         };
       },
-      providesTags: ["Users"],
+      providesTags: ["User"],
+    }),
+    updateUserAvatar: builder.mutation({
+      query: ({ id, avatar }) => {
+        const formData = new FormData();
+        formData.append("avatar", avatar);
+
+        return {
+          url: `/users/update-avatar/${id}`,
+          method: "PATCH",
+          body: formData,
+        };
+      },
+      invalidatesTags: ["User"],
+    }),
+    removeUserAvatar: builder.mutation({
+      query: ({ id }) => ({
+        url: `/users/remove-avatar/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["User"],
+    }),
+    getCurrentUser: builder.query({
+      query: () => ({
+        url: `/users/find-current-user`,
+        method: "GET",
+      }),
+      providesTags: ["User"],
     }),
 
-    // getSingleInvoiceById: builder.query({
-    //   query: ({ invoice_id = "" }) => ({
-    //     url: `/sold-invoices/get-sold-invoice/${invoice_id}`,
+    // getSingleUserById: builder.query({
+    //   query: ({ user_id = "" }) => ({
+    //     url: `/users/find-user/${user_id}`,
     //     method: "GET",
     //   }),
-    //   providesTags: ["SoldInvoice"],
+    //   providesTags: ["Users"],
     // }),
     // addSoldInvoice: builder.mutation({
     //   query: (data) => ({
@@ -54,8 +86,11 @@ const userApi = baseApi.injectEndpoints({
 
 export const {
   useGetAllUserQuery,
+  useGetCurrentUserQuery,
   //   useAddSoldInvoiceMutation,
   //   useGetSingleInvoiceByIdQuery,
   //   useDeleteMenuItemMutation,
   //   useUpdateMenuItemMutation,
+  useUpdateUserAvatarMutation,
+  useRemoveUserAvatarMutation,
 } = userApi;

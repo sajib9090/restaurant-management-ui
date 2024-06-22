@@ -20,7 +20,7 @@ const Member = () => {
   const [discountValue, setDiscountValue] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(20);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [memberData, setMemberData] = useState({});
 

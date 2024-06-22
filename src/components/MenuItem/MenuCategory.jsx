@@ -11,10 +11,11 @@ import {
 import StatisticsCard from "../StatisticsCard/StatisticsCard";
 import MenuItemTableHead from "./MenuItemTableHead";
 import PrimaryError from "../PrimaryError/PrimaryError";
-import {toast } from "sonner";
+import { toast } from "sonner";
 import PrimaryLoading from "../Loading/PrimaryLoading/PrimaryLoading";
 import CustomModal from "../Modal/Modal";
-import { Popconfirm } from "antd";
+import { Pagination, Popconfirm } from "antd";
+import DateFormatter from "../DateFormatter/DateFormatter";
 
 const MenuCategory = ({ categoriesData }) => {
   const [checkedItems, setCheckedItems] = useState([]);
@@ -28,12 +29,25 @@ const MenuCategory = ({ categoriesData }) => {
   const [editedCategory, setEditedCategory] = useState("");
   const [editedDiscount, setEditedDiscount] = useState("");
   const [editedPrice, setEditedPrice] = useState("");
+  const [pageSize, setPageSize] = useState(50);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const {
     data: menuItems,
     isLoading: menuItemLoading,
     error: menuItemError,
-  } = useGetAllMenuItemsQuery({ searchValue, categoryValue, priceFilterValue });
+  } = useGetAllMenuItemsQuery({
+    searchValue,
+    categoryValue,
+    priceFilterValue,
+    pageValue: currentPage,
+    limitValue: pageSize,
+  });
+
+  const handlePaginationChange = (page, pageSize) => {
+    setCurrentPage(page);
+    setPageSize(pageSize);
+  };
 
   const categories = menuItems?.data?.map((item) => item?.category);
   const uniqueCategories = [...new Set(categories)];
@@ -206,81 +220,97 @@ const MenuCategory = ({ categoriesData }) => {
         </div>
       </div>
       {menuItems?.data?.length > 0 ? (
-        <table className="min-w-full border-collapse block md:table">
-          <MenuItemTableHead />
-          <tbody className="block md:table-row-group">
-            {uniqueCategories?.map((category, categoryIndex) => (
-              <React.Fragment key={categoryIndex}>
-                <tr className="bg-gray-100 border border-gray-200 md:border-none block md:table-row">
-                  <td
-                    className="p-2 text-left text-black font-bold md:border md:border-gray-300 block md:table-cell capitalize"
-                    colSpan="4"
-                  >
-                    {category}
-                  </td>
-                </tr>
-                {menuItems?.data
-                  ?.filter((fItem) => fItem?.category === category)
-                  .map((item, itemIndex) => (
-                    <tr
-                      key={itemIndex}
-                      className={` border border-gray-200 md:border-none block md:table-row hover:bg-blue-100 ${
-                        checkedItems?.includes(item?.item_id)
-                          ? "bg-blue-200 hover:bg-blue-300 duration-500"
-                          : "bg-white"
-                      }`}
+        <>
+          <table className="min-w-full border-collapse block md:table">
+            <MenuItemTableHead />
+            <tbody className="block md:table-row-group">
+              {uniqueCategories?.map((category, categoryIndex) => (
+                <React.Fragment key={categoryIndex}>
+                  <tr className="bg-gray-100 border border-gray-200 md:border-none block md:table-row">
+                    <td
+                      className="p-2 text-left text-black font-bold md:border md:border-gray-300 block md:table-cell capitalize"
+                      colSpan="4"
                     >
-                      <td className="p-2 md:border md:border-gray-200 text-left block md:table-cell">
-                        <div className="flex items-center">
-                          <input
-                            type="checkbox"
-                            checked={checkedItems.includes(item?.item_id)}
-                            onChange={(event) =>
-                              handleCheckboxChange(event, item?.item_id)
-                            }
-                            className="h-5 w-5 mr-2 cursor-pointer"
-                          />
-                          <span className="capitalize">{item?.item_name}</span>
-                        </div>
-                      </td>
-                      <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
-                        {item?.discount ? (
-                          <button className="bg-green-600 w-[30px] text-white rounded ml-2">
-                            On
+                      {category}
+                    </td>
+                  </tr>
+                  {menuItems?.data
+                    ?.filter((fItem) => fItem?.category === category)
+                    .map((item, itemIndex) => (
+                      <tr
+                        key={itemIndex}
+                        className={` border border-gray-200 md:border-none block md:table-row hover:bg-blue-100 ${
+                          checkedItems?.includes(item?.item_id)
+                            ? "bg-blue-200 hover:bg-blue-300 duration-500"
+                            : "bg-white"
+                        }`}
+                      >
+                        <td className="p-2 md:border md:border-gray-200 text-left block md:table-cell">
+                          <div className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={checkedItems.includes(item?.item_id)}
+                              onChange={(event) =>
+                                handleCheckboxChange(event, item?.item_id)
+                              }
+                              className="h-5 w-5 mr-2 cursor-pointer"
+                            />
+                            <span className="capitalize">
+                              {item?.item_name}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
+                          {item?.discount ? (
+                            <button className="bg-green-600 w-[30px] text-white rounded ml-2">
+                              On
+                            </button>
+                          ) : (
+                            <button className="bg-red-600 w-[30px] text-white rounded ml-2">
+                              Off
+                            </button>
+                          )}
+                        </td>
+                        <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
+                          <DateFormatter dateString={item?.createdAt} />
+                        </td>
+                        <td className="p-2 md:border md:border-gray-200 text-end block md:table-cell">
+                          <CurrencyFormatter value={item?.item_price} />
+                        </td>
+                        <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
+                          <button
+                            onClick={() => {
+                              setSelectedEditItem(item);
+                              setIsModalOpen(!isModalOpen);
+                              setEditedItemName("");
+                              setEditedCategory("");
+                              setEditedDiscount("");
+                            }}
+                            className="text-blue-600 text-xl"
+                            title="Edit"
+                          >
+                            <EditFilled />
                           </button>
-                        ) : (
-                          <button className="bg-red-600 w-[30px] text-white rounded ml-2">
-                            Off
-                          </button>
-                        )}
-                      </td>
-                      <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
-                        {new Date(item?.createdAt).toLocaleString()}
-                      </td>
-                      <td className="p-2 md:border md:border-gray-200 text-end block md:table-cell">
-                        <CurrencyFormatter value={item?.item_price} />
-                      </td>
-                      <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
-                        <button
-                          onClick={() => {
-                            setSelectedEditItem(item);
-                            setIsModalOpen(!isModalOpen);
-                            setEditedItemName("");
-                            setEditedCategory("");
-                            setEditedDiscount("");
-                          }}
-                          className="text-blue-600 text-xl"
-                          title="Edit"
-                        >
-                          <EditFilled />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-              </React.Fragment>
-            ))}
-          </tbody>
-        </table>
+                        </td>
+                      </tr>
+                    ))}
+                </React.Fragment>
+              ))}
+            </tbody>
+          </table>
+          <div className="mt-2">
+            <Pagination
+              total={menuItems?.data_found || 0}
+              showTotal={(total, range) =>
+                `${range[0]}-${range[1]} of ${total} items`
+              }
+              pageSize={pageSize}
+              current={currentPage}
+              onChange={handlePaginationChange}
+              showSizeChanger
+            />
+          </div>
+        </>
       ) : (
         <PrimaryError
           message={

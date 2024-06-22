@@ -67,7 +67,7 @@ const Register = () => {
       name,
       email,
       brand_name,
-      mobile: "+88" + mobile,
+      mobile: mobile,
       password,
     };
     try {

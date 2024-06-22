@@ -1,34 +1,30 @@
 import { baseApi } from "../api/baseApi";
 
 const menuItemApi = baseApi.injectEndpoints({
-  tagTypes: ["MenuItem"],
   endpoints: (builder) => ({
     getAllMenuItems: builder.query({
       query: ({
-        searchValue = "",
-        pageValue = "",
+        searchValue,
+        pageValue,
         limitValue,
-        categoryValue = "",
-        priceFilterValue = "",
+        categoryValue,
+        priceFilterValue,
       } = {}) => {
-        let queryString = `/menu-items/get-all?search=${searchValue}`;
-        if (pageValue) {
-          queryString += `&page=${pageValue}`;
+        let url = "/menu-items/get-all";
+        const params = new URLSearchParams();
+
+        if (searchValue) params.append("search", searchValue);
+        if (pageValue) params.append("page", pageValue);
+        if (limitValue) params.append("limit", limitValue);
+        if (categoryValue) params.append("category", categoryValue);
+        if (priceFilterValue) params.append("price", priceFilterValue);
+
+        if (params.toString()) {
+          url += `?${params.toString()}`;
         }
-        if (limitValue) {
-          queryString += `&limit=${limitValue}`;
-        }
-        if (limitValue) {
-          queryString += `&limit=${limitValue}`;
-        }
-        if (categoryValue) {
-          queryString += `&category=${categoryValue}`;
-        }
-        if (priceFilterValue) {
-          queryString += `&price=${priceFilterValue}`;
-        }
+
         return {
-          url: queryString,
+          url,
           method: "GET",
         };
       },

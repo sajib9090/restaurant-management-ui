@@ -1,4 +1,4 @@
-import { Popconfirm, Table } from "antd";
+import { Pagination, Popconfirm, Table } from "antd";
 import {
   useAddTableMutation,
   useDeleteTableMutation,
@@ -18,6 +18,9 @@ const MaintainTable = () => {
   const [modalContent, setModalContent] = useState(null);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedId, setSelectedId] = useState("");
+  const [searchValue, setSearchValue] = useState("");
+  const [pageSize, setPageSize] = useState(20);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const columns = [
     Table.SELECTION_COLUMN,
@@ -41,7 +44,11 @@ const MaintainTable = () => {
     },
   ];
 
-  const { data: tables, isLoading } = useGetAllTablesQuery();
+  const { data: tables, isLoading } = useGetAllTablesQuery({
+    pageValue: currentPage,
+    limitValue: pageSize,
+    searchValue: searchValue,
+  });
 
   const data =
     tables?.data?.map((table) => ({
@@ -67,6 +74,11 @@ const MaintainTable = () => {
     onChange: (selectedRowKeys) => {
       setSelectedRowKeys(selectedRowKeys);
     },
+  };
+
+  const handlePaginationChange = (page, pageSize) => {
+    setCurrentPage(page);
+    setPageSize(pageSize);
   };
 
   const [tableName, setTableName] = useState("");
@@ -143,7 +155,7 @@ const MaintainTable = () => {
         <StatisticsCard
           bg="bg-gray-200"
           title="Total Tables"
-          value={tables?.data?.length}
+          value={tables?.data_found}
         />
       </div>
       <div className="flex items-center justify-between">
@@ -190,12 +202,37 @@ const MaintainTable = () => {
           </Popconfirm>
         )}
       </div>
+      <div className="my-4">
+        <div className="search">
+          <input
+            value={searchValue}
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+            }}
+            className="rounded"
+            type="search"
+            placeholder="Search..."
+          />
+        </div>
+      </div>
       <Table
         columns={columns}
         rowSelection={rowSelection}
         dataSource={data}
         pagination={false}
       />
+      <div className="mt-2">
+        <Pagination
+          total={tables?.data_found || 0}
+          showTotal={(total, range) =>
+            `${range[0]}-${range[1]} of ${total} items`
+          }
+          pageSize={pageSize}
+          current={currentPage}
+          onChange={handlePaginationChange}
+          showSizeChanger
+        />
+      </div>
       <>
         <CustomModal setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen}>
           {errorMessage && <ErrorMessage errorMessage={errorMessage} />}

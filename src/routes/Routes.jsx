@@ -42,6 +42,7 @@ const MaintainUsers = lazy(() =>
 const SellHistory = lazy(() =>
   import("../pages/Dashboard/SellReport/SellHistory/SellHistory")
 );
+const Brand = lazy(() => import("../pages/Dashboard/Brand/Brand"));
 
 export const router = createBrowserRouter([
   {
@@ -150,6 +151,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<h1>Loading...</h1>}>
             <Profile />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/user/brand",
+        element: (
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <Brand />
           </Suspense>
         ),
       },

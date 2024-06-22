@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Table, Popconfirm } from "antd";
+import { Table, Popconfirm, Pagination } from "antd";
 import { useState } from "react";
 import { EditFilled, PlusSquareFilled, DeleteFilled } from "@ant-design/icons";
 import { toast } from "sonner";
@@ -12,7 +12,15 @@ import {
 } from "../../redux/features/category/categoryApi";
 import PrimaryLoading from "../Loading/PrimaryLoading/PrimaryLoading";
 
-const Category = ({ categories }) => {
+const Category = ({
+  categories,
+  searchValue,
+  setSearchValue,
+  pageSize,
+  setPageSize,
+  currentPage,
+  setCurrentPage,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categoryName, setCategoryName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -62,6 +70,11 @@ const Category = ({ categories }) => {
         ),
       }))) ||
     [];
+
+  const handlePaginationChange = (page, pageSize) => {
+    setCurrentPage(page);
+    setPageSize(pageSize);
+  };
 
   const rowSelection = {
     selectedRowKeys,
@@ -178,12 +191,38 @@ const Category = ({ categories }) => {
           </Popconfirm>
         )}
       </div>
+
+      <div className="my-4">
+        <div className="search">
+          <input
+            value={searchValue}
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+            }}
+            className="rounded"
+            type="search"
+            placeholder="Search..."
+          />
+        </div>
+      </div>
       <Table
         columns={columns}
         rowSelection={rowSelection}
         dataSource={data}
         pagination={false}
       />
+      <div className="mt-2">
+        <Pagination
+          total={categories?.data_found || 0}
+          showTotal={(total, range) =>
+            `${range[0]}-${range[1]} of ${total} items`
+          }
+          pageSize={pageSize}
+          current={currentPage}
+          onChange={handlePaginationChange}
+          showSizeChanger
+        />
+      </div>
 
       <CustomModal setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen}>
         {errorMessage && <ErrorMessage errorMessage={errorMessage} />}

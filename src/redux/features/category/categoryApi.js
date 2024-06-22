@@ -1,13 +1,25 @@
 import { baseApi } from "../api/baseApi";
 
 const categoryApi = baseApi.injectEndpoints({
-  tagTypes: ["Category"],
   endpoints: (builder) => ({
     getAllCategories: builder.query({
-      query: () => ({
-        url: `/categories/get-all`,
-        method: "GET",
-      }),
+      query: ({ pageValue, limitValue, searchValue } = {}) => {
+        let url = "/categories/get-all";
+        const params = new URLSearchParams();
+
+        if (searchValue) params.append("search", searchValue);
+        if (limitValue) params.append("limit", limitValue);
+        if (pageValue) params.append("page", pageValue);
+
+        if (params.toString()) {
+          url += `?${params.toString()}`;
+        }
+
+        return {
+          url,
+          method: "GET",
+        };
+      },
       providesTags: ["Category", "MenuItem"],
     }),
     addCategory: builder.mutation({

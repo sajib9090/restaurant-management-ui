@@ -1,7 +1,6 @@
 import { baseApi } from "../api/baseApi";
 
 const memberApi = baseApi.injectEndpoints({
-  tagTypes: ["Member"],
   endpoints: (builder) => ({
     getAllMembers: builder.query({
       query: ({

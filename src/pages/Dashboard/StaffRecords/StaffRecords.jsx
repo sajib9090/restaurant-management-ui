@@ -9,7 +9,7 @@ const StaffRecords = () => {
   const [searchValue, setSearchValue] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(20);
 
   const columns = [
     Table.SELECTION_COLUMN,
@@ -32,6 +32,9 @@ const StaffRecords = () => {
     pageValue: currentPage,
     limitValue: pageSize,
   });
+
+
+  console.log(staffs);
 
   const data =
     staffs?.data?.map((staff, i) => ({

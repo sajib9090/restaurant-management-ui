@@ -28,14 +28,15 @@ import {
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { currentUser, logout } from "../../../redux/features/auth/authSlice";
+import { logout } from "../../../redux/features/auth/authSlice";
 import CustomModal from "../../Modal/Modal";
 import AddMember from "../../Member/AddMember";
+import { useGetCurrentUserQuery } from "../../../redux/features/user/userApi";
 
 const Sidebar = ({ setDark, dark, collapsed }) => {
-  const user = useSelector(currentUser);
+  const { data: user } = useGetCurrentUserQuery();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -292,7 +293,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
       icon: <PlusSquareFilled />,
       title: "Add Member",
     },
-    user && {
+    user?.data && {
       label: <button onClick={handleLogout}>Logout</button>,
       key: "/user/logout",
       icon: <LogoutOutlined />,

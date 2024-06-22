@@ -1,14 +1,25 @@
 import { baseApi } from "../api/baseApi";
 
 const tableApi = baseApi.injectEndpoints({
-  tagTypes: ["Table"],
   endpoints: (builder) => ({
     getAllTables: builder.query({
-      query: () => ({
-        // url: `/tables/get-all?brand_id=${brand_id}&user_id=${user_id}`,
-        url: `/tables/get-all`,
-        method: "GET",
-      }),
+      query: ({ pageValue, limitValue, searchValue } = {}) => {
+        let url = "/tables/get-all";
+        const params = new URLSearchParams();
+
+        if (searchValue) params.append("search", searchValue);
+        if (limitValue) params.append("limit", limitValue);
+        if (pageValue) params.append("page", pageValue);
+
+        if (params.toString()) {
+          url += `?${params.toString()}`;
+        }
+
+        return {
+          url,
+          method: "GET",
+        };
+      },
       providesTags: ["Table"],
     }),
     addTable: builder.mutation({

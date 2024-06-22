@@ -1,41 +1,37 @@
 import { baseApi } from "../api/baseApi";
 
 const soldInvoiceApi = baseApi.injectEndpoints({
-  tagTypes: ["SoldInvoice"],
   endpoints: (builder) => ({
     getAllSellAlsoDateFilter: builder.query({
       query: ({
-        pageValue = "",
+        pageValue,
         limitValue,
-        date = "",
-        start_date = "",
-        end_date = "",
-        month = "",
+        date,
+        start_date,
+        end_date,
+        month,
       } = {}) => {
-        let queryString = `/sold-invoices/get-sold-invoices?page=${pageValue}`;
+        let url = "/sold-invoices/get-sold-invoices";
+        const params = new URLSearchParams();
 
-        if (limitValue) {
-          queryString += `&limit=${limitValue}`;
-        }
+        if (pageValue) params.append("page", pageValue);
+        if (limitValue) params.append("limit", limitValue);
+        if (date) params.append("date", date);
+        if (start_date) params.append("start_date", start_date);
+        if (end_date) params.append("end_date", end_date);
+        if (month) params.append("month", month);
 
-        if (date) {
-          queryString += `&date=${date}`;
-        }
-        if (start_date && end_date) {
-          queryString += `&start_date=${start_date}&end_date=${end_date}`;
-        }
-        if (month) {
-          queryString += `&month=${month}`;
+        if (params.toString()) {
+          url += `?${params.toString()}`;
         }
 
         return {
-          url: queryString,
+          url,
           method: "GET",
         };
       },
       providesTags: ["SoldInvoice"],
     }),
-
     getSingleInvoiceById: builder.query({
       query: ({ invoice_id = "" }) => ({
         url: `/sold-invoices/get-sold-invoice/${invoice_id}`,
