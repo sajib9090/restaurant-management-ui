@@ -21,8 +21,8 @@ const SideDataBar = ({ collapsed, dark }) => {
           <div className="w-[80%] mx-auto">
             <img
               src={
-                user?.data?.brand?.brand_logo
-                  ? user?.data?.brand?.brand_logo
+                user?.data?.brand?.brand_logo?.url
+                  ? user?.data?.brand?.brand_logo?.url
                   : brandLogo
               }
               alt={user?.data?.brand?.brand_slug}
@@ -37,8 +37,8 @@ const SideDataBar = ({ collapsed, dark }) => {
           <div className="w-[50%] mx-auto">
             <img
               src={
-                user?.data?.brand?.brand_logo
-                  ? user?.data?.brand?.brand_logo
+                user?.data?.brand?.brand_logo?.url
+                  ? user?.data?.brand?.brand_logo?.url
                   : brandLogo
               }
               alt={user?.data?.brand?.brand_slug}
@@ -47,7 +47,15 @@ const SideDataBar = ({ collapsed, dark }) => {
           <h1 className="text-2xl text-center font-bold capitalize">
             {user?.data?.brand?.brand_name}
           </h1>
-          <address className="text-center">Naria, Shariatpur</address>
+          <address className="text-center capitalize">
+            {user?.data?.brand?.address?.sub_district
+              ? user?.data?.brand?.address?.sub_district
+              : "sub district"}
+            ,{" "}
+            {user?.data?.brand?.address?.district
+              ? user?.data?.brand?.address?.district
+              : "District"}
+          </address>
         </div>
       )}
     </div>

@@ -17,7 +17,7 @@ const Services = lazy(() => import("../pages/PrimaryPage/Services/Services"));
 const ExpiredCredentials = lazy(() =>
   import("../pages/PrimaryPage/ExpiredCredentials/ExpiredCredentials")
 );
-const Profile = lazy(() => import("../pages/Dashboard/Profile/Profile"));
+const Profile = lazy(() => import("../pages/Profile/Profile"));
 const ReportBugs = lazy(() => import("../pages/ReportBugs/ReportBugs"));
 const SelectOrder = lazy(() => import("../pages/Sell/SelectOrder/SelectOrder"));
 const MaintainTable = lazy(() =>
@@ -42,7 +42,7 @@ const MaintainUsers = lazy(() =>
 const SellHistory = lazy(() =>
   import("../pages/Dashboard/SellReport/SellHistory/SellHistory")
 );
-const Brand = lazy(() => import("../pages/Dashboard/Brand/Brand"));
+const Brand = lazy(() => import("../pages/Brand/Brand"));
 
 export const router = createBrowserRouter([
   {

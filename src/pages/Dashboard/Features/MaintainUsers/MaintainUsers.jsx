@@ -1,15 +1,16 @@
 import { Pagination, Popconfirm, Table } from "antd";
-import { useGetAllUserQuery } from "../../../../redux/features/user/userApi";
+import {
+  useGetAllUserQuery,
+  useGetCurrentUserQuery,
+} from "../../../../redux/features/user/userApi";
 import { useState } from "react";
 import DateFormatter from "../../../../components/DateFormatter/DateFormatter";
 import defaultAvatar from "../../../../../public/image/avatar/6791548_avatar_person_profile_profile icon_user_icon.png";
 import { EditFilled, DeleteFilled } from "@ant-design/icons";
-import { useSelector } from "react-redux";
-import { currentUser } from "../../../../redux/features/auth/authSlice";
 import PrimaryLoading from "../../../../components/Loading/PrimaryLoading/PrimaryLoading";
 
 const MaintainUsers = () => {
-  const loggedInUser = useSelector(currentUser);
+  const { data: loggedInUser } = useGetCurrentUserQuery();
 
   const [searchValue, setSearchValue] = useState("");
   const [pageSize, setPageSize] = useState(20);
@@ -38,12 +39,6 @@ const MaintainUsers = () => {
       dataIndex: "avatar",
       key: "avatar",
       className: "w-[7%]",
-    },
-    {
-      title: "Brand ID",
-      dataIndex: "brand",
-      key: "brand",
-      className: "w-[17%]",
     },
     {
       title: "Role & Username",
@@ -80,12 +75,11 @@ const MaintainUsers = () => {
         <div className="flex justify-center items-center">
           <img
             className="w-12 h-12 rounded-full border-2 border-gray-300 shadow-sm"
-            src={user?.avatar ? user?.avatar : defaultAvatar}
+            src={user?.avatar?.url ? user?.avatar?.url : defaultAvatar}
             alt=""
           />
         </div>
       ),
-      brand: <span className="text-[10px]">{user?.brand_id}</span>,
       role: (
         <div>
           <p className="font-semibold text-blue-600 capitalize">
@@ -107,7 +101,7 @@ const MaintainUsers = () => {
       ),
       actions: (
         <div className="flex items-center justify-center">
-          {user?.email !== loggedInUser?.email && (
+          {user?.email !== loggedInUser?.data?.email && (
             <button
               title="Edit"
               className="text-blue-500 text-xl hover:text-blue-700 transition-transform transform hover:scale-110"
