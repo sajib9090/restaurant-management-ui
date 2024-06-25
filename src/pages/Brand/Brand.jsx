@@ -1,20 +1,28 @@
 import defaultLogo from "../../../public/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
 import { CameraFilled } from "@ant-design/icons";
-import { useGetCurrentUserQuery } from "../../redux/features/user/userApi";
 import DateFormatter from "../../components/DateFormatter/DateFormatter";
 import { useRef } from "react";
 import PrimaryLoading from "../../components/Loading/PrimaryLoading/PrimaryLoading";
 import { useUpdateBrandLogoMutation } from "../../redux/features/brand/brandApi";
 import { toast } from "sonner";
 import EditBrand from "../../components/Brand/EditBrand/EditBrand";
+import LookInvoiceStyle from "../../components/Brand/LookInvoiceStyle/LookInvoiceStyle";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  currentUserInfo,
+  setUserInfo,
+} from "../../redux/features/auth/authSlice";
+import { useFetchCurrentUserMutation } from "../../redux/features/user/userApi";
 
 const Brand = () => {
-  const { data: user } = useGetCurrentUserQuery();
-  const brand = user?.data?.brand;
+  const userInfo = useSelector(currentUserInfo);
+  const brand = userInfo?.brand;
   const fileInputRef = useRef(null);
 
   const [updateBrandLogo, { isLoading: updateLoading }] =
     useUpdateBrandLogoMutation();
+  const [fetchCurrentUser, { isLoading }] = useFetchCurrentUserMutation();
+  const dispatch = useDispatch();
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -24,6 +32,9 @@ const Brand = () => {
         const res = await updateBrandLogo({
           brandLogo: file,
         }).unwrap();
+
+        const userInfo = await fetchCurrentUser().unwrap();
+        dispatch(setUserInfo(userInfo?.data));
         toast.success(res?.message || "Logo uploaded successfully:");
       } catch (error) {
         toast.error(
@@ -35,10 +46,10 @@ const Brand = () => {
 
   return (
     <div>
-      <div className="w-full bg-gray-100 rounded grid grid-cols-12 py-12 px-4 relative">
+      <div className="w-full bg-gray-100 rounded grid grid-cols-12 py-16 px-4 relative">
         <div className="col-span-3 flex flex-col items-center">
           <div className="">
-            {updateLoading ? (
+            {updateLoading || isLoading ? (
               <div className="w-[240px]  h-[240px] rounded-md  mx-auto p-2 bg-white flex flex-col items-center justify-center">
                 <PrimaryLoading />
                 Updating...
@@ -54,6 +65,7 @@ const Brand = () => {
             )}
           </div>
           <button
+            disabled={updateLoading || isLoading}
             onClick={() => fileInputRef.current.click()}
             className="text-center bg-gray-700 text-white py-2 mt-3 w-[40%] mx-auto rounded"
           >
@@ -179,6 +191,7 @@ const Brand = () => {
               </div>
             </div>
           </div>
+          <LookInvoiceStyle />
           <EditBrand brandInfo={brand} />
         </div>
       </div>

@@ -6,6 +6,9 @@ import PrimaryLoading from "../../Loading/PrimaryLoading/PrimaryLoading";
 import { useUpdateBrandInfoMutation } from "../../../redux/features/brand/brandApi";
 import ErrorMessage from "../../ErrorMessage/ErrorMessage";
 import { toast } from "sonner";
+import { useFetchCurrentUserMutation } from "../../../redux/features/user/userApi";
+import { useDispatch } from "react-redux";
+import { setUserInfo } from "../../../redux/features/auth/authSlice";
 
 const EditBrand = ({ brandInfo }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,6 +16,9 @@ const EditBrand = ({ brandInfo }) => {
 
   const [updateBrandInfo, { isLoading: updateLoading }] =
     useUpdateBrandInfoMutation();
+
+  const [fetchCurrentUser, { isLoading }] = useFetchCurrentUserMutation();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     brand_name: brandInfo?.brand_name || "",
     mobile1: brandInfo?.contact?.mobile1 || "",
@@ -30,14 +36,16 @@ const EditBrand = ({ brandInfo }) => {
     });
   };
 
-  const handleRegister = async (e) => {
+  const handleEdit = async (e) => {
     e.preventDefault();
     const data = formData;
     setErrorMessage("");
     try {
       const res = await updateBrandInfo(data).unwrap();
-      setIsModalOpen(false);
+      const userInfo = await fetchCurrentUser().unwrap();
+      dispatch(setUserInfo(userInfo?.data));
       toast.success(res?.message);
+      setIsModalOpen(false);
     } catch (error) {
       setErrorMessage(error?.data?.message);
     }
@@ -59,7 +67,7 @@ const EditBrand = ({ brandInfo }) => {
         closeSymbolFalse={true}
       >
         {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
-        <form onSubmit={handleRegister} className="py-4">
+        <form onSubmit={handleEdit} className="py-4">
           <div className="mb-4">
             <label className="block text-blue-800">Name</label>
             <input
@@ -137,11 +145,11 @@ const EditBrand = ({ brandInfo }) => {
           </div>
 
           <button
-            disabled={updateLoading}
+            disabled={updateLoading || isLoading}
             type="submit"
             className={`w-full flex justify-center items-center bg-[#001529] text-white p-3 rounded-lg hover:bg-[#E6F4FF] transition duration-500 hover:text-[#5977FF]`}
           >
-            {updateLoading ? <PrimaryLoading /> : "SAVE CHANGES"}
+            {updateLoading || isLoading ? <PrimaryLoading /> : "SAVE CHANGES"}
           </button>
         </form>
       </CustomModal>

@@ -2,31 +2,39 @@ import { useState, useRef } from "react";
 import defaultAvatar from "../../../public/image/avatar/6791548_avatar_person_profile_profile icon_user_icon.png";
 import { CameraOutlined } from "@ant-design/icons";
 import {
-  useGetCurrentUserQuery,
+  useFetchCurrentUserMutation,
   useUpdateUserAvatarMutation,
 } from "../../redux/features/user/userApi";
 import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  currentUserInfo,
+  setUserInfo,
+} from "../../redux/features/auth/authSlice";
 
 const Profile = () => {
-  const { data } = useGetCurrentUserQuery();
+  const userInfo = useSelector(currentUserInfo);
   const [showOptions, setShowOptions] = useState(false);
   const fileInputRef = useRef(null);
 
   const [updateUserAvatar, { isLoading: uploadLoading }] =
     useUpdateUserAvatarMutation();
+  const [fetchCurrentUser, { isLoading }] = useFetchCurrentUserMutation();
+  const dispatch = useDispatch();
 
   const handleFileChange = async (event) => {
     const file = event.target?.files[0];
-  
+
     if (file) {
-      const userId = data?.data?.user_id;
+      const userId = userInfo?.user_id;
 
       try {
         const res = await updateUserAvatar({
           id: userId,
           avatar: file,
         }).unwrap();
-
+        const userInfo = await fetchCurrentUser().unwrap();
+        dispatch(setUserInfo(userInfo?.data));
         toast.success(res?.message || "Photo uploaded successfully:");
       } catch (error) {
         toast.error(error?.data?.message);
@@ -41,11 +49,7 @@ const Profile = () => {
           <div className="relative flex-shrink-0">
             <img
               className="h-32 w-32 rounded-full shadow object-cover border-2 border-gray-300 transition-transform duration-300 transform hover:scale-105 cursor-pointer"
-              src={
-                data?.data?.avatar?.url
-                  ? data?.data?.avatar?.url
-                  : defaultAvatar
-              }
+              src={userInfo?.avatar?.url || defaultAvatar}
               alt="User Avatar"
             />
             <div
@@ -53,7 +57,7 @@ const Profile = () => {
               onClick={() => setShowOptions(true)}
               onMouseLeave={() => setShowOptions(false)}
             >
-              {uploadLoading ? (
+              {uploadLoading || isLoading ? (
                 <div className="text-white text-lg font-semibold">
                   Uploading...
                 </div>
@@ -76,7 +80,7 @@ const Profile = () => {
             </div>
             <input
               type="file"
-              disabled={uploadLoading}
+              disabled={uploadLoading || isLoading}
               id="fileInput"
               ref={fileInputRef}
               className="hidden"
@@ -84,25 +88,23 @@ const Profile = () => {
             />
           </div>
           <div className="w-full lg:w-auto h-auto flex flex-col justify-center space-y-4 text-gray-800">
-            <h1 className="text-3xl font-bold capitalize">
-              {data?.data?.name}
-            </h1>
+            <h1 className="text-3xl font-bold capitalize">{userInfo?.name}</h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4">
               <div className="p-4 rounded-lg shadow-sm bg-white">
                 <p className="text-sm font-semibold text-gray-600">Role</p>
-                <p className="text-lg">{data?.data?.role}</p>
+                <p className="text-lg">{userInfo?.role}</p>
               </div>
               <div className="p-4 rounded-lg shadow-sm bg-white">
                 <p className="text-sm font-semibold text-gray-600">Email</p>
-                <p className="text-lg">{data?.data?.email}</p>
+                <p className="text-lg">{userInfo?.email}</p>
               </div>
               <div className="p-4 rounded-lg shadow-sm bg-white">
                 <p className="text-sm font-semibold text-gray-600">Username</p>
-                <p className="text-lg">{data?.data?.username}</p>
+                <p className="text-lg">{userInfo?.username}</p>
               </div>
               <div className="p-4 rounded-lg shadow-sm bg-white">
                 <p className="text-sm font-semibold text-gray-600">Mobile</p>
-                <p className="text-lg">{data?.data?.mobile}</p>
+                <p className="text-lg">{userInfo?.mobile}</p>
               </div>
             </div>
           </div>

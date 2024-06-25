@@ -6,8 +6,14 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../../redux/features/auth/authApi";
 import { jwtDecode } from "jwt-decode";
-import { setUser } from "../../../redux/features/auth/authSlice";
+import {
+  logout,
+  setUser,
+  setUserInfo,
+} from "../../../redux/features/auth/authSlice";
 import PrimaryLoading from "../../../components/Loading/PrimaryLoading/PrimaryLoading";
+import { useFetchCurrentUserMutation } from "../../../redux/features/user/userApi";
+import { toast } from "sonner";
 
 const Login = () => {
   const [visible, setVisible] = useState(false);
@@ -45,6 +51,8 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [login, { isLoading }] = useLoginMutation();
+  const [fetchCurrentUser, { isLoading: fetchCurrentUserInfoLoading }] =
+    useFetchCurrentUserMutation();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -69,7 +77,15 @@ const Login = () => {
       };
 
       dispatch(setUser(user));
-      navigate("/user");
+
+      try {
+        const userInfoRes = await fetchCurrentUser().unwrap();
+        dispatch(setUserInfo(userInfoRes?.data));
+        navigate("/user");
+      } catch (error) {
+        dispatch(logout());
+        toast.error("Failed to fetch user info");
+      }
     } catch (error) {
       setErrorMessage("Login failed: " + error?.data?.message);
     }
@@ -141,12 +157,17 @@ const Login = () => {
               disabled={
                 formData?.email?.length == 0 ||
                 formData?.password?.length == 0 ||
-                isLoading
+                isLoading ||
+                fetchCurrentUserInfoLoading
               }
               type="submit"
               className="w-full flex justify-center items-center bg-[#001529] text-white p-3 rounded-lg hover:bg-[#E6F4FF] transition duration-500 hover:text-[#5977FF]"
             >
-              {isLoading ? <PrimaryLoading /> : "LOGIN"}
+              {isLoading || fetchCurrentUserInfoLoading ? (
+                <PrimaryLoading />
+              ) : (
+                "LOGIN"
+              )}
             </button>
 
             {/* <div className="flex items-center my-4">

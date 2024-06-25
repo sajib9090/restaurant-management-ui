@@ -1,17 +1,18 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetSingleInvoiceByIdQuery } from "../../../redux/features/soldInvoice/soldInvoiceApi.js";
 import { useRef } from "react";
-import { useSelector } from "react-redux";
-import { currentUser } from "../../../redux/features/auth/authSlice.js";
 import brandLogo from "../../../../public/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
 import DateFormatter from "../../../components/DateFormatter/DateFormatter.jsx";
 import CurrencyFormatter from "../../../components/Currencyformatter/CurrencyFormatter.jsx";
 import ReactToPrint from "react-to-print";
 import InvoiceSkeleton from "../../../components/Skeleton/InvoiceSkeleton.jsx";
+import { useSelector } from "react-redux";
+import { currentUserInfo } from "../../../redux/features/auth/authSlice.js";
 
 const SoldInvoice = () => {
   const { invoice_id } = useParams();
-  const user = useSelector(currentUser);
+  const userInfo = useSelector(currentUserInfo);
+
   const { data, isLoading } = useGetSingleInvoiceByIdQuery({ invoice_id });
   const componentRef = useRef();
   const navigate = useNavigate();
@@ -30,24 +31,22 @@ const SoldInvoice = () => {
           <div className="text-center mt-6">
             <div className="mx-auto w-full">
               <img
-                src={
-                  user?.brand?.brand_logo ? user?.brand?.brand_logo : brandLogo
-                }
+                src={userInfo?.brand?.brand_logo?.url || brandLogo}
                 alt=""
                 className="h-[50px] text-center mx-auto grayscale"
               />
             </div>
             <h1 className="text-2xl font-bold capitalize">
-              {user?.brand?.brand_name
-                ? user?.brand?.brand_name
-                : "Restaurant Name"}
+              {userInfo?.brand?.brand_name || "Restaurant Name"}
             </h1>
-            <p className="text-[8.5px] -mt-0.5">
-              Mazhi Plaza 2nd floor, Naria, Shariatpur
+            <p className="text-[8.5px] -mt-0.5 capitalize">
+              {userInfo?.brand?.address?.location || "Your Location"},{" "}
+              {userInfo?.brand?.address?.sub_district || "Sub district"},{" "}
+              {userInfo?.brand?.address?.district || "District"}
             </p>
             <div className="text-[8.5px] flex justify-center space-x-1">
-              <p>+8801770 940333,</p>
-              <p>+8801903 390050</p>
+              <p>+88{userInfo?.brand?.contact?.mobile1 || "00000000000"},</p>
+              <p>+88{userInfo?.brand?.contact?.mobile2 || "00000000000"}</p>
             </div>
 
             <p className="text-xs mb-1">
@@ -128,7 +127,7 @@ const SoldInvoice = () => {
           <div className="text-[10px] text-center mt-3 font-medium border-b border-t border-black">
             <p className="py-1">
               Thanks for visiting{" "}
-              <span className="capitalize">{user?.brand?.brand_name}</span>!
+              <span className="capitalize">{userInfo?.brand?.brand_name}</span>!
               Come again
             </p>
           </div>

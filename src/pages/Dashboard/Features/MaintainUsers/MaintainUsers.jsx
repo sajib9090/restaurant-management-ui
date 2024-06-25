@@ -1,16 +1,15 @@
 import { Pagination, Popconfirm, Table } from "antd";
-import {
-  useGetAllUserQuery,
-  useGetCurrentUserQuery,
-} from "../../../../redux/features/user/userApi";
+import { useGetAllUserQuery } from "../../../../redux/features/user/userApi";
 import { useState } from "react";
 import DateFormatter from "../../../../components/DateFormatter/DateFormatter";
 import defaultAvatar from "../../../../../public/image/avatar/6791548_avatar_person_profile_profile icon_user_icon.png";
 import { EditFilled, DeleteFilled } from "@ant-design/icons";
 import PrimaryLoading from "../../../../components/Loading/PrimaryLoading/PrimaryLoading";
+import { useSelector } from "react-redux";
+import { currentUserInfo } from "../../../../redux/features/auth/authSlice";
 
 const MaintainUsers = () => {
-  const { data: loggedInUser } = useGetCurrentUserQuery();
+  const userInfo = useSelector(currentUserInfo);
 
   const [searchValue, setSearchValue] = useState("");
   const [pageSize, setPageSize] = useState(20);
@@ -101,7 +100,7 @@ const MaintainUsers = () => {
       ),
       actions: (
         <div className="flex items-center justify-center">
-          {user?.email !== loggedInUser?.data?.email && (
+          {user?.email !== userInfo?.email && (
             <button
               title="Edit"
               className="text-blue-500 text-xl hover:text-blue-700 transition-transform transform hover:scale-110"

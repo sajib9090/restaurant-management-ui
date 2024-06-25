@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
+import { useSelector } from "react-redux";
 import brandLogo from "../../../../public/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
-import { useGetCurrentUserQuery } from "../../../redux/features/user/userApi";
+import { currentUserInfo } from "../../../redux/features/auth/authSlice";
 
 const SideDataBar = ({ collapsed, dark }) => {
-  const { data: user } = useGetCurrentUserQuery();
+  const userInfo = useSelector(currentUserInfo);
 
-  const firstLetters = user?.data?.brand?.brand_name
+  const firstLetters = userInfo?.brand?.brand_name
     ?.split(" ")
     .map((word) => word.charAt(0))
     .join("");
@@ -20,12 +21,8 @@ const SideDataBar = ({ collapsed, dark }) => {
         <div className={`mt-6 mb-10 ${dark ? "text-white" : "text-black"}`}>
           <div className="w-[80%] mx-auto">
             <img
-              src={
-                user?.data?.brand?.brand_logo?.url
-                  ? user?.data?.brand?.brand_logo?.url
-                  : brandLogo
-              }
-              alt={user?.data?.brand?.brand_slug}
+              src={userInfo?.brand?.brand_logo?.url || brandLogo}
+              alt={userInfo?.brand?.brand_slug}
             />
           </div>
           <h1 className="text-2xl text-center font-bold uppercase">
@@ -36,25 +33,16 @@ const SideDataBar = ({ collapsed, dark }) => {
         <div className={`mt-6 mb-10 ${dark ? "text-white" : "text-black"}`}>
           <div className="w-[50%] mx-auto">
             <img
-              src={
-                user?.data?.brand?.brand_logo?.url
-                  ? user?.data?.brand?.brand_logo?.url
-                  : brandLogo
-              }
-              alt={user?.data?.brand?.brand_slug}
+              src={userInfo?.brand?.brand_logo?.url || brandLogo}
+              alt={userInfo?.brand?.brand_slug}
             />
           </div>
           <h1 className="text-2xl text-center font-bold capitalize">
-            {user?.data?.brand?.brand_name}
+            {userInfo?.brand?.brand_name}
           </h1>
           <address className="text-center capitalize">
-            {user?.data?.brand?.address?.sub_district
-              ? user?.data?.brand?.address?.sub_district
-              : "sub district"}
-            ,{" "}
-            {user?.data?.brand?.address?.district
-              ? user?.data?.brand?.address?.district
-              : "District"}
+            {userInfo?.brand?.address?.sub_district || "sub district"},{" "}
+            {userInfo?.brand?.address?.district || "District"}
           </address>
         </div>
       )}

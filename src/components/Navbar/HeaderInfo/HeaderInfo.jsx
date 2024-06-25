@@ -1,6 +1,9 @@
 import { Dropdown, Menu } from "antd";
-import { useDispatch } from "react-redux";
-import { logout } from "../../../redux/features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  currentUserInfo,
+  logout,
+} from "../../../redux/features/auth/authSlice";
 import avatar from "../../../../public/image/avatar/6791548_avatar_person_profile_profile icon_user_icon.png";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -8,10 +11,9 @@ import {
   LogoutOutlined,
   QrcodeOutlined,
 } from "@ant-design/icons";
-import { useGetCurrentUserQuery } from "../../../redux/features/user/userApi";
 
 const HeaderInfo = () => {
-  const { data: user } = useGetCurrentUserQuery();
+  const userInfo = useSelector(currentUserInfo);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -28,12 +30,12 @@ const HeaderInfo = () => {
           <div className="w-44 h-44 border border-gray-300 rounded-full mx-auto">
             <img
               className="w-full h-full rounded-full object-cover"
-              src={user?.data?.avatar?.url ? user?.data?.avatar?.url : avatar}
+              src={userInfo?.avatar?.url || avatar}
               alt="avatar"
             />
           </div>
           <div className="text-center mt-4">
-            <p className="capitalize">{user?.data?.role}</p>
+            <p className="capitalize">{userInfo?.role}</p>
           </div>
         </div>
       ),
@@ -71,8 +73,8 @@ const HeaderInfo = () => {
     <div className="flex justify-center items-center">
       <div className="mr-2">
         <span> Hi, </span>
-        <span title={user?.data?.name} className="font-bold capitalize">
-          {user?.data?.name}
+        <span title={userInfo?.name} className="font-bold capitalize">
+          {userInfo?.name}
         </span>
       </div>
 
@@ -84,7 +86,7 @@ const HeaderInfo = () => {
         <div className="w-12 h-12 border border-gray-300 rounded-full cursor-pointer">
           <img
             className="w-full h-full rounded-full object-cover"
-            src={user?.data?.avatar?.url ? user?.data?.avatar?.url : avatar}
+            src={userInfo?.avatar?.url || avatar}
             alt="avatar"
             title="Avatar"
           />
