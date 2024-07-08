@@ -9,7 +9,7 @@ import { currentUser } from "../../redux/features/auth/authSlice";
 import DateFormatter from "../DateFormatter/DateFormatter";
 import CurrencyFormatter from "../Currencyformatter/CurrencyFormatter";
 import ReactToPrint from "react-to-print";
-import brandLogo from "../../../public/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
+import brandLogo from "../../assets/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
 
 const FindSpecificInvoice = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -81,11 +81,7 @@ const FindSpecificInvoice = () => {
                 <div className="text-center mt-6">
                   <div className="mx-auto w-full">
                     <img
-                      src={
-                        user?.brand?.brand_logo
-                          ? user?.brand?.brand_logo
-                          : brandLogo
-                      }
+                      src={user?.brand?.brand_logo || brandLogo}
                       alt=""
                       className="h-[50px] text-center mx-auto grayscale"
                     />

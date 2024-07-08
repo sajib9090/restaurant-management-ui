@@ -4,7 +4,7 @@ import {
   currentUserInfo,
   logout,
 } from "../../../redux/features/auth/authSlice";
-import avatar from "../../../../public/image/avatar/6791548_avatar_person_profile_profile icon_user_icon.png";
+import avatar from "../../../assets/image/avatar/6791548_avatar_person_profile_profile icon_user_icon.png";
 import { Link, useNavigate } from "react-router-dom";
 import {
   UserOutlined,

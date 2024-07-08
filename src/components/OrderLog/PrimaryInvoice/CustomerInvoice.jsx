@@ -4,7 +4,7 @@ import CustomModal from "../../Modal/Modal";
 import CurrencyFormatter from "../../Currencyformatter/CurrencyFormatter";
 import ReactToPrint from "react-to-print";
 import DateFormatter from "../../DateFormatter/DateFormatter";
-import brandLogo from "../../../../public/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
+import brandLogo from "../../../assets/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
 
 const CustomerInvoice = ({
   tableWiseOrder,
@@ -15,6 +15,8 @@ const CustomerInvoice = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const componentRef = useRef();
+
+  console.log(user);
 
   return (
     <>
@@ -29,6 +31,7 @@ const CustomerInvoice = ({
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         width={"400px"}
+        closeSymbolFalse={true}
       >
         <div className="w-full max-w-[310px] mx-auto">
           <div
@@ -38,26 +41,22 @@ const CustomerInvoice = ({
             <div className="text-center mt-6">
               <div className="mx-auto w-full">
                 <img
-                  src={
-                    user?.brand?.brand_logo
-                      ? user?.brand?.brand_logo
-                      : brandLogo
-                  }
+                  src={user?.brand?.brand_logo?.url || brandLogo}
                   alt=""
                   className="h-[50px] text-center mx-auto grayscale"
                 />
               </div>
               <h1 className="text-2xl font-bold capitalize">
-                {user?.brand?.brand_name
-                  ? user?.brand?.brand_name
-                  : "Restaurant Name"}
+                {user?.brand?.brand_name || "Restaurant Name"}
               </h1>
-              <p className="text-[8.5px] -mt-0.5">
-                Mazhi Plaza 2nd floor, Naria, Shariatpur
+              <p className="text-[8.5px] -mt-0.5 capitalize">
+                {user?.brand?.address?.location || "Location"},{" "}
+                {user?.brand?.address?.sub_district || "Sub District"},{" "}
+                {user?.brand?.address?.district || "District"}
               </p>
               <div className="text-[8.5px] flex justify-center space-x-1">
-                <p>+8801770 940333,</p>
-                <p>+8801903 390050</p>
+                <p>+88{user?.brand?.contact?.mobile1 || "00000000000"},</p>
+                <p>+88{user?.brand?.contact?.mobile2 || "00000000000"},</p>
               </div>
 
               <p className="text-xs mb-1">

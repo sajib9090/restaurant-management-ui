@@ -1,7 +1,7 @@
 import { EyeFilled, EyeInvisibleFilled } from "@ant-design/icons";
 import { useState } from "react";
 import Lottie from "lottie-react";
-import restaurant from "../../../../public/animation/Animation - 1716694632912.json";
+import restaurant from "../../../assets/animation/Animation - 1716694632912.json";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../../redux/features/auth/authApi";
@@ -169,23 +169,6 @@ const Login = () => {
                 "LOGIN"
               )}
             </button>
-
-            {/* <div className="flex items-center my-4">
-            <div className="flex-grow border-t border-gray-300"></div>
-            <span className="mx-4 text-gray-500">or</span>
-            <div className="flex-grow border-t border-gray-300"></div>
-          </div> */}
-            {/* <button
-            type="button"
-            className="w-full bg-white text-gray-700 border border-gray-300 p-3 rounded-lg flex items-center justify-center hover:bg-gray-100 transition duration-200"
-          >
-            <img
-              src="https://img.icons8.com/color/16/000000/google-logo.png"
-              alt="Google"
-              className="mr-2"
-            />
-            Sign in with Google
-          </button> */}
           </form>
           <p className="mt-8 text-center text-gray-700">
             Dont have an account?{" "}

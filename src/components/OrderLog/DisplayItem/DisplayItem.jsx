@@ -18,7 +18,7 @@ const DisplayItem = ({
           <div
             onClick={() => handleAddToCart(menuItem)}
             key={menuItem?._id}
-            className={`flex justify-between items-center py-4 shadow-md px-2 border-b border-gray-300 cursor-pointer hover:shadow-md hover:bg-blue-200 hover:text-red-700
+            className={`flex justify-between items-center py-4 shadow px-2 border-b border-gray-300 cursor-pointer hover:shadow hover:bg-blue-200 hover:text-red-700
               ${commonItemIds?.includes(menuItem?.item_id) ? "bg-blue-100" : ""}
             `}
           >
@@ -35,13 +35,7 @@ const DisplayItem = ({
             <div>
               <button
                 className={`hover:bg-opacity-70 px-2 py-1 text-white rounded-md text-base ${
-                  index == 0
-                    ? "bg-[#001529]"
-                    : index == 1
-                    ? "bg-[#aa5f34]"
-                    : index == 2
-                    ? "bg-[#457322]"
-                    : "bg-pink-700"
+                  index % 2 == 0 ? "bg-green-700" : "bg-[#c1622b]"
                 } `}
               >
                 <CurrencyFormatter value={menuItem?.item_price} />

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import CustomModal from "../../Modal/Modal";
 import { useDispatch, useSelector } from "react-redux";
-import { currentUser } from "../../../redux/features/auth/authSlice";
+import { currentUserInfo } from "../../../redux/features/auth/authSlice";
 import CurrencyFormatter from "../../Currencyformatter/CurrencyFormatter";
 import { DeleteFilled } from "@ant-design/icons";
 import { PiBagFill } from "react-icons/pi";
@@ -13,6 +13,7 @@ import {
 } from "../../../redux/features/OrderLog/orderLogSlice";
 import PrimaryInvoiceFooter from "../PrimaryInvoice/PrimaryInvoiceFooter";
 import PrimaryError from "../../PrimaryError/PrimaryError";
+import { FullscreenOutlined, FullscreenExitOutlined } from "@ant-design/icons";
 
 const DisplayOrderInvoice = ({
   tableWiseOrderQuantity,
@@ -22,7 +23,7 @@ const DisplayOrderInvoice = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const user = useSelector(currentUser);
+  const userInfo = useSelector(currentUserInfo);
   const dispatch = useDispatch();
 
   const categories = tableWiseOrder?.map((item) => item?.category);
@@ -44,10 +45,11 @@ const DisplayOrderInvoice = ({
     <>
       <button
         onClick={() => setIsModalOpen(!isModalOpen)}
-        className="py-2 px-2 bg-gradient-to-r from-gray-400 to-indigo-500 text-lg font-semibold rounded-md flex sticky top-6 z-50"
+        className="py-2 px-2 bg-[#94A3B8] text-lg font-semibold rounded-md flex items-center sticky top-6 z-50 text-gray-800"
       >
-        Check Invoice{" "}
-        <p className="ml-2 px-2 bg-blue-300 rounded-full">
+        {isModalOpen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+        <span className="ml-1">Check Invoice</span>{" "}
+        <p className="ml-2 px-2 bg-blue-300 rounded-full text-gray-800">
           {tableWiseOrderQuantity}
         </p>
       </button>
@@ -56,11 +58,12 @@ const DisplayOrderInvoice = ({
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         width={"750px"}
+        closeSymbolFalse={true}
       >
         <div className="bg-gray-50 rounded-lg">
           <div className="text-center mb-6 capitalize">
             <h2 className="text-3xl font-bold text-indigo-600">
-              {user?.brand?.brand_name}
+              {userInfo?.brand?.brand_name}
             </h2>
             <p className="font-medium text-lg text-gray-700">{table_name}</p>
           </div>

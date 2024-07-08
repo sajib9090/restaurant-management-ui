@@ -68,11 +68,13 @@ const PrimaryAppLayout = () => {
         <div
           style={{
             background: colorBgContainer,
-            minHeight: "85vh",
+
             borderRadius: borderRadiusLG,
           }}
         >
-          <Outlet />
+          <div className="min-h-screen">
+            <Outlet />
+          </div>
         </div>
       </Content>
       <Footer

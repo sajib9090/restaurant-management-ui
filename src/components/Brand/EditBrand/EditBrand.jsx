@@ -42,10 +42,12 @@ const EditBrand = ({ brandInfo }) => {
     setErrorMessage("");
     try {
       const res = await updateBrandInfo(data).unwrap();
-      const userInfo = await fetchCurrentUser().unwrap();
-      dispatch(setUserInfo(userInfo?.data));
-      toast.success(res?.message);
-      setIsModalOpen(false);
+      const res2 = await fetchCurrentUser().unwrap();
+      if (res2?.success) {
+        dispatch(setUserInfo(res2?.data));
+        toast.success(res?.data?.message || res?.message);
+        setIsModalOpen(false);
+      }
     } catch (error) {
       setErrorMessage(error?.data?.message);
     }

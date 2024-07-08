@@ -18,6 +18,7 @@ const PaymentInvoice = ({
   selectedStaff,
   singleMemberData,
   table_name,
+  gotMoney,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -51,6 +52,7 @@ const PaymentInvoice = ({
   return (
     <>
       <button
+        disabled={!gotMoney == 0 && gotMoney < totalBill - totalDiscount}
         onClick={() => setIsModalOpen(!isModalOpen)}
         className="px-4 py-2 bg-green-600 text-white rounded shadow hover:bg-green-700 transition duration-200"
       >

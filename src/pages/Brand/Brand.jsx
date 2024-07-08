@@ -1,22 +1,24 @@
-import defaultLogo from "../../../public/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
+import defaultLogo from "../../assets/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
 import { CameraFilled } from "@ant-design/icons";
-import DateFormatter from "../../components/DateFormatter/DateFormatter";
 import { useRef } from "react";
 import PrimaryLoading from "../../components/Loading/PrimaryLoading/PrimaryLoading";
-import { useUpdateBrandLogoMutation } from "../../redux/features/brand/brandApi";
+import {
+  useGetCurrentBrandInfoQuery,
+  useUpdateBrandLogoMutation,
+} from "../../redux/features/brand/brandApi";
 import { toast } from "sonner";
 import EditBrand from "../../components/Brand/EditBrand/EditBrand";
 import LookInvoiceStyle from "../../components/Brand/LookInvoiceStyle/LookInvoiceStyle";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  currentUserInfo,
-  setUserInfo,
-} from "../../redux/features/auth/authSlice";
+import { useDispatch } from "react-redux";
+import { setUserInfo } from "../../redux/features/auth/authSlice";
 import { useFetchCurrentUserMutation } from "../../redux/features/user/userApi";
+import CurrencyFormatter from "../../components/Currencyformatter/CurrencyFormatter";
+import { formatDistanceToNow } from "date-fns";
 
 const Brand = () => {
-  const userInfo = useSelector(currentUserInfo);
-  const brand = userInfo?.brand;
+  const { data, isLoading: brandInfoLoading } = useGetCurrentBrandInfoQuery();
+  const brand = data?.data;
+
   const fileInputRef = useRef(null);
 
   const [updateBrandLogo, { isLoading: updateLoading }] =
@@ -46,7 +48,7 @@ const Brand = () => {
 
   return (
     <div>
-      <div className="w-full bg-gray-100 rounded grid grid-cols-12 py-16 px-4 relative">
+      <div className="w-full bg-gray-100 rounded grid grid-cols-12 gap-2 py-16 px-4 relative">
         <div className="col-span-3 flex flex-col items-center">
           <div className="">
             {updateLoading || isLoading ? (
@@ -57,13 +59,12 @@ const Brand = () => {
             ) : (
               <img
                 className="w-[240px]  h-[240px] rounded-md  mx-auto p-2 bg-white hover:scale-105 duration-500 cursor-pointer"
-                src={
-                  brand?.brand_logo?.url ? brand?.brand_logo?.url : defaultLogo
-                }
+                src={brand?.brand_logo?.url || defaultLogo}
                 alt=""
               />
             )}
           </div>
+
           <button
             disabled={updateLoading || isLoading}
             onClick={() => fileInputRef.current.click()}
@@ -82,17 +83,33 @@ const Brand = () => {
         </div>
         <div className="h-full col-span-8 space-y-4 capitalize">
           <div className="flex items-center py-6 px-4 bg-white rounded-lg text-lg">
-            <p className="text-gray-500 text-sm">Brand Name:</p>
+            <div className="flex items-center">
+              <lord-icon
+                src="https://cdn.lordicon.com/sdldsqlw.json"
+                trigger="in"
+                delay="1500"
+                state="in-reveal"
+                style={{ width: "30px", height: "30px" }}
+              />
+              <p className="text-gray-500 text-sm">Brand Name:</p>
+            </div>
             <p className="ml-4 text-blue-600 font-semibold">
               {brand?.brand_name}
             </p>
           </div>
           <div className="flex items-center py-6 px-4 bg-white rounded-lg text-lg">
-            <p className="text-gray-500 text-sm">Selected Plan:</p>
+            <div className="flex items-center">
+              <lord-icon
+                src="https://cdn.lordicon.com/kpxbczav.json"
+                trigger="hover"
+                style={{ width: "30px", height: "30px" }}
+              />
+              <p className="text-gray-500 text-sm">Selected Plan:</p>
+            </div>
             <p className="ml-4">
               {brand?.selected_plan?.name ? (
                 <span className="text-green-600 font-semibold">
-                  brand?.selected_plan?.name
+                  {brand?.selected_plan?.name}
                 </span>
               ) : (
                 <span className="text-orange-700 font-semibold">
@@ -101,13 +118,25 @@ const Brand = () => {
               )}
             </p>
           </div>
+
           <div className="py-6 px-4 bg-white rounded-lg text-lg space-y-2">
             <div className="flex items-center ">
-              <p className="text-gray-500 text-sm">Last Payment:</p>
+              <p className="text-gray-500 text-sm">Last Payment Date:</p>
               <p className="ml-4">
-                {brand?.subscription_info?.last_payment ? (
-                  <DateFormatter
-                    dateString={brand?.subscription_info?.last_payment}
+                {brand?.subscription_info?.previous_payment_time
+                  ? formatDistanceToNow(
+                      new Date(brand?.subscription_info?.previous_payment_time),
+                      { addSuffix: true }
+                    )
+                  : "N/A"}
+              </p>
+            </div>
+            <div className="flex items-center ">
+              <p className="text-gray-500 text-sm">Last Payment Amount:</p>
+              <p className="ml-4">
+                {brand?.subscription_info?.previous_payment_amount ? (
+                  <CurrencyFormatter
+                    value={brand?.subscription_info?.previous_payment_amount}
                   />
                 ) : (
                   "N/A"
@@ -117,76 +146,71 @@ const Brand = () => {
             <div className="flex items-center ">
               <p className="text-gray-500 text-sm">Subscription status:</p>
               <p className="ml-4">
-                {brand?.subscription_info?.subscription_expired ? (
-                  <span className="text-orange-700 font-semibold">Expired</span>
-                ) : (
+                {brand?.subscription_info?.status ? (
                   <span className="text-green-600 font-semibold">Active</span>
+                ) : (
+                  <span className="text-orange-700 font-semibold">Expired</span>
                 )}
               </p>
             </div>
             <div className="flex items-center ">
               <p className="text-gray-500 text-sm">Will Expire:</p>
               <span className="ml-4">
-                {brand?.subscription_info?.expiresAt ? (
-                  <DateFormatter
-                    dateString={brand?.subscription_info?.expiresAt}
-                  />
-                ) : (
-                  "N/A"
-                )}
+                {brand?.subscription_info?.end_time
+                  ? formatDistanceToNow(
+                      new Date(brand?.subscription_info?.end_time),
+                      { addSuffix: true }
+                    )
+                  : "N/A"}
               </span>
             </div>
           </div>
           <div className="py-6 px-4 bg-white rounded-lg text-lg space-y-2">
-            <div className="text-gray-500 text-sm">
+            <div className="text-gray-500 text-sm flex items-center">
+              <lord-icon
+                src="https://cdn.lordicon.com/qtykvslf.json"
+                trigger="hover"
+                style={{ width: "30px", height: "30px" }}
+              />
               <p>Contact:</p>
             </div>
             <div className="space-y-2 pl-[5rem]">
               <div className="flex items-center">
                 <p className="text-gray-500 text-sm">Mobile:</p>
-                <p className="ml-4">
-                  {brand?.contact?.mobile1 ? brand?.contact?.mobile1 : "N/A"}
-                </p>
+                <p className="ml-4">{brand?.contact?.mobile1 || "N/A"}</p>
               </div>
               <div className="flex items-center">
                 <p className="text-gray-500 text-sm">Mobile:</p>
                 <p className="ml-4 space-x-2">
-                  <span>
-                    {brand?.contact?.mobile2 ? brand?.contact?.mobile2 : "N/A"}
-                  </span>
+                  <span>{brand?.contact?.mobile2 || "N/A"}</span>
                 </p>
               </div>
             </div>
           </div>
           <div className="py-6 px-4 bg-white rounded-lg text-lg space-y-2">
-            <div className="text-gray-500 text-sm">
+            <div className="text-gray-500 text-sm flex items-center">
+              <lord-icon
+                src="https://cdn.lordicon.com/surcxhka.json"
+                trigger="hover"
+                style={{ width: "30px", height: "30px" }}
+              />
               <p>Address:</p>
             </div>
             <div className="space-y-2 pl-[5rem]">
               <div className="flex items-center">
                 <p className="text-gray-500 text-sm">Location:</p>
-                <p className="ml-4">
-                  {brand?.address?.location ? brand?.address?.location : "N/A"}
-                </p>
+                <p className="ml-4">{brand?.address?.location || "N/A"}</p>
               </div>
               <div className="flex items-center">
                 <p className="text-gray-500 text-sm">Sub-District:</p>
                 <p className="ml-4 space-x-2">
-                  <span>
-                    {brand?.address?.sub_district
-                      ? brand?.address?.sub_district
-                      : "N/A"}
-                  </span>
+                  <span>{brand?.address?.sub_district || "N/A"}</span>
                 </p>
               </div>
               <div className="flex items-center">
                 <p className="text-gray-500 text-sm">District:</p>
                 <p className="ml-4 space-x-2">
-                  <span>
-                    {brand?.address?.district
-                      ? brand?.address?.district
-                      : "N/A"}
-                  </span>
+                  <span>{brand?.address?.district || "N/A"}</span>
                 </p>
               </div>
             </div>

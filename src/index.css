@@ -10,7 +10,7 @@
 
 .login {
   position: relative;
-  background-image: url(../public/image/tim-toomey-n-daDckQfKo-unsplash.jpg);
+  background-image: url(./assets/image/tim-toomey-n-daDckQfKo-unsplash.jpg);
   background-size: cover;
   background-position: center;
   height: 100vh;

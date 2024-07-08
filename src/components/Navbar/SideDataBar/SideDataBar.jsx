@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useSelector } from "react-redux";
-import brandLogo from "../../../../public/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
+import brandLogo from "../../../assets/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
 import { currentUserInfo } from "../../../redux/features/auth/authSlice";
 
 const SideDataBar = ({ collapsed, dark }) => {
@@ -38,7 +38,7 @@ const SideDataBar = ({ collapsed, dark }) => {
             />
           </div>
           <h1 className="text-2xl text-center font-bold capitalize">
-            {userInfo?.brand?.brand_name}
+            {userInfo?.brand?.brand_name || "Restaurant Name"}
           </h1>
           <address className="text-center capitalize">
             {userInfo?.brand?.address?.sub_district || "sub district"},{" "}

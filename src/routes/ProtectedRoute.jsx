@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 const ProtectedRoute = ({ children, role }) => {
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const token = useSelector(currentUserToken);
   let user;
@@ -14,14 +15,12 @@ const ProtectedRoute = ({ children, role }) => {
     user = jwtDecode(token);
   }
 
-  const dispatch = useDispatch();
-
   if (!token) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   if (role !== undefined && role !== user?.role) {
-    toast.error("You are not permitted");
+    toast.error("You are not permitted. Only higher authority can access.");
     dispatch(logout());
     return <Navigate to="/login" state={{ from: location }} replace />;
   }

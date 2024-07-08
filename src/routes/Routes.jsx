@@ -5,6 +5,7 @@ import Home from "../pages/Home/Home";
 import AuthenticatedRoute from "./AuthenticatedRoute";
 import PublicLayout from "../layout/PublicLayout";
 import NonAuthenticatedRoute from "./NonAuthenticatedRoute";
+import ProtectedRoute from "./ProtectedRoute";
 const Login = lazy(() => import("../pages/PrimaryPage/Login/Login"));
 const Register = lazy(() => import("../pages/PrimaryPage/Register/Register"));
 const Sell = lazy(() => import("../pages/Sell/Sell"));
@@ -43,6 +44,11 @@ const SellHistory = lazy(() =>
   import("../pages/Dashboard/SellReport/SellHistory/SellHistory")
 );
 const Brand = lazy(() => import("../pages/Brand/Brand"));
+const Plans = lazy(() => import("../pages/Confidential/Plans"));
+const Pricing = lazy(() => import("../pages/Pricing/Pricing"));
+const SelectedPlan = lazy(() =>
+  import("../pages/Pricing/SelectedPlan/SelectedPlan")
+);
 
 export const router = createBrowserRouter([
   {
@@ -171,6 +177,32 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "/user/pricing",
+        element: (
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <Pricing />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/user/pricing/plans",
+        element: (
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <SelectedPlan />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/user/confidential/plans",
+        element: (
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <ProtectedRoute role={"super admin"}>
+              <Plans />
+            </ProtectedRoute>
+          </Suspense>
+        ),
+      },
+      {
         path: "/user/dashboard/sell-report/daily-sell-report",
         element: (
           <Suspense fallback={<h1>Loading...</h1>}>
@@ -228,6 +260,14 @@ export const router = createBrowserRouter([
       },
       {
         path: "/user/dashboard/staff-records",
+        element: (
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <StaffRecords />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/user/dashboard/staff-records/sell-record",
         element: (
           <Suspense fallback={<h1>Loading...</h1>}>
             <StaffRecords />

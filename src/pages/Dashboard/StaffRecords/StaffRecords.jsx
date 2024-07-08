@@ -4,6 +4,8 @@ import { Pagination, Table } from "antd";
 import AddStaff from "../../../components/Staff/AddStaff/AddStaff";
 import DeleteStaff from "../../../components/Staff/DeleteStaff/DeleteStaff";
 import DateFormatter from "../../../components/DateFormatter/DateFormatter";
+import { SnippetsOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
 const StaffRecords = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -32,9 +34,6 @@ const StaffRecords = () => {
     pageValue: currentPage,
     limitValue: pageSize,
   });
-
-
-  console.log(staffs);
 
   const data =
     staffs?.data?.map((staff, i) => ({
@@ -68,7 +67,16 @@ const StaffRecords = () => {
 
   return (
     <div>
-      <AddStaff setSelectedRowKeys={setSelectedRowKeys} />
+      <div className="flex justify-between">
+        <AddStaff setSelectedRowKeys={setSelectedRowKeys} />
+        <Link
+          to={"/user/dashboard/staff-records/sell-record"}
+          className="h-[40px] px-4 border border-gray-300 text-blue-500 text-lg my-4 rounded flex items-center justify-center gap-2 hover:bg-blue-500 hover:text-white duration-700 transition-all"
+        >
+          <SnippetsOutlined />
+          Staff Sell Record
+        </Link>
+      </div>
 
       <div className="flex items-center justify-between mt-4 mb-10">
         <div className="search">

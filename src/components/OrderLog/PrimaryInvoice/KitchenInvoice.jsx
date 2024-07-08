@@ -5,7 +5,7 @@ import CurrencyFormatter from "../../Currencyformatter/CurrencyFormatter";
 import ReactToPrint from "react-to-print";
 import DateFormatter from "../../DateFormatter/DateFormatter";
 
-const KitchenInvoice = ({ tableWiseOrder }) => {
+const KitchenInvoice = ({ tableWiseOrder, user }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const componentRef = useRef();
   const [tempTableWiseOrder, setTempTableWiseOrder] = useState([]);
@@ -78,10 +78,13 @@ const KitchenInvoice = ({ tableWiseOrder }) => {
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         width={"370px"}
+        closeSymbolFalse={true}
       >
         <div className="w-[310px] mx-auto mt-6">
           <div ref={componentRef} className="p-4 min-h-[400px]">
-            <h1 className="text-center font-bold text-xl">Food Republic</h1>
+            <h1 className="text-center font-bold text-xl capitalize">
+              {user?.brand?.brand_name || "Restaurant name"}
+            </h1>
             <h1 className="text-center font-semibold text-base mb-1 capitalize">
               {name}
             </h1>

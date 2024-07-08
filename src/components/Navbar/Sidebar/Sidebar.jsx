@@ -25,6 +25,10 @@ import {
   BugOutlined,
   GoldenFilled,
   PlusSquareFilled,
+  WarningOutlined,
+  DashboardFilled,
+  UsergroupAddOutlined,
+  SecurityScanOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { useEffect, useState } from "react";
@@ -36,16 +40,26 @@ import {
 } from "../../../redux/features/auth/authSlice";
 import CustomModal from "../../Modal/Modal";
 import AddMember from "../../Member/AddMember";
+import { useLogoutUserMutation } from "../../../redux/features/auth/authApi";
+import { toast } from "sonner";
 
 const Sidebar = ({ setDark, dark, collapsed }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const userInfo = useSelector(currentUserInfo);
+  const [logoutUser] = useLogoutUserMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate("/login");
+  const handleLogout = async () => {
+    try {
+      const res = await logoutUser().unwrap();
+      if (res?.success) {
+        dispatch(logout());
+        navigate("/login");
+      }
+    } catch (error) {
+      toast.error("Logout failed: ");
+    }
   };
 
   const initialMode = localStorage.getItem("menu-mode") === "true";
@@ -69,6 +83,26 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
       key: "/user/sell",
       icon: <CalendarOutlined />,
       title: "Sell",
+    },
+    userInfo?.role === "super admin" && {
+      label: "Confidential",
+      key: "/user/confidential",
+      icon: <WarningOutlined />,
+      title: "Confidential",
+      children: [
+        {
+          label: <Link to={`/user/confidential/plans`}>Plans</Link>,
+          key: "/user/confidential/plans",
+          icon: <DashboardFilled />,
+          title: "Plans",
+        },
+      ],
+    },
+    !userInfo?.brand?.subscription_info?.selected_plan_id && {
+      label: <Link to={`/user/pricing`}>Pricing</Link>,
+      key: "/user/pricing",
+      icon: <SecurityScanOutlined />,
+      title: "Pricing",
     },
     {
       label: "Dashboard",
@@ -203,6 +237,24 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
           key: "/user/dashboard/staff-records",
           icon: <GithubFilled />,
           title: "Staff Records",
+        },
+        {
+          label: "Employee Records",
+          key: "/user/dashboard/employee-records",
+          icon: <GithubFilled />,
+          title: "Employee Records",
+          children: [
+            {
+              label: (
+                <Link to="/user/dashboard/employee-records/employees">
+                  Employees
+                </Link>
+              ),
+              key: "/user/dashboard/employee-records/employees",
+              icon: <UsergroupAddOutlined />,
+              title: "Employees",
+            },
+          ],
         },
         {
           label: "Expense Reports",

@@ -46,7 +46,7 @@ const Sell = () => {
           </div>
         </div>
         {isLoading && (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {Array.from({ length: 20 }).map((_, i) => (
               <TableSkeleton key={i} />
             ))}

@@ -2,7 +2,7 @@ import { Pagination, Popconfirm, Table } from "antd";
 import { useGetAllUserQuery } from "../../../../redux/features/user/userApi";
 import { useState } from "react";
 import DateFormatter from "../../../../components/DateFormatter/DateFormatter";
-import defaultAvatar from "../../../../../public/image/avatar/6791548_avatar_person_profile_profile icon_user_icon.png";
+import defaultAvatar from "../../../../assets/image/avatar/6791548_avatar_person_profile_profile icon_user_icon.png";
 import { EditFilled, DeleteFilled } from "@ant-design/icons";
 import PrimaryLoading from "../../../../components/Loading/PrimaryLoading/PrimaryLoading";
 import { useSelector } from "react-redux";

@@ -35,6 +35,14 @@ const userApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["User"],
     }),
+    updateUserInfo: builder.mutation({
+      query: (data) => ({
+        url: `/users/update-user-info`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["User"],
+    }),
     fetchCurrentUser: builder.mutation({
       query: () => ({
         url: `/users/find-current-user`,
@@ -48,5 +56,6 @@ const userApi = baseApi.injectEndpoints({
 export const {
   useGetAllUserQuery,
   useUpdateUserAvatarMutation,
+  useUpdateUserInfoMutation,
   useFetchCurrentUserMutation,
 } = userApi;

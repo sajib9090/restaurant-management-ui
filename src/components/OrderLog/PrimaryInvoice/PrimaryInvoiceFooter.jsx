@@ -7,7 +7,7 @@ import KitchenInvoice from "./KitchenInvoice";
 import CustomerInvoice from "./CustomerInvoice";
 import PaymentInvoice from "./PaymentInvoice";
 import { useSelector } from "react-redux";
-import { currentUser } from "../../../redux/features/auth/authSlice";
+import { currentUserInfo } from "../../../redux/features/auth/authSlice";
 
 const PrimaryInvoice = ({ tableWiseOrder, selectedStaff, table_name }) => {
   const [mobileNumber, setMobileNumber] = useState("");
@@ -18,7 +18,7 @@ const PrimaryInvoice = ({ tableWiseOrder, selectedStaff, table_name }) => {
   const [gotMoney, setGotMoney] = useState("");
   const [backMoney, setBackMoney] = useState("");
 
-  const user = useSelector(currentUser);
+  const userInfo = useSelector(currentUserInfo);
 
   const totalBill = tableWiseOrder?.reduce(
     (total, item) => total + item?.item_quantity * item?.item_price,
@@ -89,7 +89,10 @@ const PrimaryInvoice = ({ tableWiseOrder, selectedStaff, table_name }) => {
           value={gotMoney}
           onChange={handleChangeMoney}
           type="number"
-          className="w-full p-2 border border-gray-300 rounded shadow focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          min="0"
+          className={`w-full p-2 border border-gray-300 rounded shadow focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+            gotMoney < totalBill - totalDiscount && "focus:ring-red-500"
+          }`}
         />
       </div>
 
@@ -127,10 +130,14 @@ const PrimaryInvoice = ({ tableWiseOrder, selectedStaff, table_name }) => {
             </div>
           </>
         )}
-        <div className="flex justify-between mt-2 text-green-600 font-bold text-lg">
+        <div
+          className={`flex justify-between mt-2 text-green-600 font-bold text-lg ${
+            gotMoney < totalBill - totalDiscount && "text-red-600"
+          }`}
+        >
           <span>Customer will get:</span>
           <span>
-            <CurrencyFormatter value={backMoney} />
+            <CurrencyFormatter value={backMoney || 0} />
           </span>
         </div>
       </div>
@@ -164,16 +171,17 @@ const PrimaryInvoice = ({ tableWiseOrder, selectedStaff, table_name }) => {
       </div>
 
       <div className="flex justify-center gap-3">
-        <KitchenInvoice tableWiseOrder={tableWiseOrder} />
+        <KitchenInvoice user={userInfo} tableWiseOrder={tableWiseOrder} />
         <CustomerInvoice
           tableWiseOrder={tableWiseOrder}
           totalDiscount={totalDiscount}
           totalBill={totalBill}
           selectedStaff={selectedStaff}
-          user={user}
+          user={userInfo}
         />
         <PaymentInvoice
-          user={user}
+          gotMoney={gotMoney}
+          user={userInfo}
           tableWiseOrder={tableWiseOrder}
           totalDiscount={totalDiscount}
           totalBill={totalBill}

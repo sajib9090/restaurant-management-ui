@@ -56,15 +56,7 @@ const DisplayCategory = ({
             className="border border-gray-200 shadow-xl rounded-md"
           >
             <div
-              className={`capitalize text-center rounded-md py-2 font-bold text-xl ${
-                index === 0
-                  ? "bg-[#070f17] bg-opacity-75 text-white"
-                  : index === 1
-                  ? "bg-[#502a14] bg-opacity-75 text-white"
-                  : index === 2
-                  ? "bg-[#21380e] bg-opacity-75 text-white"
-                  : "bg-pink-700 bg-opacity-75 text-white"
-              }`}
+              className={`capitalize text-center rounded-t-md py-2 font-bold text-xl bg-[#cfcfcf] bg-opacity-75 text-black border-t border-l border-r border-gray-400`}
             >
               {category}
             </div>

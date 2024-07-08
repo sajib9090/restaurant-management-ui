@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetSingleInvoiceByIdQuery } from "../../../redux/features/soldInvoice/soldInvoiceApi.js";
 import { useRef } from "react";
-import brandLogo from "../../../../public/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
+import brandLogo from "../../../assets/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
 import DateFormatter from "../../../components/DateFormatter/DateFormatter.jsx";
 import CurrencyFormatter from "../../../components/Currencyformatter/CurrencyFormatter.jsx";
 import ReactToPrint from "react-to-print";

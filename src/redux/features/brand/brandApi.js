@@ -2,28 +2,8 @@ import { baseApi } from "../api/baseApi";
 
 const brandApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // getAllUser: builder.query({
-    //   query: ({ pageValue, limitValue, searchValue } = {}) => {
-    //     let url = "/users/find-users";
-    //     const params = new URLSearchParams();
-
-    //     if (searchValue) params.append("search", searchValue);
-    //     if (limitValue) params.append("limit", limitValue);
-    //     if (pageValue) params.append("page", pageValue);
-
-    //     if (params.toString()) {
-    //       url += `?${params.toString()}`;
-    //     }
-
-    //     return {
-    //       url,
-    //       method: "GET",
-    //     };
-    //   },
-    //   providesTags: ["User"],
-    // }),
     updateBrandLogo: builder.mutation({
-      query: ({brandLogo }) => {
+      query: ({ brandLogo }) => {
         const formData = new FormData();
         formData.append("brandLogo", brandLogo);
 
@@ -36,18 +16,25 @@ const brandApi = baseApi.injectEndpoints({
       invalidatesTags: ["Brand", "User"],
     }),
     updateBrandInfo: builder.mutation({
-      query: (data ) => ({
+      query: (data) => ({
         url: `/brands/update-info`,
         method: "PATCH",
         body: data,
       }),
       invalidatesTags: ["Brand", "User"],
     }),
+    getCurrentBrandInfo: builder.query({
+      query: () => ({
+        url: `/brands/current-brand`,
+        method: "GET",
+      }),
+      providesTags: ["Brand"],
+    }),
   }),
 });
 
 export const {
-  //   useGetAllUserQuery,
+  useGetCurrentBrandInfoQuery,
   useUpdateBrandLogoMutation,
   useUpdateBrandInfoMutation,
 } = brandApi;

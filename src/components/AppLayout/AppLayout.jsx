@@ -4,15 +4,12 @@ import { Button, Layout, theme } from "antd";
 import Sidebar from "../Navbar/Sidebar/Sidebar";
 import SideDataBar from "../Navbar/SideDataBar/SideDataBar";
 import { Outlet } from "react-router-dom";
-// import { useSelector } from "react-redux";
-// import { currentUserDetails } from "../../redux/features/auth/authSlice";
 import HeaderInfo from "../Navbar/HeaderInfo/HeaderInfo";
 import DownBar from "../Navbar/DownBar/DownBar";
+import SubscriptionAlert from "../Navbar/SubscriptionAlert/SubscriptionAlert";
 const { Header, Sider, Content } = Layout;
 
 const AppLayout = () => {
-  // const user = useSelector(currentUserDetails);
-
   const initialThemeMode = localStorage.getItem("theme-mode") === "true";
   const [dark, setDark] = useState(initialThemeMode);
 
@@ -47,6 +44,7 @@ const AppLayout = () => {
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
           />
+          <SubscriptionAlert />
           <HeaderInfo />
         </Header>
         <Content
