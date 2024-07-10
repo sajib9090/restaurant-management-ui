@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import {
   useGetSinglePlanQuery,
   usePurchasePlanMutation,
@@ -118,13 +118,22 @@ const SelectedPlan = () => {
             <CurrencyFormatter value={totalPrice(plan?.data?.price)} />
           </div>
         </div>
-        <button
-          disabled={purchaseLoading}
-          onClick={() => handleCreatePayment(plan?.data)}
-          className="mt-8 w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300"
-        >
-          {purchaseLoading ? <PrimaryLoading /> : "Proceed to Payment"}
-        </button>
+
+        <div className="mt-8 flex flex-col items-center">
+          <button
+            disabled={purchaseLoading}
+            onClick={() => handleCreatePayment(plan?.data)}
+            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 mb-4"
+          >
+            {purchaseLoading ? <PrimaryLoading /> : "Proceed to Payment"}
+          </button>
+          <Link
+            to="/user/pricing"
+            className="text-blue-600 hover:text-blue-800 transition-colors duration-300"
+          >
+            Want to change your plan? View all plans
+          </Link>
+        </div>
       </div>
     </div>
   );

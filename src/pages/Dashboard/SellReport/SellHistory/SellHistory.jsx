@@ -165,25 +165,29 @@ const SellHistory = () => {
         </div>
       </Card>
 
-      {data?.data_found == 0 ? (
-        "Nothing found"
-      ) : (
+      {data != undefined && (
         <>
-          {isLoading ? (
-            <Spin
-              size="large"
-              className="flex justify-center items-center mt-4"
-            />
+          {data?.data_found == 0 ? (
+            "Nothing found"
           ) : (
-            <div>
-              <div className="overflow-x-auto mt-4">
-                <table className="min-w-full border-collapse border shadow-md ">
-                  <thead>{renderTableHeader()}</thead>
-                  <tbody>{renderTableBody()}</tbody>
-                  <tfoot>{renderTotalsRow()}</tfoot>
-                </table>
-              </div>
-            </div>
+            <>
+              {isLoading ? (
+                <Spin
+                  size="large"
+                  className="flex justify-center items-center mt-4"
+                />
+              ) : (
+                <div>
+                  <div className="overflow-x-auto mt-4">
+                    <table className="min-w-full border-collapse border shadow-md ">
+                      <thead>{renderTableHeader()}</thead>
+                      <tbody>{renderTableBody()}</tbody>
+                      <tfoot>{renderTotalsRow()}</tfoot>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </>
       )}

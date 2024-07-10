@@ -98,7 +98,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
         },
       ],
     },
-    !userInfo?.brand?.subscription_info?.selected_plan_id && {
+    !userInfo?.brand?.selected_plan?.id && {
       label: <Link to={`/user/pricing`}>Pricing</Link>,
       key: "/user/pricing",
       icon: <SecurityScanOutlined />,

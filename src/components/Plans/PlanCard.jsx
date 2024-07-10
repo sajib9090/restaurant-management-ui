@@ -1,9 +1,8 @@
 /* eslint-disable react/prop-types */
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useGetCurrentBrandInfoQuery } from "../../redux/features/brand/brandApi";
 const PlanCard = ({ popular, plan, actionButton }) => {
   const { data: brand } = useGetCurrentBrandInfoQuery();
-  const navigate = useNavigate();
 
   return (
     <div className="max-w-sm relative">
@@ -22,20 +21,17 @@ const PlanCard = ({ popular, plan, actionButton }) => {
           </div>
           <div className="text-gray-500 mb-4 capitalize">{plan?.duration}</div>
           {actionButton && (
-            <button
-              disabled={brand?.data?.selected_plan?.id == plan?.plan_id}
-              onClick={() =>
-                navigate(`/user/pricing/plans?plan=${plan?.plan_id}`)
-              }
+            <Link
+              to={`/user/pricing/plans?plan=${plan?.plan_id}`}
               className={`bg-blue-600 text-white py-2 px-12 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 ${
                 plan?.plan_id == brand?.data?.selected_plan?.id &&
-                "bg-slate-200 hover:bg-slate-100 text-blue-600 cursor-not-allowed"
+                "bg-slate-200 hover:bg-slate-100 text-blue-600"
               }`}
             >
               {brand?.data?.selected_plan?.id == plan?.plan_id
                 ? "Selected"
                 : "Buy Now"}
-            </button>
+            </Link>
           )}
         </div>
         <div className="border-t border-gray-200">

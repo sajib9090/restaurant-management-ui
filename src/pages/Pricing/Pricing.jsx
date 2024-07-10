@@ -2,7 +2,9 @@ import PlanCard from "../../components/Plans/PlanCard";
 import { useGetAllPlansQuery } from "../../redux/features/plan/planApi";
 
 const Pricing = () => {
-  const { data: plans } = useGetAllPlansQuery();
+  const { data: plans } = useGetAllPlansQuery(undefined, {
+    refetchOnReconnect: true,
+  });
 
   return (
     <div className="py-12">
