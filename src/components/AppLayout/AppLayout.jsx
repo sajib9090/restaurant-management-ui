@@ -6,7 +6,6 @@ import SideDataBar from "../Navbar/SideDataBar/SideDataBar";
 import { Outlet } from "react-router-dom";
 import HeaderInfo from "../Navbar/HeaderInfo/HeaderInfo";
 import DownBar from "../Navbar/DownBar/DownBar";
-import SubscriptionAlert from "../Navbar/SubscriptionAlert/SubscriptionAlert";
 const { Header, Sider, Content } = Layout;
 
 const AppLayout = () => {
@@ -44,7 +43,6 @@ const AppLayout = () => {
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
           />
-          <SubscriptionAlert />
           <HeaderInfo />
         </Header>
         <Content

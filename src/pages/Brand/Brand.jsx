@@ -154,8 +154,17 @@ const Brand = () => {
               </p>
             </div>
             <div className="flex items-center ">
-              <p className="text-gray-500 text-sm">Will Expire:</p>
-              <span className="ml-4">
+              <p className="text-gray-500 text-sm">
+                Subscription{" "}
+                {brand?.subscription_info?.status ? "Expires" : "Expired"}:
+              </p>
+              <span
+                className={`ml-4 ${
+                  brand?.subscription_info?.status
+                    ? "text-blue-600"
+                    : "text-red-600"
+                }`}
+              >
                 {brand?.subscription_info?.end_time
                   ? formatDistanceToNow(
                       new Date(brand?.subscription_info?.end_time),

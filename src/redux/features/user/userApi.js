@@ -48,7 +48,29 @@ const userApi = baseApi.injectEndpoints({
         url: `/users/find-current-user`,
         method: "POST",
       }),
-      providesTags: ["User"],
+      invalidatesTags: ["User"],
+    }),
+    addUserForMaintainBrand: builder.mutation({
+      query: (data) => ({
+        url: `/users/auth-create-user`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["User"],
+    }),
+    deleteUser: builder.mutation({
+      query: (id) => ({
+        url: `/users/delete-user/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["User"],
+    }),
+    changeOwnPassword: builder.mutation({
+      query: (data) => ({
+        url: `/users/change-own-password`,
+        method: "PATCH",
+        body: data,
+      }),
     }),
   }),
 });
@@ -58,4 +80,7 @@ export const {
   useUpdateUserAvatarMutation,
   useUpdateUserInfoMutation,
   useFetchCurrentUserMutation,
+  useAddUserForMaintainBrandMutation,
+  useDeleteUserMutation,
+  useChangeOwnPasswordMutation,
 } = userApi;

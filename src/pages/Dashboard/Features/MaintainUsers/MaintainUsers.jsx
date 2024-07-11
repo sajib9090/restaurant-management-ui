@@ -1,12 +1,14 @@
-import { Pagination, Popconfirm, Table } from "antd";
+import { Pagination, Table } from "antd";
 import { useGetAllUserQuery } from "../../../../redux/features/user/userApi";
 import { useState } from "react";
 import DateFormatter from "../../../../components/DateFormatter/DateFormatter";
 import defaultAvatar from "../../../../assets/image/avatar/6791548_avatar_person_profile_profile icon_user_icon.png";
-import { EditFilled, DeleteFilled } from "@ant-design/icons";
-import PrimaryLoading from "../../../../components/Loading/PrimaryLoading/PrimaryLoading";
+
 import { useSelector } from "react-redux";
 import { currentUserInfo } from "../../../../redux/features/auth/authSlice";
+import AddUser from "../../../../components/UserMaintain/AddUser";
+import Edit from "../../../../components/UserMaintain/Edit";
+import DeleteUser from "../../../../components/UserMaintain/DeleteUser";
 
 const MaintainUsers = () => {
   const userInfo = useSelector(currentUserInfo);
@@ -14,19 +16,13 @@ const MaintainUsers = () => {
   const [searchValue, setSearchValue] = useState("");
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const {
-    data: users,
-    isLoading: usersLoading,
-    error,
-  } = useGetAllUserQuery({
+  const { data: users, isLoading: usersLoading } = useGetAllUserQuery({
     pageValue: currentPage,
     limitValue: pageSize,
     searchValue: searchValue,
   });
 
   const columns = [
-    Table.SELECTION_COLUMN,
     {
       title: "Name",
       dataIndex: "name",
@@ -99,34 +95,16 @@ const MaintainUsers = () => {
         </div>
       ),
       actions: (
-        <div className="flex items-center justify-center">
-          {user?.email !== userInfo?.email && (
-            <button
-              title="Edit"
-              className="text-blue-500 text-xl hover:text-blue-700 transition-transform transform hover:scale-110"
-            >
-              <EditFilled />
-            </button>
-          )}
+        <div className="flex items-center justify-between">
+          <Edit user={user} userInfo={userInfo} />
+          <DeleteUser user={user} userInfo={userInfo} />
         </div>
       ),
     })) || [];
 
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: (selectedRowKeys) => {
-      setSelectedRowKeys(selectedRowKeys);
-    },
-  };
-
   const handlePaginationChange = (page, pageSize) => {
     setCurrentPage(page);
     setPageSize(pageSize);
-  };
-
-  let deleteLoading = true;
-  const handleDelete = () => {
-    console.log(selectedRowKeys);
   };
 
   return (
@@ -143,40 +121,12 @@ const MaintainUsers = () => {
             placeholder="Search..."
           />
         </div>
-        {selectedRowKeys?.length > 0 && (
-          <Popconfirm
-            title="Delete Staff"
-            description="Are you sure you want to delete the selected staff?"
-            onConfirm={handleDelete}
-            okText="Yes"
-            cancelText="No"
-            placement="topLeft"
-          >
-            <button
-              disabled={deleteLoading}
-              className="h-[40px] w-[220px] border border-gray-300 text-red-500 text-lg rounded flex items-center justify-center gap-2"
-            >
-              {deleteLoading ? (
-                <>
-                  Deleting ...
-                  <PrimaryLoading />
-                </>
-              ) : (
-                <>
-                  <DeleteFilled />
-                  Delete Selected-({selectedRowKeys?.length})
-                </>
-              )}
-            </button>
-          </Popconfirm>
-        )}
+
+        <div>
+          <AddUser />
+        </div>
       </div>
-      <Table
-        columns={columns}
-        rowSelection={rowSelection}
-        dataSource={data}
-        pagination={false}
-      />
+      <Table columns={columns} dataSource={data} pagination={false} />
       <div className="mt-2">
         <Pagination
           total={users?.data_found || 0}

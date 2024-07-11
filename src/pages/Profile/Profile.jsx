@@ -12,6 +12,7 @@ import {
   setUserInfo,
 } from "../../redux/features/auth/authSlice";
 import EditProfile from "../../components/Profile/EditProfile/EditProfile";
+import RequestPasswordChange from "../../components/Profile/RequestPasswordChange/RequestPasswordChange";
 
 const Profile = () => {
   const userInfo = useSelector(currentUserInfo);
@@ -96,7 +97,7 @@ const Profile = () => {
             </div>
             <div className="p-4 rounded-lg shadow-sm bg-yellow-100 transition-transform duration-200 transform hover:scale-105">
               <p className="text-sm font-semibold text-gray-600">Email</p>
-              <p className="text-lg">{userInfo?.email}</p>
+              <p className="text-lg">{userInfo?.email || "N/A"}</p>
             </div>
             <div className="p-4 rounded-lg shadow-sm bg-lime-100 transition-transform duration-200 transform hover:scale-105">
               <p className="text-sm font-semibold text-gray-600">Username</p>
@@ -109,6 +110,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
+      <RequestPasswordChange />
       <EditProfile userInfo={userInfo} />
     </div>
   );

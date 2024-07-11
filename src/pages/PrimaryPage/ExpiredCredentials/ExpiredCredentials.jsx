@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import expiredImage from "../../../../public/image/error/66815_key_error_icon.png";
+import expiredImage from "../../../assets/image/error/66815_key_error_icon.png";
 
 const ExpiredCredentials = () => {
   return (

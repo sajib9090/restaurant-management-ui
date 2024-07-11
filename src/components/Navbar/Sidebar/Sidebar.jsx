@@ -42,10 +42,13 @@ import CustomModal from "../../Modal/Modal";
 import AddMember from "../../Member/AddMember";
 import { useLogoutUserMutation } from "../../../redux/features/auth/authApi";
 import { toast } from "sonner";
+import { useGetCurrentBrandInfoQuery } from "../../../redux/features/brand/brandApi";
 
 const Sidebar = ({ setDark, dark, collapsed }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const userInfo = useSelector(currentUserInfo);
+  const { data } = useGetCurrentBrandInfoQuery();
+
   const [logoutUser] = useLogoutUserMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -98,7 +101,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
         },
       ],
     },
-    !userInfo?.brand?.selected_plan?.id && {
+    !data?.data?.selected_plan?.id && {
       label: <Link to={`/user/pricing`}>Pricing</Link>,
       key: "/user/pricing",
       icon: <SecurityScanOutlined />,
