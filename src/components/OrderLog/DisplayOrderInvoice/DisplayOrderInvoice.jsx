@@ -1,12 +1,8 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import CustomModal from "../../Modal/Modal";
-<<<<<<< HEAD
 import { useDispatch, useSelector } from "react-redux";
 import { currentUserInfo } from "../../../redux/features/auth/authSlice";
-=======
-import { useDispatch } from "react-redux";
->>>>>>> f608e1a4ea35d639688d420a07ea8ed266ea583a
 import CurrencyFormatter from "../../Currencyformatter/CurrencyFormatter";
 import { DeleteFilled } from "@ant-design/icons";
 import { PiBagFill } from "react-icons/pi";
@@ -17,11 +13,7 @@ import {
 } from "../../../redux/features/OrderLog/orderLogSlice";
 import PrimaryInvoiceFooter from "../PrimaryInvoice/PrimaryInvoiceFooter";
 import PrimaryError from "../../PrimaryError/PrimaryError";
-<<<<<<< HEAD
 import { FullscreenOutlined, FullscreenExitOutlined } from "@ant-design/icons";
-=======
-import { useGetCurrentUserQuery } from "../../../redux/features/user/userApi";
->>>>>>> f608e1a4ea35d639688d420a07ea8ed266ea583a
 
 const DisplayOrderInvoice = ({
   tableWiseOrderQuantity,
@@ -31,11 +23,8 @@ const DisplayOrderInvoice = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-<<<<<<< HEAD
   const userInfo = useSelector(currentUserInfo);
-=======
-  const { data: user } = useGetCurrentUserQuery();
->>>>>>> f608e1a4ea35d639688d420a07ea8ed266ea583a
+
   const dispatch = useDispatch();
 
   const categories = tableWiseOrder?.map((item) => item?.category);
@@ -75,11 +64,7 @@ const DisplayOrderInvoice = ({
         <div className="bg-gray-50 rounded-lg">
           <div className="text-center mb-6 capitalize">
             <h2 className="text-3xl font-bold text-indigo-600">
-<<<<<<< HEAD
               {userInfo?.brand?.brand_name}
-=======
-              {user?.data?.brand?.brand_name}
->>>>>>> f608e1a4ea35d639688d420a07ea8ed266ea583a
             </h2>
             <p className="font-medium text-lg text-gray-700">{table_name}</p>
           </div>
