@@ -1,11 +1,16 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetSingleInvoiceByIdQuery } from "../../../redux/features/soldInvoice/soldInvoiceApi.js";
 import { useRef } from "react";
+<<<<<<< HEAD
 import brandLogo from "../../../assets/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
+=======
+import brandLogo from "../../../../public/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
+>>>>>>> f608e1a4ea35d639688d420a07ea8ed266ea583a
 import DateFormatter from "../../../components/DateFormatter/DateFormatter.jsx";
 import CurrencyFormatter from "../../../components/Currencyformatter/CurrencyFormatter.jsx";
 import ReactToPrint from "react-to-print";
 import InvoiceSkeleton from "../../../components/Skeleton/InvoiceSkeleton.jsx";
+<<<<<<< HEAD
 import { useSelector } from "react-redux";
 import { currentUserInfo } from "../../../redux/features/auth/authSlice.js";
 
@@ -13,6 +18,13 @@ const SoldInvoice = () => {
   const { invoice_id } = useParams();
   const userInfo = useSelector(currentUserInfo);
 
+=======
+import { useGetCurrentUserQuery } from "../../../redux/features/user/userApi.js";
+
+const SoldInvoice = () => {
+  const { invoice_id } = useParams();
+  const { data: user } = useGetCurrentUserQuery();
+>>>>>>> f608e1a4ea35d639688d420a07ea8ed266ea583a
   const { data, isLoading } = useGetSingleInvoiceByIdQuery({ invoice_id });
   const componentRef = useRef();
   const navigate = useNavigate();
@@ -31,13 +43,25 @@ const SoldInvoice = () => {
           <div className="text-center mt-6">
             <div className="mx-auto w-full">
               <img
+<<<<<<< HEAD
                 src={userInfo?.brand?.brand_logo?.url || brandLogo}
+=======
+                src={
+                  user?.data?.brand?.brand_logo ? user?.brand?.brand_logo : brandLogo
+                }
+>>>>>>> f608e1a4ea35d639688d420a07ea8ed266ea583a
                 alt=""
                 className="h-[50px] text-center mx-auto grayscale"
               />
             </div>
             <h1 className="text-2xl font-bold capitalize">
+<<<<<<< HEAD
               {userInfo?.brand?.brand_name || "Restaurant Name"}
+=======
+              {user?.data?.brand?.brand_name
+                ? user?.data?.brand?.brand_name
+                : "Restaurant Name"}
+>>>>>>> f608e1a4ea35d639688d420a07ea8ed266ea583a
             </h1>
             <p className="text-[8.5px] -mt-0.5 capitalize">
               {userInfo?.brand?.address?.location || "Your Location"},{" "}
