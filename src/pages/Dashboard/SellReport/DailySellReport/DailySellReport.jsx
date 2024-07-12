@@ -7,6 +7,7 @@ import CurrencyFormatter from "../../../../components/Currencyformatter/Currency
 import SellReportFooter from "../../../../components/SellReport/SellReportFooter";
 import SellReportSkeleton from "../../../../components/Skeleton/SellReportSkeleton";
 import FindSpecificInvoice from "../../../../components/SellReport/FindSpecificInvoice";
+import AccessError from "../../../../components/AccessError/AccessError";
 
 const DailySellReport = () => {
   const [selectedDate, setSelectedDate] = useState(
@@ -49,21 +50,24 @@ const DailySellReport = () => {
     },
   ];
 
-  const { data: soldInvoices, isLoading: sellReportLoading } =
-    useGetAllSellAlsoDateFilterQuery(
-      {
-        pageValue: currentPage,
-        limitValue: pageSize,
-        date: selectedDate,
-        start_date: selectedRange[0],
-        end_date: selectedRange[1],
-      },
-      {
-        skip:
-          !selectedDate &&
-          (!selectedRange || !selectedRange[0] || !selectedRange[1]),
-      }
-    );
+  const {
+    data: soldInvoices,
+    isLoading: sellReportLoading,
+    error,
+  } = useGetAllSellAlsoDateFilterQuery(
+    {
+      pageValue: currentPage,
+      limitValue: pageSize,
+      date: selectedDate,
+      start_date: selectedRange[0],
+      end_date: selectedRange[1],
+    },
+    {
+      skip:
+        !selectedDate &&
+        (!selectedRange || !selectedRange[0] || !selectedRange[1]),
+    }
+  );
 
   const data =
     soldInvoices?.data?.map((invoice, i) => ({
@@ -128,6 +132,15 @@ const DailySellReport = () => {
     setCurrentPage(page);
     setPageSize(pageSize);
   };
+
+  const allError = error;
+  if (allError) {
+    return (
+      <AccessError
+        errorMessage={allError?.data?.message || allError?.message}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen px-4">

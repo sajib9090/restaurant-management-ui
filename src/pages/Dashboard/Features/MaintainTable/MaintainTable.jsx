@@ -12,6 +12,7 @@ import PrimaryLoading from "../../../../components/Loading/PrimaryLoading/Primar
 import CustomModal from "../../../../components/Modal/Modal";
 import ErrorMessage from "../../../../components/ErrorMessage/ErrorMessage";
 import StatisticsCard from "../../../../components/StatisticsCard/StatisticsCard";
+import AccessError from "../../../../components/AccessError/AccessError";
 
 const MaintainTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,7 +45,11 @@ const MaintainTable = () => {
     },
   ];
 
-  const { data: tables, isLoading } = useGetAllTablesQuery({
+  const {
+    data: tables,
+    isLoading,
+    error: getError,
+  } = useGetAllTablesQuery({
     pageValue: currentPage,
     limitValue: pageSize,
     searchValue: searchValue,
@@ -83,9 +88,12 @@ const MaintainTable = () => {
 
   const [tableName, setTableName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [addTable, { isLoading: addTableLoading }] = useAddTableMutation();
-  const [deleteTable, { isLoading: deleteLoading }] = useDeleteTableMutation();
-  const [updateTable, { isLoading: updateLoading }] = useUpdateTableMutation();
+  const [addTable, { isLoading: addTableLoading, error: addError }] =
+    useAddTableMutation();
+  const [deleteTable, { isLoading: deleteLoading, error: deleteError }] =
+    useDeleteTableMutation();
+  const [updateTable, { isLoading: updateLoading, error: updateError }] =
+    useUpdateTableMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -147,6 +155,15 @@ const MaintainTable = () => {
 
   if (isLoading) {
     return <p>Loading...</p>;
+  }
+
+  const allError = getError || addError || updateError || deleteError;
+  if (allError) {
+    return (
+      <AccessError
+        errorMessage={allError?.data?.message || allError?.message}
+      />
+    );
   }
 
   return (

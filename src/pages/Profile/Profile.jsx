@@ -13,15 +13,17 @@ import {
 } from "../../redux/features/auth/authSlice";
 import EditProfile from "../../components/Profile/EditProfile/EditProfile";
 import RequestPasswordChange from "../../components/Profile/RequestPasswordChange/RequestPasswordChange";
+import AccessError from "../../components/AccessError/AccessError";
 
 const Profile = () => {
   const userInfo = useSelector(currentUserInfo);
   const [showOptions, setShowOptions] = useState(false);
   const fileInputRef = useRef(null);
 
-  const [updateUserAvatar, { isLoading: uploadLoading }] =
+  const [updateUserAvatar, { isLoading: uploadLoading, error: updateError }] =
     useUpdateUserAvatarMutation();
-  const [fetchCurrentUser, { isLoading }] = useFetchCurrentUserMutation();
+  const [fetchCurrentUser, { isLoading, error }] =
+    useFetchCurrentUserMutation();
   const dispatch = useDispatch();
 
   const handleFileChange = async (event) => {
@@ -43,6 +45,15 @@ const Profile = () => {
       }
     }
   };
+
+  const allError = error || updateError;
+  if (allError) {
+    return (
+      <AccessError
+        errorMessage={allError?.data?.message || allError?.message}
+      />
+    );
+  }
 
   return (
     <div className="container mx-auto my-8 p-8 bg-white rounded-lg shadow-lg relative">

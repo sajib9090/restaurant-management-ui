@@ -10,6 +10,7 @@ import DateFormatter from "../DateFormatter/DateFormatter";
 import CurrencyFormatter from "../Currencyformatter/CurrencyFormatter";
 import ReactToPrint from "react-to-print";
 import brandLogo from "../../assets/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
+import AccessError from "../AccessError/AccessError";
 
 const FindSpecificInvoice = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,12 +27,21 @@ const FindSpecificInvoice = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const id = e.target.invoiceId.value;
-    if (!id || id?.length < 34) {
+    if (!id || id?.length < 32) {
       setErrorMessage("Invalid invoice id");
     } else {
       setInvoiceId(id);
     }
   };
+
+  const allError = error;
+  if (allError) {
+    return (
+      <AccessError
+        errorMessage={allError?.data?.message || allError?.message}
+      />
+    );
+  }
 
   return (
     <>

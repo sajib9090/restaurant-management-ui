@@ -14,16 +14,24 @@ import { setUserInfo } from "../../redux/features/auth/authSlice";
 import { useFetchCurrentUserMutation } from "../../redux/features/user/userApi";
 import CurrencyFormatter from "../../components/Currencyformatter/CurrencyFormatter";
 import { formatDistanceToNow } from "date-fns";
+import AccessError from "../../components/AccessError/AccessError";
 
 const Brand = () => {
-  const { data, isLoading: brandInfoLoading } = useGetCurrentBrandInfoQuery();
+  const {
+    data,
+    isLoading: brandInfoLoading,
+    error,
+  } = useGetCurrentBrandInfoQuery();
   const brand = data?.data;
 
   const fileInputRef = useRef(null);
 
-  const [updateBrandLogo, { isLoading: updateLoading }] =
-    useUpdateBrandLogoMutation();
-  const [fetchCurrentUser, { isLoading }] = useFetchCurrentUserMutation();
+  const [
+    updateBrandLogo,
+    { isLoading: updateLoading, error: updateLogoError },
+  ] = useUpdateBrandLogoMutation();
+  const [fetchCurrentUser, { isLoading, error: currentUserError }] =
+    useFetchCurrentUserMutation();
   const dispatch = useDispatch();
 
   const handleFileChange = async (event) => {
@@ -45,6 +53,15 @@ const Brand = () => {
       }
     }
   };
+
+  const allError = error || updateLogoError || currentUserError;
+  if (allError) {
+    return (
+      <AccessError
+        errorMessage={allError?.data?.message || allError?.message}
+      />
+    );
+  }
 
   return (
     <div>

@@ -1,6 +1,7 @@
 import { Card, Col, DatePicker, Row, Spin } from "antd";
 import { useState, useMemo } from "react";
 import { useGetAllSellAlsoDateFilterQuery } from "../../../../redux/features/soldInvoice/soldInvoiceApi";
+import AccessError from "../../../../components/AccessError/AccessError";
 
 const SellHistory = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -19,7 +20,7 @@ const SellHistory = () => {
     }
   };
 
-  const { data, isLoading } = useGetAllSellAlsoDateFilterQuery(
+  const { data, isLoading, error } = useGetAllSellAlsoDateFilterQuery(
     { month: selectedDate },
     { skip: !selectedDate }
   );
@@ -143,6 +144,15 @@ const SellHistory = () => {
       </tr>
     );
   };
+
+  const allError = error;
+  if (allError) {
+    return (
+      <AccessError
+        errorMessage={allError?.data?.message || allError?.message}
+      />
+    );
+  }
 
   return (
     <div>

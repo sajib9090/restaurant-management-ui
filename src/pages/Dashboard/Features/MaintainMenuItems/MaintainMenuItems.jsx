@@ -8,9 +8,11 @@ import ErrorMessage from "../../../../components/ErrorMessage/ErrorMessage";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { useGetAllCategoriesQuery } from "../../../../redux/features/category/categoryApi";
+import AccessError from "../../../../components/AccessError/AccessError";
 
 const MaintainMenuItems = () => {
-  const { data: categoriesData } = useGetAllCategoriesQuery();
+  const { data: categoriesData, error: getCategoryError } =
+    useGetAllCategoriesQuery();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [formData, setFormData] = useState({
@@ -49,7 +51,8 @@ const MaintainMenuItems = () => {
     }
   };
 
-  const [addMenuItem, { isLoading: addLoading }] = useAddMenuItemMutation();
+  const [addMenuItem, { isLoading: addLoading, error: addError }] =
+    useAddMenuItemMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -76,6 +79,15 @@ const MaintainMenuItems = () => {
       setErrorMessage(error?.data?.message);
     }
   };
+
+  const allError = getCategoryError || addError;
+  if (allError) {
+    return (
+      <AccessError
+        errorMessage={allError?.data?.message || allError?.message}
+      />
+    );
+  }
 
   return (
     <div>

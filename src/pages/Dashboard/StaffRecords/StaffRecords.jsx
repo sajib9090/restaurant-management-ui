@@ -6,6 +6,7 @@ import DeleteStaff from "../../../components/Staff/DeleteStaff/DeleteStaff";
 import DateFormatter from "../../../components/DateFormatter/DateFormatter";
 import { SnippetsOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import AccessError from "../../../components/AccessError/AccessError";
 
 const StaffRecords = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -29,7 +30,11 @@ const StaffRecords = () => {
     },
   ];
 
-  const { data: staffs, isLoading: staffLoading } = useGetAllStaffsQuery({
+  const {
+    data: staffs,
+    isLoading: staffLoading,
+    error,
+  } = useGetAllStaffsQuery({
     searchValue,
     pageValue: currentPage,
     limitValue: pageSize,
@@ -64,6 +69,15 @@ const StaffRecords = () => {
     setCurrentPage(page);
     setPageSize(pageSize);
   };
+
+  const allError = error;
+  if (allError) {
+    return (
+      <AccessError
+        errorMessage={allError?.data?.message || allError?.message}
+      />
+    );
+  }
 
   return (
     <div>

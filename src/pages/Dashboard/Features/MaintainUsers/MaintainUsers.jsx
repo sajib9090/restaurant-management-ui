@@ -9,6 +9,7 @@ import { currentUserInfo } from "../../../../redux/features/auth/authSlice";
 import AddUser from "../../../../components/UserMaintain/AddUser";
 import Edit from "../../../../components/UserMaintain/Edit";
 import DeleteUser from "../../../../components/UserMaintain/DeleteUser";
+import AccessError from "../../../../components/AccessError/AccessError";
 
 const MaintainUsers = () => {
   const userInfo = useSelector(currentUserInfo);
@@ -16,7 +17,11 @@ const MaintainUsers = () => {
   const [searchValue, setSearchValue] = useState("");
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
-  const { data: users, isLoading: usersLoading } = useGetAllUserQuery({
+  const {
+    data: users,
+    isLoading: usersLoading,
+    error,
+  } = useGetAllUserQuery({
     pageValue: currentPage,
     limitValue: pageSize,
     searchValue: searchValue,
@@ -106,6 +111,15 @@ const MaintainUsers = () => {
     setCurrentPage(page);
     setPageSize(pageSize);
   };
+
+  const allError = error;
+  if (allError) {
+    return (
+      <AccessError
+        errorMessage={allError?.data?.message || allError?.message}
+      />
+    );
+  }
 
   return (
     <div>
