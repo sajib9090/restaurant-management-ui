@@ -29,8 +29,8 @@ const Sell = () => {
     return (
       <AccessError
         errorMessage={error?.data?.message || brandError?.data?.message}
-        paymentError={error?.data?.message == "Your subscription is expired."}
-        selectedPlanId={brand?.data?.selected_plan?.id}
+        paymentError={error?.data?.status === 402}
+        selectedPlanId={brand?.data?.selected_plan?.id || ""}
       />
     );
   }

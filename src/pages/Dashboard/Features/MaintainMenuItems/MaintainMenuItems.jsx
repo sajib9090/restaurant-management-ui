@@ -11,8 +11,11 @@ import { useGetAllCategoriesQuery } from "../../../../redux/features/category/ca
 import AccessError from "../../../../components/AccessError/AccessError";
 
 const MaintainMenuItems = () => {
-  const { data: categoriesData, error: getCategoryError } =
-    useGetAllCategoriesQuery();
+  const {
+    data: categoriesData,
+    isLoading: categoryLoading,
+    error: getCategoryError,
+  } = useGetAllCategoriesQuery();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [formData, setFormData] = useState({
@@ -108,7 +111,10 @@ const MaintainMenuItems = () => {
           Add New Menu Item
         </button>
       </div>
-      <MenuCategory categoriesData={categoriesData} />
+      <MenuCategory
+        categoriesData={categoriesData}
+        isLoading={addLoading || categoryLoading}
+      />
 
       <CustomModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}>
         {errorMessage && <ErrorMessage errorMessage={errorMessage} />}

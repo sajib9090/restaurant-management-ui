@@ -373,7 +373,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
     <>
       <Menu
         className={`w-[200px] ${
-          collapsed ? "min-h-[calc(100vh-200px)]" : "min-h-[calc(100vh-250px)]"
+          collapsed ? "min-h-[calc(100vh-200px)]" : "min-h-[calc(100vh-235px)]"
         }`}
         mode={mode ? "inline" : "vertical"}
         theme={dark ? "dark" : "light"}

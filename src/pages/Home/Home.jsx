@@ -1,5 +1,6 @@
 import AccessError from "../../components/AccessError/AccessError";
 import { useGetCurrentBrandInfoQuery } from "../../redux/features/brand/brandApi";
+import brandLogo from "../../assets/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
 
 const Home = () => {
   const { data, error } = useGetCurrentBrandInfoQuery();
@@ -14,7 +15,7 @@ const Home = () => {
         <div className="max-w-3xl w-full p-8 rounded-lg text-center bg-gray-100">
           <div className="flex justify-center">
             <img
-              src={data?.data?.brand_logo?.url}
+              src={data?.data?.brand_logo?.url || brandLogo}
               alt={data?.data?.brand_name}
               className="w-full h-52 object-contain"
             />

@@ -13,6 +13,7 @@ import DateFormatter from "../DateFormatter/DateFormatter";
 import ExpandDetails from "./ExpandDetails";
 import CustomModal from "../Modal/Modal";
 import EditMember from "./EditMember";
+import IndividualLoading from "../Loading/IndividualLoading/IndividualLoading";
 
 const Member = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -66,7 +67,7 @@ const Member = () => {
     },
   ];
 
-  const { data: members, isLoading } = useGetAllMembersQuery({
+  const { data: members, isLoading: memberLoading } = useGetAllMembersQuery({
     searchValue,
     spentValue,
     discountValue,
@@ -162,10 +163,7 @@ const Member = () => {
     }
   };
 
-  if (isLoading) {
-    return <PrimaryLoading />;
-  }
-
+  const isLoading = memberLoading || deleteLoading;
   return (
     <div>
       <div className="flex items-center justify-between mt-4 mb-10">
@@ -270,15 +268,19 @@ const Member = () => {
         </div>
       </div>
 
-      <Table
-        columns={columns}
-        rowSelection={rowSelection}
-        dataSource={data}
-        pagination={false}
-        expandable={{
-          expandedRowRender,
-        }}
-      />
+      {isLoading ? (
+        <IndividualLoading contentLength={50} />
+      ) : (
+        <Table
+          columns={columns}
+          rowSelection={rowSelection}
+          dataSource={data}
+          pagination={false}
+          expandable={{
+            expandedRowRender,
+          }}
+        />
+      )}
       <div className="mt-2">
         <Pagination
           total={members?.data_found || 0}

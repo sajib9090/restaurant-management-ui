@@ -49,6 +49,13 @@ const Pricing = lazy(() => import("../pages/Pricing/Pricing"));
 const SelectedPlan = lazy(() =>
   import("../pages/Pricing/SelectedPlan/SelectedPlan")
 );
+const Overview = lazy(() => import("../pages/Dashboard/Overview/Overview"));
+const FindVoid = lazy(() =>
+  import("../pages/Dashboard/SellReport/FindVoid/FindVoid")
+);
+const UnsuccessfulSell = lazy(() =>
+  import("../pages/Dashboard/SellReport/UnsuccessfulSell/UnsuccessfulSell")
+);
 
 export const router = createBrowserRouter([
   {
@@ -203,6 +210,14 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "/user/dashboard/overview",
+        element: (
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <Overview />
+          </Suspense>
+        ),
+      },
+      {
         path: "/user/dashboard/sell-report/daily-sell-report",
         element: (
           <Suspense fallback={<h1>Loading...</h1>}>
@@ -215,6 +230,22 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<h1>Loading...</h1>}>
             <SellHistory />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/user/dashboard/sell-report/find-void",
+        element: (
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <FindVoid />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/user/dashboard/sell-report/unsuccessful-sell",
+        element: (
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <UnsuccessfulSell />
           </Suspense>
         ),
       },

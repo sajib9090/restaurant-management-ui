@@ -13,6 +13,8 @@ import CustomModal from "../../../../components/Modal/Modal";
 import ErrorMessage from "../../../../components/ErrorMessage/ErrorMessage";
 import StatisticsCard from "../../../../components/StatisticsCard/StatisticsCard";
 import AccessError from "../../../../components/AccessError/AccessError";
+import DateFormatter from "../../../../components/DateFormatter/DateFormatter";
+import IndividualLoading from "../../../../components/Loading/IndividualLoading/IndividualLoading";
 
 const MaintainTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,7 +37,7 @@ const MaintainTable = () => {
       title: "Date",
       dataIndex: "createdAt",
       key: "createdAt",
-      className: "text-gray-500 uppercase w-[25%]",
+      className: "text-gray-500 w-[25%]",
     },
     {
       title: "Actions",
@@ -47,7 +49,7 @@ const MaintainTable = () => {
 
   const {
     data: tables,
-    isLoading,
+    isLoading: tableLoading,
     error: getError,
   } = useGetAllTablesQuery({
     pageValue: currentPage,
@@ -56,10 +58,17 @@ const MaintainTable = () => {
   });
 
   const data =
-    tables?.data?.map((table) => ({
+    tables?.data?.map((table, i) => ({
       key: table?.table_id,
-      table_name: table?.table_name,
-      createdAt: new Date(table?.createdAt).toLocaleString(),
+      table_name: (
+        <>
+          <span className="mr-2">
+            {i + 1 + tables?.pagination?.currentPage * pageSize - pageSize}.
+          </span>{" "}
+          {table?.table_name}
+        </>
+      ),
+      createdAt: <DateFormatter dateString={table?.createdAt} />,
       actions: (
         <button
           onClick={() => {
@@ -147,15 +156,12 @@ const MaintainTable = () => {
       if (res) {
         toast.success(`${selectedRowKeys?.length} -Table has been deleted`);
         setSelectedRowKeys([]);
+        setSearchValue("");
       }
     } catch (error) {
       toast.error(error?.data?.message);
     }
   };
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
 
   const allError = getError || addError || updateError || deleteError;
   if (allError) {
@@ -165,6 +171,9 @@ const MaintainTable = () => {
       />
     );
   }
+
+  const isLoading =
+    tableLoading || updateLoading || deleteLoading || addTableLoading;
 
   return (
     <div>
@@ -193,8 +202,8 @@ const MaintainTable = () => {
 
         {selectedRowKeys?.length > 0 && (
           <Popconfirm
-            title="Delete Staff"
-            description="Are you sure you want to delete the selected staff?"
+            title="Delete Table"
+            description="Are you sure you want to delete this selected tables?"
             onConfirm={handleDelete}
             okText="Yes"
             cancelText="No"
@@ -232,12 +241,20 @@ const MaintainTable = () => {
           />
         </div>
       </div>
-      <Table
-        columns={columns}
-        rowSelection={rowSelection}
-        dataSource={data}
-        pagination={false}
-      />
+
+      {isLoading ? (
+        <div>
+          <IndividualLoading contentLength={50} />
+        </div>
+      ) : (
+        <Table
+          columns={columns}
+          rowSelection={rowSelection}
+          dataSource={data}
+          pagination={false}
+        />
+      )}
+
       <div className="mt-2">
         <Pagination
           total={tables?.data_found || 0}
@@ -251,7 +268,11 @@ const MaintainTable = () => {
         />
       </div>
       <>
-        <CustomModal setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen}>
+        <CustomModal
+          setIsModalOpen={setIsModalOpen}
+          isModalOpen={isModalOpen}
+          closeSymbolFalse={true}
+        >
           {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
           {modalContent === "add" ? (
             <form onSubmit={handleSubmit} className="py-4">

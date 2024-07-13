@@ -72,6 +72,14 @@ const userApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
+    changeInfoByAuthority: builder.mutation({
+      query: ({ id, ...data }) => ({
+        url: `/users/change-user-credentials-by-authority/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
@@ -83,4 +91,5 @@ export const {
   useAddUserForMaintainBrandMutation,
   useDeleteUserMutation,
   useChangeOwnPasswordMutation,
+  useChangeInfoByAuthorityMutation,
 } = userApi;

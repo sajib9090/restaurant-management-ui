@@ -9,7 +9,11 @@ const MaintainCategories = () => {
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { data: categories, error: getError } = useGetAllCategoriesQuery({
+  const {
+    data: categories,
+    isLoading: categoryLoading,
+    error: getError,
+  } = useGetAllCategoriesQuery({
     pageValue: currentPage,
     limitValue: pageSize,
     searchValue: searchValue,
@@ -43,6 +47,7 @@ const MaintainCategories = () => {
           setPageSize={setPageSize}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
+          categoryLoading={categoryLoading}
         />
       </div>
     </div>

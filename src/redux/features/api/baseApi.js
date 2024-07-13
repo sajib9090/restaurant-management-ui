@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logout, setUser } from "../auth/authSlice";
 
-const baseUrl = "https://restaurant-management-backend-tau.vercel.app/api/v2";
-// const baseUrl = "http://localhost:8000/api/v2";
+// const baseUrl = "https://restaurant-management-backend-tau.vercel.app/api/v2";
+const baseUrl = "http://localhost:8000/api/v2";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: baseUrl,
@@ -18,6 +18,10 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithRefreshToken = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
+
+  if (result?.error?.status === 423) {
+    api.dispatch(logout());
+  }
   if (result?.error?.status === 401) {
     const res = await fetch(`${baseUrl}/users/auth-manage-token`, {
       method: "GET",

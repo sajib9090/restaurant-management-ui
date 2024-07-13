@@ -11,6 +11,7 @@ import {
   useUpdateCategoryMutation,
 } from "../../redux/features/category/categoryApi";
 import PrimaryLoading from "../Loading/PrimaryLoading/PrimaryLoading";
+import IndividualLoading from "../Loading/IndividualLoading/IndividualLoading";
 
 const Category = ({
   categories,
@@ -20,6 +21,7 @@ const Category = ({
   setPageSize,
   currentPage,
   setCurrentPage,
+  categoryLoading,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categoryName, setCategoryName] = useState("");
@@ -148,6 +150,9 @@ const Category = ({
     }
   };
 
+  const isLoading =
+    categoryLoading || addCategoryLoading || updateLoading || deleteLoading;
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -165,8 +170,8 @@ const Category = ({
         </button>
         {selectedRowKeys?.length > 0 && (
           <Popconfirm
-            title="Delete Staff"
-            description="Are you sure you want to delete the selected staff?"
+            title="Delete Category"
+            description="Are you sure you want to delete the selected categories?"
             onConfirm={handleDelete}
             okText="Yes"
             cancelText="No"
@@ -205,12 +210,18 @@ const Category = ({
           />
         </div>
       </div>
-      <Table
-        columns={columns}
-        rowSelection={rowSelection}
-        dataSource={data}
-        pagination={false}
-      />
+
+      {isLoading ? (
+        <IndividualLoading contentLength={50} />
+      ) : (
+        <Table
+          columns={columns}
+          rowSelection={rowSelection}
+          dataSource={data}
+          pagination={false}
+        />
+      )}
+
       <div className="mt-2">
         <Pagination
           total={categories?.data_found || 0}

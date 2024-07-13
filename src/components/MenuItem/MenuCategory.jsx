@@ -16,8 +16,10 @@ import PrimaryLoading from "../Loading/PrimaryLoading/PrimaryLoading";
 import CustomModal from "../Modal/Modal";
 import { Pagination, Popconfirm } from "antd";
 import DateFormatter from "../DateFormatter/DateFormatter";
+import IndividualLoading from "../Loading/IndividualLoading/IndividualLoading";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
-const MenuCategory = ({ categoriesData }) => {
+const MenuCategory = ({ categoriesData, isLoading }) => {
   const [checkedItems, setCheckedItems] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [categoryValue, setCategoryValue] = useState("");
@@ -92,6 +94,7 @@ const MenuCategory = ({ categoriesData }) => {
       discount: editedDiscount,
       item_price: editedPrice,
     };
+    setErrorMessage("");
     try {
       const res = await updateMenuItem({
         id: selectedEditItem?._id,
@@ -101,11 +104,15 @@ const MenuCategory = ({ categoriesData }) => {
         toast.success("Menu item has been updated");
         setCheckedItems([]);
         setIsModalOpen(false);
+        setErrorMessage("");
       }
     } catch (error) {
-      setErrorMessage(error?.data?.message);
+      setErrorMessage(error?.data?.message || error?.message);
     }
   };
+
+  const loading =
+    isLoading || deleteLoading || updateLoading || menuItemLoading;
 
   return (
     <div>
@@ -221,83 +228,87 @@ const MenuCategory = ({ categoriesData }) => {
       </div>
       {menuItems?.data?.length > 0 ? (
         <>
-          <table className="min-w-full border-collapse block md:table">
-            <MenuItemTableHead />
-            <tbody className="block md:table-row-group">
-              {uniqueCategories?.map((category, categoryIndex) => (
-                <React.Fragment key={categoryIndex}>
-                  <tr className="bg-gray-100 border border-gray-200 md:border-none block md:table-row">
-                    <td
-                      className="p-2 text-left text-black font-bold md:border md:border-gray-300 block md:table-cell capitalize"
-                      colSpan="4"
-                    >
-                      {category}
-                    </td>
-                  </tr>
-                  {menuItems?.data
-                    ?.filter((fItem) => fItem?.category === category)
-                    .map((item, itemIndex) => (
-                      <tr
-                        key={itemIndex}
-                        className={` border border-gray-200 md:border-none block md:table-row hover:bg-blue-100 ${
-                          checkedItems?.includes(item?.item_id)
-                            ? "bg-blue-200 hover:bg-blue-300 duration-500"
-                            : "bg-white"
-                        }`}
+          {loading ? (
+            <IndividualLoading contentLength={50} />
+          ) : (
+            <table className="min-w-full border-collapse block md:table">
+              <MenuItemTableHead />
+              <tbody className="block md:table-row-group">
+                {uniqueCategories?.map((category, categoryIndex) => (
+                  <React.Fragment key={categoryIndex}>
+                    <tr className="bg-gray-100 border border-gray-200 md:border-none block md:table-row">
+                      <td
+                        className="p-2 text-left text-black font-bold md:border md:border-gray-300 block md:table-cell capitalize"
+                        colSpan="4"
                       >
-                        <td className="p-2 md:border md:border-gray-200 text-left block md:table-cell">
-                          <div className="flex items-center">
-                            <input
-                              type="checkbox"
-                              checked={checkedItems.includes(item?.item_id)}
-                              onChange={(event) =>
-                                handleCheckboxChange(event, item?.item_id)
-                              }
-                              className="h-5 w-5 mr-2 cursor-pointer"
-                            />
-                            <span className="capitalize">
-                              {item?.item_name}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
-                          {item?.discount ? (
-                            <button className="bg-green-600 w-[30px] text-white rounded ml-2">
-                              On
+                        {category}
+                      </td>
+                    </tr>
+                    {menuItems?.data
+                      ?.filter((fItem) => fItem?.category === category)
+                      .map((item, itemIndex) => (
+                        <tr
+                          key={itemIndex}
+                          className={` border border-gray-200 md:border-none block md:table-row hover:bg-blue-100 ${
+                            checkedItems?.includes(item?.item_id)
+                              ? "bg-blue-200 hover:bg-blue-300 duration-500"
+                              : "bg-white"
+                          }`}
+                        >
+                          <td className="p-2 md:border md:border-gray-200 text-left block md:table-cell">
+                            <div className="flex items-center">
+                              <input
+                                type="checkbox"
+                                checked={checkedItems.includes(item?.item_id)}
+                                onChange={(event) =>
+                                  handleCheckboxChange(event, item?.item_id)
+                                }
+                                className="h-5 w-5 mr-2 cursor-pointer"
+                              />
+                              <span className="capitalize">
+                                {item?.item_name}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
+                            {item?.discount ? (
+                              <button className="bg-green-600 w-[30px] text-white rounded ml-2">
+                                On
+                              </button>
+                            ) : (
+                              <button className="bg-red-600 w-[30px] text-white rounded ml-2">
+                                Off
+                              </button>
+                            )}
+                          </td>
+                          <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
+                            <DateFormatter dateString={item?.createdAt} />
+                          </td>
+                          <td className="p-2 md:border md:border-gray-200 text-end block md:table-cell">
+                            <CurrencyFormatter value={item?.item_price} />
+                          </td>
+                          <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
+                            <button
+                              onClick={() => {
+                                setSelectedEditItem(item);
+                                setIsModalOpen(!isModalOpen);
+                                setEditedItemName("");
+                                setEditedCategory("");
+                                setEditedDiscount("");
+                              }}
+                              className="text-blue-600 text-xl"
+                              title="Edit"
+                            >
+                              <EditFilled />
                             </button>
-                          ) : (
-                            <button className="bg-red-600 w-[30px] text-white rounded ml-2">
-                              Off
-                            </button>
-                          )}
-                        </td>
-                        <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
-                          <DateFormatter dateString={item?.createdAt} />
-                        </td>
-                        <td className="p-2 md:border md:border-gray-200 text-end block md:table-cell">
-                          <CurrencyFormatter value={item?.item_price} />
-                        </td>
-                        <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
-                          <button
-                            onClick={() => {
-                              setSelectedEditItem(item);
-                              setIsModalOpen(!isModalOpen);
-                              setEditedItemName("");
-                              setEditedCategory("");
-                              setEditedDiscount("");
-                            }}
-                            className="text-blue-600 text-xl"
-                            title="Edit"
-                          >
-                            <EditFilled />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                </React.Fragment>
-              ))}
-            </tbody>
-          </table>
+                          </td>
+                        </tr>
+                      ))}
+                  </React.Fragment>
+                ))}
+              </tbody>
+            </table>
+          )}
           <div className="mt-2">
             <Pagination
               total={menuItems?.data_found || 0}
@@ -314,14 +325,15 @@ const MenuCategory = ({ categoriesData }) => {
       ) : (
         <PrimaryError
           message={
-            menuItemError?.data?.message
-              ? menuItemError?.data?.message
-              : "Oops! no data found!"
+            menuItemError?.data?.message ||
+            menuItemError?.message ||
+            "Oops! no data found!"
           }
         />
       )}
 
       <CustomModal setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen}>
+        {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
         <form onSubmit={handleEdit} className="py-4">
           <div className="mb-4">
             <label className="block text-gray-700">Edit Item Name</label>

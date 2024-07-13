@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const AccessError = ({ errorMessage, paymentError, selectedPlanId }) => {
   const navigate = useNavigate();
+
   return (
     <div className="flex flex-col justify-center items-center min-h-screen">
       <div
@@ -30,7 +31,11 @@ const AccessError = ({ errorMessage, paymentError, selectedPlanId }) => {
         {paymentError && (
           <button
             onClick={() =>
-              navigate(`/user/pricing/plans?plan=${selectedPlanId}`)
+              navigate(
+                `/user/pricing${
+                  selectedPlanId && `/plans?plan=${selectedPlanId}`
+                }`
+              )
             }
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out"
           >
