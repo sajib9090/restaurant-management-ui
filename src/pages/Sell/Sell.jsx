@@ -25,7 +25,7 @@ const Sell = () => {
     }
   }, [searchValue, tables]);
 
-  if (tables?.data?.length == 0) {
+  if (tables?.data?.length === 0) {
     return <div>No data found</div>;
   }
 
@@ -44,31 +44,27 @@ const Sell = () => {
       <TitleComponent
         title={`${LocationPath(location)}-(${tables?.data_found || 0})`}
       />
-      <div>
+      <div className="min-h-screen flex flex-col items-center py-8 px-4">
         <h1 className="text-center text-blue-600 text-2xl font-semibold mb-4">
           Select a Table First
         </h1>
-        <div className="mb-6">
-          <div className="search-menu">
-            <input
-              value={searchValue}
-              onChange={(e) => {
-                setSearchValue(e.target.value);
-              }}
-              className="rounded"
-              type="search"
-              placeholder="Search table..."
-            />
-          </div>
+        <div className="mb-6 w-full max-w-md">
+          <input
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded"
+            type="search"
+            placeholder="Search table..."
+          />
         </div>
         {isLoading && (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full">
             {Array.from({ length: 20 }).map((_, i) => (
               <TableSkeleton key={i} />
             ))}
           </div>
         )}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full">
           {filteredTable?.map((table) => (
             <Table
               key={table?._id}

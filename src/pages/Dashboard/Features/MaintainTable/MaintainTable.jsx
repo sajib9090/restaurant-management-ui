@@ -50,10 +50,7 @@ const MaintainTable = () => {
     },
   ];
 
-  const {
-    data: tables,
-    isLoading: tableLoading,
-  } = useGetAllTablesQuery({
+  const { data: tables, isLoading: tableLoading } = useGetAllTablesQuery({
     pageValue: currentPage,
     limitValue: pageSize,
     searchValue: searchValue,
@@ -101,12 +98,9 @@ const MaintainTable = () => {
 
   const [tableName, setTableName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [addTable, { isLoading: addTableLoading }] =
-    useAddTableMutation();
-  const [deleteTable, { isLoading: deleteLoading }] =
-    useDeleteTableMutation();
-  const [updateTable, { isLoading: updateLoading }] =
-    useUpdateTableMutation();
+  const [addTable, { isLoading: addTableLoading }] = useAddTableMutation();
+  const [deleteTable, { isLoading: deleteLoading }] = useDeleteTableMutation();
+  const [updateTable, { isLoading: updateLoading }] = useUpdateTableMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -166,7 +160,6 @@ const MaintainTable = () => {
       toast.error(error?.data?.message);
     }
   };
-
 
   const isLoading =
     tableLoading || updateLoading || deleteLoading || addTableLoading;

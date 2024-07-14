@@ -45,7 +45,7 @@ const DisplayCategory = ({
   );
 
   return (
-    <div className="grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-2 mt-6">
+    <div className="grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 mt-6">
       {menuLoading &&
         Array.from({ length: 4 }).map((_, i) => <MenuItemSkeleton key={i} />)}
       {uniqueCategories
@@ -53,14 +53,11 @@ const DisplayCategory = ({
         .map((category, index) => (
           <div
             key={category}
-            className="border border-gray-200 shadow-xl rounded-md"
+            className="border border-gray-200 shadow-lg rounded-md"
           >
-            <div
-              className={`capitalize text-center rounded-t-md py-2 font-bold text-xl bg-[#cfcfcf] bg-opacity-75 text-black border-t border-l border-r border-gray-400`}
-            >
+            <div className="capitalize text-center rounded-t-md py-2 font-bold text-xl bg-gray-200 text-black border-t border-l border-r border-gray-400">
               {category}
             </div>
-            {/* display menu items by category */}
             <DisplayItem
               filteredMenuItems={filteredMenuItems}
               category={category}

@@ -81,3 +81,17 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+
+@media (max-width: 768px) {
+  .site-layout {
+    margin-left: 0 !important;
+  }
+  .ant-layout-sider {
+    position: absolute;
+    z-index: 1000;
+    height: 100%;
+  }
+  .ant-layout-sider-collapsed {
+    display: none;
+  }
+}

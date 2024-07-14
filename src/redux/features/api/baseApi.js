@@ -3,8 +3,8 @@ import { logout, setUser } from "../auth/authSlice";
 
 // const baseUrl = "https://restaurant-management-backend-tau.vercel.app/api/v2";
 // const baseUrl =
-//   "https://restaurant-management-backend-mrse.onrender.com/api/v2";
-const baseUrl = "http://localhost:8000/api/v2";
+("https://restaurant-management-backend-mrse.onrender.com/api/v2");
+// const baseUrl = "http://localhost:8000/api/v2";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: baseUrl,

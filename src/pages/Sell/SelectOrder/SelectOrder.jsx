@@ -29,7 +29,7 @@ const SelectOrder = () => {
   const { data: staffs, isLoading: staffLoading } = useGetAllStaffsQuery();
 
   return (
-    <div>
+    <div className="p-4 md:p-8">
       <TitleComponent
         title={`${LocationPath(location)}-(${tableWiseOrderQuantity || 0})`}
       />
@@ -40,8 +40,8 @@ const SelectOrder = () => {
         selectedStaff={selectedStaff}
       />
 
-      <h2 className="text-center text-xl font-semibold capitalize my-2">
-        order for {table_name}
+      <h2 className="text-center text-xl font-semibold capitalize my-4">
+        Order for {table_name}
       </h2>
 
       <StaffSelection
@@ -52,14 +52,14 @@ const SelectOrder = () => {
         setSelectedStaff={setSelectedStaff}
       />
 
-      <div className="">
-        <div className="search-menu">
+      <div className="my-4">
+        <div className="flex justify-center">
           <input
             value={searchValue}
             onChange={(e) => {
               setSearchValue(e.target.value);
             }}
-            className="rounded"
+            className="rounded border px-4 py-2 w-full md:w-1/2"
             type="search"
             placeholder="Search menu item..."
           />

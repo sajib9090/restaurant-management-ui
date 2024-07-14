@@ -82,124 +82,120 @@ const Register = () => {
     }
   };
   return (
-    <div className="min-h-screen">
-      <div className="login py-12">
-        <div className="flex justify-center items-center min-h-screen login-content max-w-[118rem] mx-auto">
-          <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-            <h2 className="text-2xl font-bold mb-2 text-center">
-              Good Morning
-            </h2>
-            <p className="text-gray-600 mb-8 text-center">
-              Enter the information you entered while registering
-            </p>
-            {errorMessage && (
-              <div
-                className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-                role="alert"
-              >
-                <span className="block sm:inline">{errorMessage}</span>
-              </div>
-            )}
-            {successMessage && (
-              <div
-                className="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
-                role="alert"
-              >
-                <span className="block sm:inline">{successMessage}</span>
-              </div>
-            )}
-            <form onSubmit={handleRegister}>
-              <div className="mb-4">
-                <label className="block text-gray-700">Name</label>
-                <input
-                  className="w-full p-3 border border-gray-300 rounded mt-1"
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Enter your name"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700">Email</label>
-                <input
-                  className="w-full p-3 border border-gray-300 rounded mt-1"
-                  type="text"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Enter your Email"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700">Brand Name</label>
-                <input
-                  className="w-full p-3 border border-gray-300 rounded mt-1"
-                  type="text"
-                  name="brand_name"
-                  value={formData.brand_name}
-                  onChange={handleChange}
-                  placeholder="Enter your Brand name"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700">Mobile</label>
-                <input
-                  className="w-full p-3 border border-gray-300 rounded mt-1"
-                  type="text"
-                  name="mobile"
-                  value={formData.mobile}
-                  onChange={handleChange}
-                  placeholder="Enter your Mobile number"
-                />
-              </div>
-              <div className="mb-4 relative">
-                <label className="block text-gray-700">Password</label>
-                <input
-                  className="w-full p-3 border border-gray-300 rounded mt-1"
-                  type={visible ? "text" : "password"}
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Password"
-                />
-                {visible ? (
-                  <EyeFilled
-                    onClick={() => setVisible(!visible)}
-                    className="absolute bottom-[14px] right-3 cursor-pointer text-xl"
-                  />
-                ) : (
-                  <EyeInvisibleFilled
-                    onClick={() => setVisible(!visible)}
-                    className="absolute bottom-[14px] right-3 cursor-pointer text-xl"
-                  />
-                )}
-              </div>
-              <button
-                type="submit"
-                className="w-full flex justify-center items-center bg-[#001529] text-white p-3 rounded-lg hover:bg-[#E6F4FF] transition duration-500 hover:text-[#5977FF]"
-              >
-                {isLoading ? <PrimaryLoading /> : "REGISTER"}
-              </button>
-            </form>
-            <p className="mt-8 text-center text-gray-700">
-              Already have an account?{" "}
-              <Link to="/login" className="text-yellow-500 hover:underline">
-                Login
-              </Link>
-            </p>
-          </div>
-          <div className="hidden md:block w-1/2 h-full">
-            <div className="flex flex-col justify-center items-center h-full">
-              <Lottie
-                className="h-[380px]"
-                animationData={restaurant}
-                loop={true}
-              />
-              <p className="text-white text-2xl font-semibold -mt-12">
-                Innovative Solutions for Modern Restaurants
-              </p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-200">
+      <div className="flex flex-col md:flex-row justify-center items-center w-full max-w-7xl p-4">
+        <div className="bg-white p-8 rounded-lg shadow-lg w-full md:w-1/2 lg:w-1/3">
+          <h2 className="text-2xl font-bold mb-2 text-center">Good Morning</h2>
+          <p className="text-gray-600 mb-8 text-center">
+            Enter the information you entered while registering
+          </p>
+          {errorMessage && (
+            <div
+              className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+              role="alert"
+            >
+              <span className="block sm:inline">{errorMessage}</span>
             </div>
+          )}
+          {successMessage && (
+            <div
+              className="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+              role="alert"
+            >
+              <span className="block sm:inline">{successMessage}</span>
+            </div>
+          )}
+          <form onSubmit={handleRegister}>
+            <div className="mb-4">
+              <label className="block text-gray-700">Name</label>
+              <input
+                className="w-full p-3 border border-gray-300 rounded mt-1"
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Enter your name"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Email</label>
+              <input
+                className="w-full p-3 border border-gray-300 rounded mt-1"
+                type="text"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter your Email"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Brand Name</label>
+              <input
+                className="w-full p-3 border border-gray-300 rounded mt-1"
+                type="text"
+                name="brand_name"
+                value={formData.brand_name}
+                onChange={handleChange}
+                placeholder="Enter your Brand name"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Mobile</label>
+              <input
+                className="w-full p-3 border border-gray-300 rounded mt-1"
+                type="text"
+                name="mobile"
+                value={formData.mobile}
+                onChange={handleChange}
+                placeholder="Enter your Mobile number"
+              />
+            </div>
+            <div className="mb-4 relative">
+              <label className="block text-gray-700">Password</label>
+              <input
+                className="w-full p-3 border border-gray-300 rounded mt-1"
+                type={visible ? "text" : "password"}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Password"
+              />
+              {visible ? (
+                <EyeFilled
+                  onClick={() => setVisible(!visible)}
+                  className="absolute bottom-[14px] right-3 cursor-pointer text-xl"
+                />
+              ) : (
+                <EyeInvisibleFilled
+                  onClick={() => setVisible(!visible)}
+                  className="absolute bottom-[14px] right-3 cursor-pointer text-xl"
+                />
+              )}
+            </div>
+            <button
+              type="submit"
+              className="w-full flex justify-center items-center bg-[#001529] text-white p-3 rounded-lg hover:bg-[#E6F4FF] transition duration-500 hover:text-[#5977FF]"
+            >
+              {isLoading ? <PrimaryLoading /> : "REGISTER"}
+            </button>
+          </form>
+          <p className="mt-8 text-center text-gray-700">
+            Already have an account?{" "}
+            <Link to="/login" className="text-yellow-500 hover:underline">
+              Login
+            </Link>
+          </p>
+        </div>
+        <div className="hidden md:block md:w-1/2 lg:w-2/3 h-full">
+          <div className="flex flex-col justify-center items-center h-full">
+            <Lottie
+              className="h-[380px]"
+              animationData={restaurant}
+              loop={true}
+            />
+            <p className="text-gray-700 text-2xl font-semibold -mt-12 text-center">
+              Innovative Solutions for Modern Restaurants
+            </p>
           </div>
         </div>
       </div>
