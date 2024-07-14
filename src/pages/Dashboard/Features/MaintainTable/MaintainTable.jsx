@@ -12,11 +12,14 @@ import PrimaryLoading from "../../../../components/Loading/PrimaryLoading/Primar
 import CustomModal from "../../../../components/Modal/Modal";
 import ErrorMessage from "../../../../components/ErrorMessage/ErrorMessage";
 import StatisticsCard from "../../../../components/StatisticsCard/StatisticsCard";
-import AccessError from "../../../../components/AccessError/AccessError";
 import DateFormatter from "../../../../components/DateFormatter/DateFormatter";
 import IndividualLoading from "../../../../components/Loading/IndividualLoading/IndividualLoading";
+import TitleComponent from "../../../../components/TitleComponent/TitleComponent";
+import { useLocation } from "react-router-dom";
+import LocationPath from "../../../../components/LocationPath/LocationPath";
 
 const MaintainTable = () => {
+  const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -50,12 +53,13 @@ const MaintainTable = () => {
   const {
     data: tables,
     isLoading: tableLoading,
-    error: getError,
   } = useGetAllTablesQuery({
     pageValue: currentPage,
     limitValue: pageSize,
     searchValue: searchValue,
   });
+
+  console.log(tables);
 
   const data =
     tables?.data?.map((table, i) => ({
@@ -97,11 +101,11 @@ const MaintainTable = () => {
 
   const [tableName, setTableName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [addTable, { isLoading: addTableLoading, error: addError }] =
+  const [addTable, { isLoading: addTableLoading }] =
     useAddTableMutation();
-  const [deleteTable, { isLoading: deleteLoading, error: deleteError }] =
+  const [deleteTable, { isLoading: deleteLoading }] =
     useDeleteTableMutation();
-  const [updateTable, { isLoading: updateLoading, error: updateError }] =
+  const [updateTable, { isLoading: updateLoading }] =
     useUpdateTableMutation();
 
   const handleSubmit = async (e) => {
@@ -163,20 +167,15 @@ const MaintainTable = () => {
     }
   };
 
-  const allError = getError || addError || updateError || deleteError;
-  if (allError) {
-    return (
-      <AccessError
-        errorMessage={allError?.data?.message || allError?.message}
-      />
-    );
-  }
 
   const isLoading =
     tableLoading || updateLoading || deleteLoading || addTableLoading;
 
   return (
     <div>
+      <TitleComponent
+        title={`${LocationPath(location)}-(${tables?.data_found || 0})`}
+      />
       <div className="grid grid-cols-5 gap-6">
         <StatisticsCard
           bg="bg-gray-200"

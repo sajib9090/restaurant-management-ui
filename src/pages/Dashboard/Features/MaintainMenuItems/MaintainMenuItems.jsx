@@ -5,17 +5,19 @@ import { PlusSquareFilled } from "@ant-design/icons";
 import CustomModal from "../../../../components/Modal/Modal";
 import PrimaryLoading from "../../../../components/Loading/PrimaryLoading/PrimaryLoading";
 import ErrorMessage from "../../../../components/ErrorMessage/ErrorMessage";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import { useGetAllCategoriesQuery } from "../../../../redux/features/category/categoryApi";
-import AccessError from "../../../../components/AccessError/AccessError";
+import TitleComponent from "../../../../components/TitleComponent/TitleComponent";
+import LocationPath from "../../../../components/LocationPath/LocationPath";
 
 const MaintainMenuItems = () => {
+  const location = useLocation();
   const {
     data: categoriesData,
     isLoading: categoryLoading,
-    error: getCategoryError,
   } = useGetAllCategoriesQuery();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [formData, setFormData] = useState({
@@ -54,7 +56,7 @@ const MaintainMenuItems = () => {
     }
   };
 
-  const [addMenuItem, { isLoading: addLoading, error: addError }] =
+  const [addMenuItem, { isLoading: addLoading }] =
     useAddMenuItemMutation();
 
   const handleSubmit = async (e) => {
@@ -83,17 +85,11 @@ const MaintainMenuItems = () => {
     }
   };
 
-  const allError = getCategoryError || addError;
-  if (allError) {
-    return (
-      <AccessError
-        errorMessage={allError?.data?.message || allError?.message}
-      />
-    );
-  }
+
 
   return (
     <div>
+      <TitleComponent title={LocationPath(location)} />
       <div>
         <button
           onClick={() => {

@@ -5,10 +5,13 @@ import AddStaff from "../../../components/Staff/AddStaff/AddStaff";
 import DeleteStaff from "../../../components/Staff/DeleteStaff/DeleteStaff";
 import DateFormatter from "../../../components/DateFormatter/DateFormatter";
 import { SnippetsOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
-import AccessError from "../../../components/AccessError/AccessError";
+import { Link, useLocation } from "react-router-dom";
+import IndividualLoading from "../../../components/Loading/IndividualLoading/IndividualLoading";
+import LocationPath from "../../../components/LocationPath/LocationPath";
+import TitleComponent from "../../../components/TitleComponent/TitleComponent";
 
 const StaffRecords = () => {
+  const location = useLocation();
   const [searchValue, setSearchValue] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,7 +36,6 @@ const StaffRecords = () => {
   const {
     data: staffs,
     isLoading: staffLoading,
-    error,
   } = useGetAllStaffsQuery({
     searchValue,
     pageValue: currentPage,
@@ -70,17 +72,14 @@ const StaffRecords = () => {
     setPageSize(pageSize);
   };
 
-  const allError = error;
-  if (allError) {
-    return (
-      <AccessError
-        errorMessage={allError?.data?.message || allError?.message}
-      />
-    );
-  }
+ 
+ 
 
   return (
     <div>
+      <TitleComponent
+        title={`${LocationPath(location)}-(${staffs?.data_found || 0})`}
+      />
       <div className="flex justify-between">
         <AddStaff setSelectedRowKeys={setSelectedRowKeys} />
         <Link
@@ -110,12 +109,16 @@ const StaffRecords = () => {
         />
       </div>
 
-      <Table
-        columns={columns}
-        rowSelection={rowSelection}
-        dataSource={data}
-        pagination={false}
-      />
+      {staffLoading ? (
+        <IndividualLoading contentLength={20} />
+      ) : (
+        <Table
+          columns={columns}
+          rowSelection={rowSelection}
+          dataSource={data}
+          pagination={false}
+        />
+      )}
       <div className="mt-2">
         <Pagination
           total={staffs?.data_found || 0}

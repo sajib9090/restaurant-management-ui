@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useGetAllStaffsQuery } from "../../../redux/features/staff/staffApi";
 import { useState } from "react";
 import StaffSelection from "../../../components/OrderLog/Staff/StaffSelection";
@@ -6,8 +6,11 @@ import { useSelector } from "react-redux";
 import { selectedMenu } from "../../../redux/features/OrderLog/orderLogSlice";
 import DisplayCategory from "../../../components/OrderLog/DisplayCategory/DisplayCategory";
 import DisplayOrderInvoice from "../../../components/OrderLog/DisplayOrderInvoice/DisplayOrderInvoice";
+import TitleComponent from "../../../components/TitleComponent/TitleComponent";
+import LocationPath from "../../../components/LocationPath/LocationPath";
 
 const SelectOrder = () => {
+  const location = useLocation();
   const { name: table_name } = useParams();
 
   const [searchValue, setSearchValue] = useState("");
@@ -27,6 +30,9 @@ const SelectOrder = () => {
 
   return (
     <div>
+      <TitleComponent
+        title={`${LocationPath(location)}-(${tableWiseOrderQuantity || 0})`}
+      />
       <DisplayOrderInvoice
         tableWiseOrder={tableWiseOrder}
         tableWiseOrderQuantity={tableWiseOrderQuantity}

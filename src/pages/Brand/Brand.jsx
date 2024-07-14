@@ -14,13 +14,15 @@ import { setUserInfo } from "../../redux/features/auth/authSlice";
 import { useFetchCurrentUserMutation } from "../../redux/features/user/userApi";
 import CurrencyFormatter from "../../components/Currencyformatter/CurrencyFormatter";
 import { formatDistanceToNow } from "date-fns";
-import AccessError from "../../components/AccessError/AccessError";
+import LocationPath from "../../components/LocationPath/LocationPath";
+import TitleComponent from "../../components/TitleComponent/TitleComponent";
+import { useLocation } from "react-router-dom";
 
 const Brand = () => {
+  const location = useLocation();
   const {
     data,
     isLoading: brandInfoLoading,
-    error,
   } = useGetCurrentBrandInfoQuery();
   const brand = data?.data;
 
@@ -28,9 +30,9 @@ const Brand = () => {
 
   const [
     updateBrandLogo,
-    { isLoading: updateLoading, error: updateLogoError },
+    { isLoading: updateLoading },
   ] = useUpdateBrandLogoMutation();
-  const [fetchCurrentUser, { isLoading, error: currentUserError }] =
+  const [fetchCurrentUser, { isLoading }] =
     useFetchCurrentUserMutation();
   const dispatch = useDispatch();
 
@@ -54,17 +56,10 @@ const Brand = () => {
     }
   };
 
-  const allError = error || updateLogoError || currentUserError;
-  if (allError) {
-    return (
-      <AccessError
-        errorMessage={allError?.data?.message || allError?.message}
-      />
-    );
-  }
 
   return (
     <div>
+      <TitleComponent title={LocationPath(location)} />
       <div className="w-full bg-gray-100 rounded grid grid-cols-12 gap-2 py-16 px-4 relative">
         <div className="col-span-3 flex flex-col items-center">
           <div className="">

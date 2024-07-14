@@ -6,6 +6,8 @@ import AuthenticatedRoute from "./AuthenticatedRoute";
 import PublicLayout from "../layout/PublicLayout";
 import NonAuthenticatedRoute from "./NonAuthenticatedRoute";
 import ProtectedRoute from "./ProtectedRoute";
+import ErrorPage from "../pages/Error/Error";
+import LoadingSpinner from "../components/Loading/LoadingSpinner/LoadingSpinner";
 const Login = lazy(() => import("../pages/PrimaryPage/Login/Login"));
 const Register = lazy(() => import("../pages/PrimaryPage/Register/Register"));
 const Sell = lazy(() => import("../pages/Sell/Sell"));
@@ -65,12 +67,12 @@ export const router = createBrowserRouter([
         <PublicLayout />
       </NonAuthenticatedRoute>
     ),
-    errorElement: <h1>Error</h1>,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <PrimaryHome />
           </Suspense>
         ),
@@ -78,7 +80,7 @@ export const router = createBrowserRouter([
       {
         path: "/about",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <About />
           </Suspense>
         ),
@@ -86,7 +88,7 @@ export const router = createBrowserRouter([
       {
         path: "/services",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <Services />
           </Suspense>
         ),
@@ -94,7 +96,7 @@ export const router = createBrowserRouter([
       {
         path: "/login",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <Login />
           </Suspense>
         ),
@@ -102,7 +104,7 @@ export const router = createBrowserRouter([
       {
         path: "/register",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <Register />
           </Suspense>
         ),
@@ -110,7 +112,7 @@ export const router = createBrowserRouter([
       {
         path: "/expired-credentials",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <ExpiredCredentials />
           </Suspense>
         ),
@@ -125,12 +127,12 @@ export const router = createBrowserRouter([
         <Main />
       </AuthenticatedRoute>
     ),
-    errorElement: <h1>Error</h1>,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/user",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <Home />
           </Suspense>
         ),
@@ -138,7 +140,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/sell",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <Sell />
           </Suspense>
         ),
@@ -146,7 +148,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/sell/:name",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <SelectOrder />
           </Suspense>
         ),
@@ -154,7 +156,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/sell/:name/:invoice_id",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <SoldInvoice />
           </Suspense>
         ),
@@ -162,7 +164,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/profile",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <Profile />
           </Suspense>
         ),
@@ -170,7 +172,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/brand",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <Brand />
           </Suspense>
         ),
@@ -178,7 +180,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/report-bugs",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <ReportBugs />
           </Suspense>
         ),
@@ -186,7 +188,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/pricing",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <Pricing />
           </Suspense>
         ),
@@ -194,7 +196,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/pricing/plans",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <SelectedPlan />
           </Suspense>
         ),
@@ -202,7 +204,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/confidential/plans",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <ProtectedRoute role={"super admin"}>
               <Plans />
             </ProtectedRoute>
@@ -212,7 +214,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/dashboard/overview",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <Overview />
           </Suspense>
         ),
@@ -220,7 +222,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/dashboard/sell-report/daily-sell-report",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <DailySellReport />
           </Suspense>
         ),
@@ -228,7 +230,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/dashboard/sell-report/sell-history",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <SellHistory />
           </Suspense>
         ),
@@ -236,7 +238,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/dashboard/sell-report/find-void",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <FindVoid />
           </Suspense>
         ),
@@ -244,7 +246,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/dashboard/sell-report/unsuccessful-sell",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <UnsuccessfulSell />
           </Suspense>
         ),
@@ -252,7 +254,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/dashboard/features/maintain-tables",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <MaintainTable />
           </Suspense>
         ),
@@ -260,7 +262,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/dashboard/features/maintain-categories",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <MaintainCategories />
           </Suspense>
         ),
@@ -268,7 +270,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/dashboard/features/maintain-menu-items",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <MaintainMenuItems />
           </Suspense>
         ),
@@ -276,7 +278,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/dashboard/features/maintain-members",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <MaintainMembers />
           </Suspense>
         ),
@@ -284,7 +286,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/dashboard/features/maintain-users",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <MaintainUsers />
           </Suspense>
         ),
@@ -292,7 +294,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/dashboard/staff-records",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <StaffRecords />
           </Suspense>
         ),
@@ -300,7 +302,7 @@ export const router = createBrowserRouter([
       {
         path: "/user/dashboard/staff-records/sell-record",
         element: (
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<LoadingSpinner />}>
             <StaffRecords />
           </Suspense>
         ),

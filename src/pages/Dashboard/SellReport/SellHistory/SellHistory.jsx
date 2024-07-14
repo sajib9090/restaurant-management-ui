@@ -1,9 +1,13 @@
 import { Card, Col, DatePicker, Row, Spin } from "antd";
 import { useState, useMemo } from "react";
 import { useGetAllSellAlsoDateFilterQuery } from "../../../../redux/features/soldInvoice/soldInvoiceApi";
-import AccessError from "../../../../components/AccessError/AccessError";
+import TitleComponent from "../../../../components/TitleComponent/TitleComponent";
+import { useLocation } from "react-router-dom";
+import LocationPath from "../../../../components/LocationPath/LocationPath";
 
 const SellHistory = () => {
+  const location = useLocation();
+
   const [selectedDate, setSelectedDate] = useState(null);
   const [daysInMonth, setDaysInMonth] = useState(null);
 
@@ -20,7 +24,7 @@ const SellHistory = () => {
     }
   };
 
-  const { data, isLoading, error } = useGetAllSellAlsoDateFilterQuery(
+  const { data, isLoading } = useGetAllSellAlsoDateFilterQuery(
     { month: selectedDate },
     { skip: !selectedDate }
   );
@@ -145,17 +149,12 @@ const SellHistory = () => {
     );
   };
 
-  const allError = error;
-  if (allError) {
-    return (
-      <AccessError
-        errorMessage={allError?.data?.message || allError?.message}
-      />
-    );
-  }
 
   return (
     <div>
+      <TitleComponent
+        title={`${LocationPath(location)} ${selectedDate ? selectedDate : ""}`}
+      />
       <Card className="bg-gray-50 shadow-md">
         <div className="p-4 space-y-6">
           <Row gutter={16} justify="center">

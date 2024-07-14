@@ -7,9 +7,13 @@ import CurrencyFormatter from "../../../../components/Currencyformatter/Currency
 import SellReportFooter from "../../../../components/SellReport/SellReportFooter";
 import SellReportSkeleton from "../../../../components/Skeleton/SellReportSkeleton";
 import FindSpecificInvoice from "../../../../components/SellReport/FindSpecificInvoice";
-import AccessError from "../../../../components/AccessError/AccessError";
+import TitleComponent from "../../../../components/TitleComponent/TitleComponent";
+import { useLocation } from "react-router-dom";
+import LocationPath from "../../../../components/LocationPath/LocationPath";
 
 const DailySellReport = () => {
+  const location = useLocation();
+
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
   );
@@ -53,7 +57,7 @@ const DailySellReport = () => {
   const {
     data: soldInvoices,
     isLoading: sellReportLoading,
-    error,
+  
   } = useGetAllSellAlsoDateFilterQuery(
     {
       pageValue: currentPage,
@@ -133,17 +137,10 @@ const DailySellReport = () => {
     setPageSize(pageSize);
   };
 
-  const allError = error;
-  if (allError) {
-    return (
-      <AccessError
-        errorMessage={allError?.data?.message || allError?.message}
-      />
-    );
-  }
 
   return (
     <div className="min-h-screen px-4">
+      <TitleComponent title={LocationPath(location)} />
       <FindSpecificInvoice />
       <MultipleDatePicker
         selectedDate={selectedDate}

@@ -8,6 +8,7 @@ import ReactToPrint from "react-to-print";
 import InvoiceSkeleton from "../../../components/Skeleton/InvoiceSkeleton.jsx";
 import { useSelector } from "react-redux";
 import { currentUserInfo } from "../../../redux/features/auth/authSlice.js";
+import TitleComponent from "../../../components/TitleComponent/TitleComponent.jsx";
 
 const SoldInvoice = () => {
   const { invoice_id } = useParams();
@@ -23,6 +24,7 @@ const SoldInvoice = () => {
 
   return (
     <div className="px-2 pt-4">
+      <TitleComponent title={`invoice-${invoice_id}`} />
       <div className="w-full max-w-[310px] mx-auto">
         <div
           ref={componentRef}

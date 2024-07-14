@@ -1,10 +1,13 @@
-import AccessError from "../../../../components/AccessError/AccessError";
+import { useLocation } from "react-router-dom";
+import LocationPath from "../../../../components/LocationPath/LocationPath";
 import Member from "../../../../components/Member/Member";
 import StatisticsCard from "../../../../components/StatisticsCard/StatisticsCard";
+import TitleComponent from "../../../../components/TitleComponent/TitleComponent";
 import { useGetAllMembersQuery } from "../../../../redux/features/member/memberApi";
 
 const MaintainMembers = () => {
-  const { data: members, error } = useGetAllMembersQuery({
+  const location = useLocation();
+  const { data: members } = useGetAllMembersQuery({
     searchValue: "",
     spentValue: "",
     discountValue: "",
@@ -12,17 +15,14 @@ const MaintainMembers = () => {
     limitValue: "",
   });
 
-  const allError = error;
-  if (allError) {
-    return (
-      <AccessError
-        errorMessage={allError?.data?.message || allError?.message}
-      />
-    );
-  }
+
 
   return (
     <div>
+      <TitleComponent
+        title={`${LocationPath(location)}-(${members?.data_found || 0})`}
+      />
+
       <StatisticsCard
         bg="bg-gray-200"
         title="Total Members"

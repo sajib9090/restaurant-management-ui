@@ -4,8 +4,12 @@ import { useGetAllTablesQuery } from "../../redux/features/table/tableApi";
 import TableSkeleton from "../../components/Skeleton/TableSkeleton";
 import { useGetCurrentBrandInfoQuery } from "../../redux/features/brand/brandApi";
 import AccessError from "../../components/AccessError/AccessError";
+import TitleComponent from "../../components/TitleComponent/TitleComponent";
+import { useLocation } from "react-router-dom";
+import LocationPath from "../../components/LocationPath/LocationPath";
 
 const Sell = () => {
+  const location = useLocation();
   const { data: tables, error, isLoading } = useGetAllTablesQuery();
   const { data: brand, error: brandError } = useGetCurrentBrandInfoQuery();
 
@@ -37,6 +41,9 @@ const Sell = () => {
 
   return (
     <>
+      <TitleComponent
+        title={`${LocationPath(location)}-(${tables?.data_found || 0})`}
+      />
       <div>
         <h1 className="text-center text-blue-600 text-2xl font-semibold mb-4">
           Select a Table First

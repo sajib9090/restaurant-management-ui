@@ -10,7 +10,7 @@ import DateFormatter from "../DateFormatter/DateFormatter";
 import CurrencyFormatter from "../Currencyformatter/CurrencyFormatter";
 import ReactToPrint from "react-to-print";
 import brandLogo from "../../assets/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
-import AccessError from "../AccessError/AccessError";
+import TitleComponent from "../TitleComponent/TitleComponent";
 
 const FindSpecificInvoice = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,17 +34,14 @@ const FindSpecificInvoice = () => {
     }
   };
 
-  const allError = error;
-  if (allError) {
-    return (
-      <AccessError
-        errorMessage={allError?.data?.message || allError?.message}
-      />
-    );
-  }
-
   return (
     <>
+      {isModalOpen && (
+        <TitleComponent
+          title={`find-invoice ${invoiceId ? "-" + invoiceId : ""}`}
+        />
+      )}
+
       <button
         onClick={() => {
           setIsModalOpen(!isModalOpen);

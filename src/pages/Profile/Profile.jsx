@@ -13,16 +13,19 @@ import {
 } from "../../redux/features/auth/authSlice";
 import EditProfile from "../../components/Profile/EditProfile/EditProfile";
 import RequestPasswordChange from "../../components/Profile/RequestPasswordChange/RequestPasswordChange";
-import AccessError from "../../components/AccessError/AccessError";
+import TitleComponent from "../../components/TitleComponent/TitleComponent";
+import LocationPath from "../../components/LocationPath/LocationPath";
+import { useLocation } from "react-router-dom";
 
 const Profile = () => {
+  const location = useLocation();
   const userInfo = useSelector(currentUserInfo);
   const [showOptions, setShowOptions] = useState(false);
   const fileInputRef = useRef(null);
 
-  const [updateUserAvatar, { isLoading: uploadLoading, error: updateError }] =
+  const [updateUserAvatar, { isLoading: uploadLoading }] =
     useUpdateUserAvatarMutation();
-  const [fetchCurrentUser, { isLoading, error }] =
+  const [fetchCurrentUser, { isLoading }] =
     useFetchCurrentUserMutation();
   const dispatch = useDispatch();
 
@@ -46,17 +49,10 @@ const Profile = () => {
     }
   };
 
-  const allError = error || updateError;
-  if (allError) {
-    return (
-      <AccessError
-        errorMessage={allError?.data?.message || allError?.message}
-      />
-    );
-  }
 
   return (
     <div className="container mx-auto my-8 p-8 bg-white rounded-lg shadow-lg relative">
+      <TitleComponent title={LocationPath(location)} />
       <div className="flex flex-col lg:flex-row items-center gap-8">
         <div className="relative flex-shrink-0">
           <img

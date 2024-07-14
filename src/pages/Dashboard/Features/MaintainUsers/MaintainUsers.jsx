@@ -3,30 +3,30 @@ import { useGetAllUserQuery } from "../../../../redux/features/user/userApi";
 import { useState } from "react";
 import DateFormatter from "../../../../components/DateFormatter/DateFormatter";
 import defaultAvatar from "../../../../assets/image/avatar/6791548_avatar_person_profile_profile icon_user_icon.png";
-
 import { useSelector } from "react-redux";
 import { currentUserInfo } from "../../../../redux/features/auth/authSlice";
 import AddUser from "../../../../components/UserMaintain/AddUser";
 import Edit from "../../../../components/UserMaintain/Edit";
 import DeleteUser from "../../../../components/UserMaintain/DeleteUser";
-import AccessError from "../../../../components/AccessError/AccessError";
+import TitleComponent from "../../../../components/TitleComponent/TitleComponent";
+import { useLocation } from "react-router-dom";
+import LocationPath from "../../../../components/LocationPath/LocationPath";
 
 const MaintainUsers = () => {
-  const userInfo = useSelector(currentUserInfo);
+  const location = useLocation();
 
+  const userInfo = useSelector(currentUserInfo);
   const [searchValue, setSearchValue] = useState("");
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
   const {
     data: users,
     isLoading: usersLoading,
-    error,
   } = useGetAllUserQuery({
     pageValue: currentPage,
     limitValue: pageSize,
     searchValue: searchValue,
   });
-
 
   const columns = [
     {
@@ -113,17 +113,12 @@ const MaintainUsers = () => {
     setPageSize(pageSize);
   };
 
-  const allError = error;
-  if (allError) {
-    return (
-      <AccessError
-        errorMessage={allError?.data?.message || allError?.message}
-      />
-    );
-  }
 
   return (
     <div>
+      <TitleComponent
+        title={`${LocationPath(location)}-(${users?.data_found || 0})`}
+      />
       <div className="flex items-center justify-between mt-4 mb-10">
         <div className="search">
           <input
