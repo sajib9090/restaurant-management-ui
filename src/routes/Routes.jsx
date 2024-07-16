@@ -58,6 +58,9 @@ const FindVoid = lazy(() =>
 const UnsuccessfulSell = lazy(() =>
   import("../pages/Dashboard/SellReport/UnsuccessfulSell/UnsuccessfulSell")
 );
+const StaffSellRecord = lazy(() =>
+  import("../pages/Dashboard/StaffRecords/StaffSellRecord/StaffSellRecord")
+);
 
 export const router = createBrowserRouter([
   {
@@ -303,7 +306,7 @@ export const router = createBrowserRouter([
         path: "/user/dashboard/staff-records/sell-record",
         element: (
           <Suspense fallback={<LoadingSpinner />}>
-            <StaffRecords />
+            <StaffSellRecord />
           </Suspense>
         ),
       },

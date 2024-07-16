@@ -149,7 +149,6 @@ const SellHistory = () => {
     );
   };
 
-
   return (
     <div>
       <TitleComponent

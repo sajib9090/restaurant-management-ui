@@ -33,10 +33,7 @@ const StaffRecords = () => {
     },
   ];
 
-  const {
-    data: staffs,
-    isLoading: staffLoading,
-  } = useGetAllStaffsQuery({
+  const { data: staffs, isLoading: staffLoading } = useGetAllStaffsQuery({
     searchValue,
     pageValue: currentPage,
     limitValue: pageSize,
@@ -71,9 +68,6 @@ const StaffRecords = () => {
     setCurrentPage(page);
     setPageSize(pageSize);
   };
-
- 
- 
 
   return (
     <div>
