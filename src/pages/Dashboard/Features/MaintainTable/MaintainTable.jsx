@@ -1,11 +1,11 @@
-import { Pagination, Popconfirm, Table } from "antd";
+import { Pagination, Table } from "antd";
 import {
   useAddTableMutation,
   useDeleteTableMutation,
   useGetAllTablesQuery,
   useUpdateTableMutation,
 } from "../../../../redux/features/table/tableApi";
-import { EditFilled, PlusSquareFilled, DeleteFilled } from "@ant-design/icons";
+import { EditFilled } from "@ant-design/icons";
 import { useState } from "react";
 import { toast } from "sonner";
 import PrimaryLoading from "../../../../components/Loading/PrimaryLoading/PrimaryLoading";
@@ -17,6 +17,10 @@ import IndividualLoading from "../../../../components/Loading/IndividualLoading/
 import TitleComponent from "../../../../components/TitleComponent/TitleComponent";
 import { useLocation } from "react-router-dom";
 import LocationPath from "../../../../components/LocationPath/LocationPath";
+import Button from "../../../../components/Button/Button";
+import DeleteButton from "../../../../components/Button/DeleteButton";
+import SearchInput from "../../../../components/SearchInput/SearchInput";
+import Input from "../../../../components/FormInput/Input";
 
 const MaintainTable = () => {
   const location = useLocation();
@@ -55,8 +59,6 @@ const MaintainTable = () => {
     limitValue: pageSize,
     searchValue: searchValue,
   });
-
-  console.log(tables);
 
   const data =
     tables?.data?.map((table, i) => ({
@@ -169,69 +171,38 @@ const MaintainTable = () => {
       <TitleComponent
         title={`${LocationPath(location)}-(${tables?.data_found || 0})`}
       />
-      <div className="grid grid-cols-5 gap-6">
-        <StatisticsCard
-          bg="bg-gray-200"
-          title="Total Tables"
-          value={tables?.data_found}
-        />
-      </div>
+
+      <StatisticsCard
+        bg="bg-gray-200"
+        title="Total Tables"
+        value={tables?.data_found}
+      />
+
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => {
-              setIsModalOpen(!isModalOpen);
-              setErrorMessage("");
-              setModalContent("add");
-              setTableName("");
-            }}
-            className="h-[40px] px-4 border border-gray-300 text-blue-500 text-lg my-6 rounded flex items-center justify-center gap-2"
-          >
-            <PlusSquareFilled />
-            Add New Table
-          </button>
-        </div>
+        <Button
+          title={"Add New Table"}
+          onclick={() => {
+            setIsModalOpen(!isModalOpen);
+            setErrorMessage("");
+            setModalContent("add");
+            setTableName("");
+          }}
+        />
 
         {selectedRowKeys?.length > 0 && (
-          <Popconfirm
-            title="Delete Table"
-            description="Are you sure you want to delete this selected tables?"
+          <DeleteButton
+            deleteTitle={"Tables"}
             onConfirm={handleDelete}
-            okText="Yes"
-            cancelText="No"
-            placement="topLeft"
-          >
-            <button
-              disabled={deleteLoading}
-              className="h-[40px] w-[220px] border border-gray-300 text-red-500 text-lg my-6 rounded flex items-center justify-center gap-2"
-            >
-              {deleteLoading ? (
-                <>
-                  Deleting ...
-                  <PrimaryLoading />
-                </>
-              ) : (
-                <>
-                  <DeleteFilled />
-                  Delete Selected-({selectedRowKeys?.length})
-                </>
-              )}
-            </button>
-          </Popconfirm>
+            deleteLoading={deleteLoading}
+            selectedRowKeys={selectedRowKeys}
+          />
         )}
       </div>
       <div className="my-4">
-        <div className="search">
-          <input
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-            }}
-            className="rounded"
-            type="search"
-            placeholder="Search..."
-          />
-        </div>
+        <SearchInput
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+        />
       </div>
 
       {isLoading ? (
@@ -249,6 +220,7 @@ const MaintainTable = () => {
 
       <div className="mt-2">
         <Pagination
+          disabled={isLoading}
           total={tables?.data_found || 0}
           showTotal={(total, range) =>
             `${range[0]}-${range[1]} of ${total} items`
@@ -268,22 +240,16 @@ const MaintainTable = () => {
           {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
           {modalContent === "add" ? (
             <form onSubmit={handleSubmit} className="py-4">
-              <div className="mb-4">
-                <label className="block text-gray-700" htmlFor="email">
-                  Write Table Name
-                </label>
-                <input
-                  className="w-full p-3 border border-gray-300 rounded mt-1"
-                  type="text"
-                  value={tableName}
-                  onChange={(e) => {
-                    setTableName(e.target.value);
-                    setErrorMessage("");
-                  }}
-                  placeholder="Write table name..."
-                />
-              </div>
-
+              <Input
+                labelText={"Write Table Name"}
+                value={tableName}
+                type={"text"}
+                placeholder={"Write table name..."}
+                onChange={(e) => {
+                  setTableName(e.target.value);
+                  setErrorMessage("");
+                }}
+              />
               <button
                 disabled={!tableName || addTableLoading}
                 type="submit"
@@ -296,20 +262,15 @@ const MaintainTable = () => {
             </form>
           ) : modalContent == "edit" ? (
             <form onSubmit={handleEdit} className="py-4">
-              <div className="mb-4">
-                <label className="block text-gray-700" htmlFor="email">
-                  Edit Table Name
-                </label>
-                <input
-                  className="w-full p-3 border border-gray-300 rounded mt-1"
-                  type="text"
-                  value={tableName}
-                  onChange={(e) => {
-                    setTableName(e.target.value);
-                    setErrorMessage("");
-                  }}
-                />
-              </div>
+              <Input
+                labelText={"Edit Table Name"}
+                value={tableName}
+                type={"text"}
+                onChange={(e) => {
+                  setTableName(e.target.value);
+                  setErrorMessage("");
+                }}
+              />
 
               <button
                 disabled={updateLoading}

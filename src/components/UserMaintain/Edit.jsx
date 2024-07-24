@@ -4,8 +4,8 @@ import { useState } from "react";
 import CustomModal from "../Modal/Modal";
 import PrimaryLoading from "../Loading/PrimaryLoading/PrimaryLoading";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useChangeInfoByAuthorityMutation } from "../../redux/features/user/userApi";
+import Input from "../FormInput/Input";
 
 const Edit = ({ user, userInfo }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -77,7 +77,7 @@ const Edit = ({ user, userInfo }) => {
 
             <select
               name="role"
-              value={formData.role}
+              value={formData?.role}
               onChange={handleChange}
               className="w-full p-3 border border-gray-300 rounded mt-1"
             >
@@ -88,25 +88,18 @@ const Edit = ({ user, userInfo }) => {
               <option value="regular">Regular</option>
             </select>
           </div>
-          <div className="mb-4 relative">
-            <label className="block text-gray-700" htmlFor="email">
-              Password
-            </label>
-            <input
-              className="w-full p-3 border border-gray-300 rounded mt-1"
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Write secure password..."
-            />
-            <span
-              className="absolute right-3 top-10 cursor-pointer text-lg"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </span>
-          </div>
+
+          <Input
+            labelText={"Password"}
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Write secure password..."
+            password={true}
+            showPassword={showPassword}
+            setShowPassword={setShowPassword}
+          />
 
           {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
 

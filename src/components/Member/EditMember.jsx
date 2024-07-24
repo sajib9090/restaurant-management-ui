@@ -4,6 +4,7 @@ import PrimaryLoading from "../Loading/PrimaryLoading/PrimaryLoading";
 import { useUpdateMemberMutation } from "../../redux/features/member/memberApi";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import { toast } from "sonner";
+import Input from "../FormInput/Input";
 
 const EditMember = ({ memberData, setIsModalOpen, setSelectedRowKeys }) => {
   const [name, setName] = useState(memberData?.name || "");
@@ -44,39 +45,28 @@ const EditMember = ({ memberData, setIsModalOpen, setSelectedRowKeys }) => {
     <div>
       {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
       <form onSubmit={handleSubmit} className="py-4">
-        <div className="mb-4">
-          <label className="block text-gray-700" htmlFor="email">
-            Name
-          </label>
-          <input
-            className="w-full p-3 border border-gray-300 rounded mt-1"
-            type="text"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-              setErrorMessage("");
-            }}
-            placeholder="Name..."
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700" htmlFor="email">
-            Discount %
-          </label>
-          <input
-            className="w-full p-3 border border-gray-300 rounded mt-1"
-            type="text"
-            value={discount}
-            onChange={(e) => {
-              setDiscount(e.target.value);
-              setErrorMessage("");
-            }}
-            placeholder="Discount value..."
-          />
-        </div>
+        <Input
+          labelText={"Name"}
+          type={"text"}
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value);
+            setErrorMessage("");
+          }}
+        />
+
+        <Input
+          labelText={"Discount %"}
+          type={"text"}
+          value={discount}
+          onChange={(e) => {
+            setDiscount(e.target.value);
+            setErrorMessage("");
+          }}
+        />
 
         <button
-          //   disabled={!setStaffName || isLoading}
+          disabled={isLoading}
           type="submit"
           className={`w-full flex justify-center items-center bg-[#001529] text-white p-3 rounded-lg hover:bg-[#E6F4FF] transition duration-500 hover:text-[#5977FF]`}
         >

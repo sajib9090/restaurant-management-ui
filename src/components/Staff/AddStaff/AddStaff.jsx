@@ -1,20 +1,17 @@
 /* eslint-disable react/prop-types */
-import { PlusSquareFilled } from "@ant-design/icons";
 import { useState } from "react";
 import { toast } from "sonner";
 import CustomModal from "../../Modal/Modal";
 import { useAddStaffMutation } from "../../../redux/features/staff/staffApi";
 import ErrorMessage from "../../ErrorMessage/ErrorMessage";
 import PrimaryLoading from "../../Loading/PrimaryLoading/PrimaryLoading";
-
+import Button from "../../Button/Button";
+import Input from "../../FormInput/Input";
 
 const AddStaff = ({ setSelectedRowKeys }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [staffName, setStaffName] = useState(false);
-
-
-  
 
   const [addStaff, { isLoading }] = useAddStaffMutation();
   const handleSubmit = async (e) => {
@@ -37,18 +34,15 @@ const AddStaff = ({ setSelectedRowKeys }) => {
   };
 
   return (
-    <div className="flex items-center gap-2">
-      <button
-        onClick={() => {
+    <>
+      <Button
+        title={"Add New Staff"}
+        onclick={() => {
           setIsModalOpen(!isModalOpen);
           setErrorMessage("");
           setStaffName("");
         }}
-        className="h-[40px] px-4 border border-gray-300 text-blue-500 text-lg my-4 rounded flex items-center justify-center gap-2 hover:bg-blue-500 hover:text-white duration-700 transition-all"
-      >
-        <PlusSquareFilled />
-        Add New Staff
-      </button>
+      />
 
       <CustomModal
         setIsModalOpen={setIsModalOpen}
@@ -57,21 +51,16 @@ const AddStaff = ({ setSelectedRowKeys }) => {
       >
         {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
         <form onSubmit={handleSubmit} className="py-4">
-          <div className="mb-4">
-            <label className="block text-gray-700" htmlFor="email">
-              Staff name
-            </label>
-            <input
-              className="w-full p-3 border border-gray-300 rounded mt-1"
-              type="text"
-              value={staffName}
-              onChange={(e) => {
-                setStaffName(e.target.value);
-                setErrorMessage("");
-              }}
-              placeholder="Write staff name..."
-            />
-          </div>
+          <Input
+            labelText={"Staff Name"}
+            type="text"
+            value={staffName}
+            onChange={(e) => {
+              setStaffName(e.target.value);
+              setErrorMessage("");
+            }}
+            placeholder="Write staff name..."
+          />
 
           <button
             disabled={!setStaffName || isLoading}
@@ -84,7 +73,7 @@ const AddStaff = ({ setSelectedRowKeys }) => {
           </button>
         </form>
       </CustomModal>
-    </div>
+    </>
   );
 };
 

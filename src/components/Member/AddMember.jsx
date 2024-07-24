@@ -3,7 +3,8 @@ import { useState } from "react";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import PrimaryLoading from "../Loading/PrimaryLoading/PrimaryLoading";
 import { useAddMemberMutation } from "../../redux/features/member/memberApi";
-import {  toast } from "sonner";
+import { toast } from "sonner";
+import Input from "../FormInput/Input";
 
 const AddMember = ({ setIsModalOpen, isModalOpen }) => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -35,36 +36,27 @@ const AddMember = ({ setIsModalOpen, isModalOpen }) => {
     <div>
       {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
       <form onSubmit={handleSubmit} className="py-4">
-        <div className="mb-4">
-          <label className="block text-gray-700" htmlFor="email">
-            Customer Name
-          </label>
-          <input
-            className="w-full p-3 border border-gray-300 rounded mt-1"
-            type="text"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-              setErrorMessage("");
-            }}
-            placeholder="Customer name..."
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700" htmlFor="email">
-            Customer Mobile Number
-          </label>
-          <input
-            className="w-full p-3 border border-gray-300 rounded mt-1"
-            type="text"
-            value={mobile}
-            onChange={(e) => {
-              setMobile(e.target.value);
-              setErrorMessage("");
-            }}
-            placeholder="Mobile number..."
-          />
-        </div>
+        <Input
+          labelText={"Customer Name"}
+          type="text"
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value);
+            setErrorMessage("");
+          }}
+          placeholder="Customer name..."
+        />
+
+        <Input
+          labelText={" Customer Mobile Number"}
+          type="text"
+          value={mobile}
+          onChange={(e) => {
+            setMobile(e.target.value);
+            setErrorMessage("");
+          }}
+          placeholder="Mobile number..."
+        />
 
         <button
           disabled={!name || isLoading}

@@ -14,6 +14,7 @@ import {
 import PrimaryLoading from "../../../components/Loading/PrimaryLoading/PrimaryLoading";
 import { useFetchCurrentUserMutation } from "../../../redux/features/user/userApi";
 import { toast } from "sonner";
+import useGreetings from "../../../components/Greetings/Greetings";
 
 const Login = () => {
   const [visible, setVisible] = useState(false);
@@ -90,12 +91,13 @@ const Login = () => {
       setErrorMessage("Login failed: " + error?.data?.message);
     }
   };
-
+  const { currentDateTime, greeting } = useGreetings();
   return (
     <div className="min-h-screen login">
       <div className="flex justify-center items-center min-h-screen login-content max-w-[118rem] mx-auto px-4">
         <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-          <h2 className="text-2xl font-bold mb-2 text-center">Good Morning</h2>
+          <h2 className="text-3xl font-bold text-center">{greeting}</h2>
+          <p className="text-center mb-2 text-[16px]">{currentDateTime}</p>
           <p className="text-gray-600 mb-8 text-center">
             Enter the information you entered while registering
           </p>

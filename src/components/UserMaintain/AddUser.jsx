@@ -1,11 +1,11 @@
-import { PlusSquareFilled } from "@ant-design/icons";
 import { useState } from "react";
 import CustomModal from "../Modal/Modal";
 import PrimaryLoading from "../Loading/PrimaryLoading/PrimaryLoading";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import { useAddUserForMaintainBrandMutation } from "../../redux/features/user/userApi";
 import { Link } from "react-router-dom";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Button from "../Button/Button";
+import Input from "../FormInput/Input";
 
 const AddUser = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -80,8 +80,8 @@ const AddUser = () => {
   };
   return (
     <>
-      <button
-        onClick={() => {
+      <Button
+        onclick={() => {
           setIsModalOpen(!isModalOpen);
           setFormData({
             name: "",
@@ -92,11 +92,8 @@ const AddUser = () => {
           });
           setErrorMessage("");
         }}
-        className="h-[40px] px-4 border border-gray-300 text-blue-500 text-lg my-3 rounded flex items-center justify-center gap-2"
-      >
-        <PlusSquareFilled />
-        Add New User
-      </button>
+        title={"Add New User"}
+      />
 
       <CustomModal
         isModalOpen={isModalOpen}
@@ -104,45 +101,30 @@ const AddUser = () => {
         closeSymbolFalse={true}
       >
         <form onSubmit={handleSubmit} className="py-4">
-          <div className="mb-4">
-            <label className="block text-gray-700" htmlFor="email">
-              Name
-            </label>
-            <input
-              className="w-full p-3 border border-gray-300 rounded mt-1"
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Write full name..."
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700" htmlFor="email">
-              Username
-            </label>
-            <input
-              className="w-full p-3 border border-gray-300 rounded mt-1"
-              type="text"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              placeholder="Write username..."
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700" htmlFor="email">
-              Mobile
-            </label>
-            <input
-              className="w-full p-3 border border-gray-300 rounded mt-1"
-              type="text"
-              name="mobile"
-              value={formData.mobile}
-              onChange={handleChange}
-              placeholder="Write mobile number..."
-            />
-          </div>
+          <Input
+            labelText={"Name"}
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Write full name..."
+          />
+          <Input
+            labelText="Username"
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            placeholder="Write username..."
+          />
+          <Input
+            labelText={"Mobile"}
+            type="text"
+            name="mobile"
+            value={formData.mobile}
+            onChange={handleChange}
+            placeholder="Write mobile number..."
+          />
           <div className="mb-4">
             <label className="block text-gray-700" htmlFor="email">
               Select Role
@@ -161,26 +143,17 @@ const AddUser = () => {
               <option value="regular">Regular</option>
             </select>
           </div>
-          <div className="mb-4 relative">
-            <label className="block text-gray-700" htmlFor="email">
-              Password
-            </label>
-            <input
-              className="w-full p-3 border border-gray-300 rounded mt-1"
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Write secure password..."
-            />
-            <span
-              className="absolute right-3 top-10 cursor-pointer text-lg"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </span>
-          </div>
-
+          <Input
+            labelText={"Password"}
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Write secure password..."
+            password={true}
+            showPassword={showPassword}
+            setShowPassword={setShowPassword}
+          />
           {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
           {upgradeLink && (
             <div className="mb-2">
@@ -189,7 +162,6 @@ const AddUser = () => {
               </Link>
             </div>
           )}
-
           <button
             disabled={addUserLoading || isFormIncomplete}
             type="submit"

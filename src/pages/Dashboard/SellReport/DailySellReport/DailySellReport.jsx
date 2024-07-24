@@ -54,24 +54,21 @@ const DailySellReport = () => {
     },
   ];
 
-  const {
-    data: soldInvoices,
-    isLoading: sellReportLoading,
-  
-  } = useGetAllSellAlsoDateFilterQuery(
-    {
-      pageValue: currentPage,
-      limitValue: pageSize,
-      date: selectedDate,
-      start_date: selectedRange[0],
-      end_date: selectedRange[1],
-    },
-    {
-      skip:
-        !selectedDate &&
-        (!selectedRange || !selectedRange[0] || !selectedRange[1]),
-    }
-  );
+  const { data: soldInvoices, isLoading: sellReportLoading } =
+    useGetAllSellAlsoDateFilterQuery(
+      {
+        pageValue: currentPage,
+        limitValue: pageSize,
+        date: selectedDate,
+        start_date: selectedRange[0],
+        end_date: selectedRange[1],
+      },
+      {
+        skip:
+          !selectedDate &&
+          (!selectedRange || !selectedRange[0] || !selectedRange[1]),
+      }
+    );
 
   const data =
     soldInvoices?.data?.map((invoice, i) => ({
@@ -137,7 +134,6 @@ const DailySellReport = () => {
     setPageSize(pageSize);
   };
 
-
   return (
     <div className="min-h-screen px-4">
       <TitleComponent title={LocationPath(location)} />
@@ -171,6 +167,7 @@ const DailySellReport = () => {
               <SellReportFooter soldInvoices={soldInvoices} />
               <div className="mt-2">
                 <Pagination
+                  disabled={sellReportLoading}
                   total={soldInvoices?.data_found || 0}
                   showTotal={(total, range) =>
                     `${range[0]}-${range[1]} of ${total} items`

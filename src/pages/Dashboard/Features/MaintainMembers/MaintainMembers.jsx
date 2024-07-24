@@ -15,8 +15,6 @@ const MaintainMembers = () => {
     limitValue: "",
   });
 
-
-
   return (
     <div>
       <TitleComponent
@@ -28,6 +26,7 @@ const MaintainMembers = () => {
         title="Total Members"
         value={members?.data_found}
       />
+
       <Member />
     </div>
   );

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { EyeFilled, EyeInvisibleFilled } from "@ant-design/icons";
 import PrimaryLoading from "../../../components/Loading/PrimaryLoading/PrimaryLoading";
 import { useRegisterMutation } from "../../../redux/features/auth/authApi";
+import useGreetings from "../../../components/Greetings/Greetings";
 
 const Register = () => {
   const [visible, setVisible] = useState(false);
@@ -81,13 +82,15 @@ const Register = () => {
       setSuccessMessage("");
     }
   };
+  const { currentDateTime, greeting } = useGreetings();
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-200">
-      <div className="flex flex-col md:flex-row justify-center items-center w-full max-w-7xl p-4">
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full md:w-1/2 lg:w-1/3">
-          <h2 className="text-2xl font-bold mb-2 text-center">Good Morning</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-300 register">
+      <div className="flex flex-col md:flex-row justify-center items-center w-full min-h-screen py-8 px-16 bg-black bg-opacity-65">
+        <div className=" p-8 rounded-lg shadow-lg w-full md:w-1/2 lg:w-1/3 bg-white">
+          <h2 className="text-3xl font-bold text-center">{greeting}</h2>
+          <p className="text-center mb-2 text-[16px]">{currentDateTime}</p>
           <p className="text-gray-600 mb-8 text-center">
-            Enter the information you entered while registering
+            Enter the information those is required
           </p>
           {errorMessage && (
             <div
@@ -193,7 +196,7 @@ const Register = () => {
               animationData={restaurant}
               loop={true}
             />
-            <p className="text-gray-700 text-2xl font-semibold -mt-12 text-center">
+            <p className="text-white text-2xl font-semibold -mt-12 text-center">
               Innovative Solutions for Modern Restaurants
             </p>
           </div>

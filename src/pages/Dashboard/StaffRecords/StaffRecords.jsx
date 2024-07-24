@@ -9,6 +9,7 @@ import { Link, useLocation } from "react-router-dom";
 import IndividualLoading from "../../../components/Loading/IndividualLoading/IndividualLoading";
 import LocationPath from "../../../components/LocationPath/LocationPath";
 import TitleComponent from "../../../components/TitleComponent/TitleComponent";
+import SearchInput from "../../../components/SearchInput/SearchInput";
 
 const StaffRecords = () => {
   const location = useLocation();
@@ -86,17 +87,10 @@ const StaffRecords = () => {
       </div>
 
       <div className="flex items-center justify-between mt-4 mb-10">
-        <div className="search">
-          <input
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-            }}
-            className="rounded"
-            type="search"
-            placeholder="Search..."
-          />
-        </div>
+        <SearchInput
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+        />
         <DeleteStaff
           selectedRowKeys={selectedRowKeys}
           setSelectedRowKeys={setSelectedRowKeys}
@@ -115,6 +109,7 @@ const StaffRecords = () => {
       )}
       <div className="mt-2">
         <Pagination
+          disabled={staffLoading}
           total={staffs?.data_found || 0}
           showTotal={(total, range) =>
             `${range[0]}-${range[1]} of ${total} items`

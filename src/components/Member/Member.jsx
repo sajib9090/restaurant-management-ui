@@ -1,19 +1,19 @@
 import { useState } from "react";
 import { CiFilter } from "react-icons/ci";
-import { Pagination, Popconfirm, Table } from "antd";
+import { Pagination, Table } from "antd";
 import {
   useDeleteMemberMutation,
   useGetAllMembersQuery,
 } from "../../redux/features/member/memberApi";
-import { EditFilled, DeleteFilled } from "@ant-design/icons";
+import { EditFilled } from "@ant-design/icons";
 import CurrencyFormatter from "../Currencyformatter/CurrencyFormatter";
-import PrimaryLoading from "../Loading/PrimaryLoading/PrimaryLoading";
 import { toast } from "sonner";
 import DateFormatter from "../DateFormatter/DateFormatter";
 import ExpandDetails from "./ExpandDetails";
 import CustomModal from "../Modal/Modal";
 import EditMember from "./EditMember";
 import IndividualLoading from "../Loading/IndividualLoading/IndividualLoading";
+import DeleteButton from "../Button/DeleteButton";
 
 const Member = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -181,31 +181,12 @@ const Member = () => {
           />
         </div>
         {selectedRowKeys?.length > 0 && (
-          <Popconfirm
-            title="Delete Staff"
-            description="Are you sure you want to delete the selected staff?"
+          <DeleteButton
+            deleteTitle={"Members"}
             onConfirm={handleDelete}
-            okText="Yes"
-            cancelText="No"
-            placement="topLeft"
-          >
-            <button
-              disabled={deleteLoading}
-              className="h-[40px] w-[220px] border border-gray-300 text-red-500 text-lg my-6 rounded flex items-center justify-center gap-2"
-            >
-              {deleteLoading ? (
-                <>
-                  Deleting ...
-                  <PrimaryLoading />
-                </>
-              ) : (
-                <>
-                  <DeleteFilled />
-                  Delete Selected-({selectedRowKeys?.length})
-                </>
-              )}
-            </button>
-          </Popconfirm>
+            deleteLoading={deleteLoading}
+            selectedRowKeys={selectedRowKeys}
+          />
         )}
 
         <div className="relative">
@@ -283,6 +264,7 @@ const Member = () => {
       )}
       <div className="mt-2">
         <Pagination
+          disabled={isLoading}
           total={members?.data_found || 0}
           showTotal={(total, range) =>
             `${range[0]}-${range[1]} of ${total} items`

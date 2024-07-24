@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { DeleteFilled, EditFilled } from "@ant-design/icons";
+import { EditFilled } from "@ant-design/icons";
 import React, { useState } from "react";
 import CurrencyFormatter from "../Currencyformatter/CurrencyFormatter";
 import { CiFilter } from "react-icons/ci";
@@ -14,10 +14,13 @@ import PrimaryError from "../PrimaryError/PrimaryError";
 import { toast } from "sonner";
 import PrimaryLoading from "../Loading/PrimaryLoading/PrimaryLoading";
 import CustomModal from "../Modal/Modal";
-import { Pagination, Popconfirm } from "antd";
-import DateFormatter from "../DateFormatter/DateFormatter";
+import { Pagination } from "antd";
 import IndividualLoading from "../Loading/IndividualLoading/IndividualLoading";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import DeleteButton from "../Button/DeleteButton";
+import SearchInput from "../SearchInput/SearchInput";
+import { formatDistanceToNow } from "date-fns";
+import Input from "../FormInput/Input";
 
 const MenuCategory = ({ categoriesData, isLoading }) => {
   const [checkedItems, setCheckedItems] = useState([]);
@@ -116,54 +119,24 @@ const MenuCategory = ({ categoriesData, isLoading }) => {
 
   return (
     <div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-6">
-        <StatisticsCard
-          bg="bg-gray-200"
-          title="Total Menu Items"
-          value={menuItems?.data_found ? menuItems?.data_found : "0"}
-        />
-      </div>
+      <StatisticsCard
+        bg="bg-gray-200"
+        title="Total Menu Items"
+        value={menuItems?.data_found ? menuItems?.data_found : "0"}
+      />
       <div className="flex items-center justify-between mt-4 mb-10">
-        <div className="search">
-          <input
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              setCategoryValue("");
-              setPriceFilterValue("");
-            }}
-            className="rounded"
-            type="search"
-            placeholder="Search..."
-          />
-        </div>
+        <SearchInput
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+        />
 
         {checkedItems?.length > 0 && (
-          <Popconfirm
-            title="Delete Staff"
-            description="Are you sure you want to delete the selected staff?"
+          <DeleteButton
+            deleteTitle={"Menu Items"}
+            deleteLoading={deleteLoading}
             onConfirm={handleDelete}
-            okText="Yes"
-            cancelText="No"
-            placement="topLeft"
-          >
-            <button
-              disabled={deleteLoading}
-              className="h-[40px] w-[220px] border border-gray-300 text-red-500 text-lg rounded flex items-center justify-center gap-2 text-left"
-            >
-              {deleteLoading ? (
-                <>
-                  Deleting ...
-                  <PrimaryLoading />
-                </>
-              ) : (
-                <>
-                  <DeleteFilled />
-                  Delete Selected-({checkedItems?.length})
-                </>
-              )}
-            </button>
-          </Popconfirm>
+            selectedRowKeys={checkedItems}
+          />
         )}
 
         <div className="relative">
@@ -282,7 +255,10 @@ const MenuCategory = ({ categoriesData, isLoading }) => {
                             )}
                           </td>
                           <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
-                            <DateFormatter dateString={item?.createdAt} />
+                            {item?.createdAt &&
+                              formatDistanceToNow(new Date(item?.createdAt), {
+                                addSuffix: true,
+                              })}
                           </td>
                           <td className="p-2 md:border md:border-gray-200 text-end block md:table-cell">
                             <CurrencyFormatter value={item?.item_price} />
@@ -311,6 +287,7 @@ const MenuCategory = ({ categoriesData, isLoading }) => {
           )}
           <div className="mt-2">
             <Pagination
+              disabled={isLoading}
               total={menuItems?.data_found || 0}
               showTotal={(total, range) =>
                 `${range[0]}-${range[1]} of ${total} items`
@@ -332,22 +309,24 @@ const MenuCategory = ({ categoriesData, isLoading }) => {
         />
       )}
 
-      <CustomModal setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen}>
+      <CustomModal
+        setIsModalOpen={setIsModalOpen}
+        isModalOpen={isModalOpen}
+        closeSymbolFalse={true}
+      >
         {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
         <form onSubmit={handleEdit} className="py-4">
-          <div className="mb-4">
-            <label className="block text-gray-700">Edit Item Name</label>
-            <input
-              className="w-full p-3 border border-gray-300 rounded mt-1"
-              type="text"
-              value={editedItemName}
-              onChange={(e) => {
-                setEditedItemName(e.target.value);
-                setErrorMessage("");
-              }}
-              placeholder={selectedEditItem?.item_name}
-            />
-          </div>
+          <Input
+            labelText={"Edit Item Name"}
+            type={"text"}
+            placeholder={selectedEditItem?.item_name}
+            value={editedItemName}
+            onChange={(e) => {
+              setEditedItemName(e.target.value);
+              setErrorMessage("");
+            }}
+          />
+
           <div className="mb-4">
             <label className="block text-gray-700">Category</label>
             <select
@@ -379,19 +358,17 @@ const MenuCategory = ({ categoriesData, isLoading }) => {
               <option value="false">No</option>
             </select>
           </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Edit Price</label>
-            <input
-              className="w-full p-3 border border-gray-300 rounded mt-1"
-              type="text"
-              value={editedPrice}
-              onChange={(e) => {
-                setEditedPrice(e.target.value);
-                setErrorMessage("");
-              }}
-              placeholder={selectedEditItem?.item_price}
-            />
-          </div>
+
+          <Input
+            labelText={"Edit Price"}
+            type={"text"}
+            value={editedPrice}
+            onChange={(e) => {
+              setEditedPrice(e.target.value);
+              setErrorMessage("");
+            }}
+            placeholder={selectedEditItem?.item_price}
+          />
 
           <button
             disabled={

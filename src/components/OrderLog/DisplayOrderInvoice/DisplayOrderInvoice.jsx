@@ -10,10 +10,13 @@ import {
   decreaseMenuItemQuantity,
   increaseMenuItemQuantity,
   removeSingleMenuItem,
+  removeStaff,
+  removeTableWiseMenuItems,
 } from "../../../redux/features/OrderLog/orderLogSlice";
 import PrimaryInvoiceFooter from "../PrimaryInvoice/PrimaryInvoiceFooter";
 import PrimaryError from "../../PrimaryError/PrimaryError";
 import { FullscreenOutlined, FullscreenExitOutlined } from "@ant-design/icons";
+import { toast } from "sonner";
 
 const DisplayOrderInvoice = ({
   tableWiseOrderQuantity,
@@ -46,11 +49,11 @@ const DisplayOrderInvoice = ({
     <>
       <button
         onClick={() => setIsModalOpen(!isModalOpen)}
-        className="py-2 px-2 bg-[#94A3B8] text-lg font-semibold rounded-md flex items-center sticky top-6 z-50 text-gray-800"
+        className="py-2 px-2 bg-blue-200 text-lg font-semibold rounded-md flex items-center sticky top-6 z-50 text-gray-800 hover:scale-105 duration-500 hover:bg-blue-300"
       >
         {isModalOpen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
         <span className="ml-1">Check Invoice</span>{" "}
-        <p className="ml-2 px-2 bg-blue-300 rounded-full text-gray-800">
+        <p className="ml-2 px-2 bg-gray-600 rounded-full text-white">
           {tableWiseOrderQuantity}
         </p>
       </button>
@@ -74,7 +77,10 @@ const DisplayOrderInvoice = ({
                 <p>
                   Served by: <span className="capitalize">{selectedStaff}</span>
                 </p>
-                <p>Total item-{tableWiseOrder?.length}</p>
+                <span>
+                  <p>Total item-{tableWiseOrder?.length}</p>
+                  <p>Total quantity-{tableWiseOrderQuantity}</p>
+                </span>
               </div>
 
               <div className="mb-6">
@@ -166,7 +172,14 @@ const DisplayOrderInvoice = ({
                 </table>
               </div>
 
-              <button className="w-[120px] py-2 mb-4 bg-gradient-to-r from-red-600 to-yellow-600 text-white rounded shadow transition duration-200 flex items-center justify-center">
+              <button
+                onClick={() => {
+                  dispatch(removeStaff({ table_name }));
+                  dispatch(removeTableWiseMenuItems(tableWiseOrder));
+                  toast.success("All items cleared");
+                }}
+                className="w-[120px] py-2 mb-4 bg-gradient-to-r from-red-600 to-yellow-600 text-white rounded shadow transition duration-200 flex items-center justify-center"
+              >
                 Remove All <PiBagFill className="ml-2 h-5 w-5 text-gray-200" />
               </button>
 
@@ -178,7 +191,7 @@ const DisplayOrderInvoice = ({
             </div>
           ) : (
             <div className="my-6">
-              <PrimaryError message="Oops! No data found." />
+              <PrimaryError message="Oops! No item found." />
             </div>
           )}
         </div>

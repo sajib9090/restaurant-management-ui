@@ -25,8 +25,8 @@ const DeleteUser = ({ user, userInfo }) => {
           cancelText="No"
           placement="topLeft"
         >
-          <button disabled={deleteLoading}>
-            <DeleteFilled className="text-red-600 text-lg" />
+          <button title="Delete" disabled={deleteLoading}>
+            <DeleteFilled className="text-red-600 hover:scale-110 hover:text-red-700 text-lg" />
           </button>
         </Popconfirm>
       )}

@@ -17,11 +17,11 @@ const StaffSellRecord = () => {
     setSelectedDate(dateString);
   };
 
-  const { data } = useGetAllSellAlsoDateFilterQuery(
+  const { data, isLoading } = useGetAllSellAlsoDateFilterQuery(
     { month: selectedDate },
     { skip: !selectedDate }
   );
-  const isLoading = false;
+
   const columns = [
     {
       title: "Served By",

@@ -4,6 +4,7 @@ import { useGetAllSellAlsoDateFilterQuery } from "../../../../redux/features/sol
 import TitleComponent from "../../../../components/TitleComponent/TitleComponent";
 import { useLocation } from "react-router-dom";
 import LocationPath from "../../../../components/LocationPath/LocationPath";
+import IndividualLoading from "../../../../components/Loading/IndividualLoading/IndividualLoading";
 
 const SellHistory = () => {
   const location = useLocation();
@@ -173,17 +174,20 @@ const SellHistory = () => {
         </div>
       </Card>
 
-      {data != undefined && (
+      {isLoading ? (
         <>
-          {data?.data_found == 0 ? (
-            "Nothing found"
-          ) : (
+          <Spin
+            size="large"
+            className="flex justify-center items-center mt-4"
+          />
+          <IndividualLoading contentLength={20} />
+        </>
+      ) : (
+        <>
+          {data != undefined && (
             <>
-              {isLoading ? (
-                <Spin
-                  size="large"
-                  className="flex justify-center items-center mt-4"
-                />
+              {data?.data_found == 0 ? (
+                "Nothing found"
               ) : (
                 <div>
                   <div className="overflow-x-auto mt-4">

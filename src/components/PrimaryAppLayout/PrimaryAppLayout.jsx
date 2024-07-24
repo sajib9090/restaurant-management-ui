@@ -64,7 +64,7 @@ const PrimaryAppLayout = () => {
           }}
         />
       </Header>
-      <Content className="max-w-[118rem] w-full mx-auto">
+      <Content>
         <div
           style={{
             background: colorBgContainer,

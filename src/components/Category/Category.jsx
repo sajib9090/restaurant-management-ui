@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import { Table, Popconfirm, Pagination } from "antd";
+import { Table, Pagination } from "antd";
 import { useState } from "react";
-import { EditFilled, PlusSquareFilled, DeleteFilled } from "@ant-design/icons";
+import { EditFilled } from "@ant-design/icons";
 import { toast } from "sonner";
 import CustomModal from "../Modal/Modal";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
@@ -12,6 +12,10 @@ import {
 } from "../../redux/features/category/categoryApi";
 import PrimaryLoading from "../Loading/PrimaryLoading/PrimaryLoading";
 import IndividualLoading from "../Loading/IndividualLoading/IndividualLoading";
+import Button from "../Button/Button";
+import DeleteButton from "../Button/DeleteButton";
+import SearchInput from "../SearchInput/SearchInput";
+import Input from "../FormInput/Input";
 
 const Category = ({
   categories,
@@ -156,59 +160,30 @@ const Category = ({
   return (
     <div>
       <div className="flex items-center justify-between">
-        <button
-          onClick={() => {
+        <Button
+          onclick={() => {
             setIsModalOpen(!isModalOpen);
             setErrorMessage("");
             setModalContent("add");
             setCategoryName("");
           }}
-          className="h-[40px] px-4 border border-gray-300 text-blue-500 text-lg my-6 rounded flex items-center justify-center gap-2"
-        >
-          <PlusSquareFilled />
-          Add New Category
-        </button>
+          title={"Add New Category"}
+        />
         {selectedRowKeys?.length > 0 && (
-          <Popconfirm
-            title="Delete Category"
-            description="Are you sure you want to delete the selected categories?"
+          <DeleteButton
+            deleteTitle={"Categories"}
             onConfirm={handleDelete}
-            okText="Yes"
-            cancelText="No"
-            placement="topLeft"
-          >
-            <button
-              disabled={deleteLoading}
-              className="h-[40px] w-[220px] border border-gray-300 text-red-500 text-lg my-6 rounded flex items-center justify-center gap-2"
-            >
-              {deleteLoading ? (
-                <>
-                  Deleting ...
-                  <PrimaryLoading />
-                </>
-              ) : (
-                <>
-                  <DeleteFilled />
-                  Delete Selected-({selectedRowKeys?.length})
-                </>
-              )}
-            </button>
-          </Popconfirm>
+            deleteLoading={deleteLoading}
+            selectedRowKeys={selectedRowKeys}
+          />
         )}
       </div>
 
       <div className="my-4">
-        <div className="search">
-          <input
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-            }}
-            className="rounded"
-            type="search"
-            placeholder="Search..."
-          />
-        </div>
+        <SearchInput
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+        />
       </div>
 
       {isLoading ? (
@@ -224,6 +199,7 @@ const Category = ({
 
       <div className="mt-2">
         <Pagination
+          disabled={isLoading}
           total={categories?.data_found || 0}
           showTotal={(total, range) =>
             `${range[0]}-${range[1]} of ${total} items`
@@ -235,25 +211,24 @@ const Category = ({
         />
       </div>
 
-      <CustomModal setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen}>
+      <CustomModal
+        setIsModalOpen={setIsModalOpen}
+        isModalOpen={isModalOpen}
+        closeSymbolFalse={true}
+      >
         {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
         {modalContent == "add" ? (
           <form onSubmit={handleSubmit} className="py-4">
-            <div className="mb-4">
-              <label className="block text-gray-700" htmlFor="email">
-                Write Category Name
-              </label>
-              <input
-                className="w-full p-3 border border-gray-300 rounded mt-1"
-                type="text"
-                value={categoryName}
-                onChange={(e) => {
-                  setCategoryName(e.target.value);
-                  setErrorMessage("");
-                }}
-                placeholder="Write category name..."
-              />
-            </div>
+            <Input
+              labelText={"Write Category Name"}
+              type={"text"}
+              placeholder={"Write category name..."}
+              value={categoryName}
+              onChange={(e) => {
+                setCategoryName(e.target.value);
+                setErrorMessage("");
+              }}
+            />
 
             <button
               disabled={!categoryName || addCategoryLoading}
@@ -267,20 +242,15 @@ const Category = ({
           </form>
         ) : modalContent == "edit" ? (
           <form onSubmit={handleEdit} className="py-4">
-            <div className="mb-4">
-              <label className="block text-gray-700" htmlFor="email">
-                Edit Category Name
-              </label>
-              <input
-                className="w-full p-3 border border-gray-300 rounded mt-1"
-                type="text"
-                value={categoryName}
-                onChange={(e) => {
-                  setCategoryName(e.target.value);
-                  setErrorMessage("");
-                }}
-              />
-            </div>
+            <Input
+              labelText={"Edit Category Name"}
+              type={"text"}
+              value={categoryName}
+              onChange={(e) => {
+                setCategoryName(e.target.value);
+                setErrorMessage("");
+              }}
+            />
 
             <button
               disabled={updateLoading}

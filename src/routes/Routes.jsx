@@ -61,6 +61,8 @@ const UnsuccessfulSell = lazy(() =>
 const StaffSellRecord = lazy(() =>
   import("../pages/Dashboard/StaffRecords/StaffSellRecord/StaffSellRecord")
 );
+const Suppliers = lazy(() => import("../pages/Dashboard/Suppliers/Suppliers"));
+const Expense = lazy(() => import("../pages/Dashboard/ExpenseReports/Expense"));
 
 export const router = createBrowserRouter([
   {
@@ -255,6 +257,14 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "/user/dashboard/expense-reports/expenses",
+        element: (
+          <Suspense fallback={<LoadingSpinner />}>
+            <Expense />
+          </Suspense>
+        ),
+      },
+      {
         path: "/user/dashboard/features/maintain-tables",
         element: (
           <Suspense fallback={<LoadingSpinner />}>
@@ -307,6 +317,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingSpinner />}>
             <StaffSellRecord />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/user/dashboard/suppliers",
+        element: (
+          <Suspense fallback={<LoadingSpinner />}>
+            <Suppliers />
           </Suspense>
         ),
       },

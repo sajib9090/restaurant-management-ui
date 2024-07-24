@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
+import errorImage from "../../assets/image/error/error.png";
 
 const ErrorPage = () => {
-
   const navigate = useNavigate();
 
   return (
@@ -27,9 +27,9 @@ const ErrorPage = () => {
         </button>
       </div>
       <img
-        src="https://via.placeholder.com/400"
+        src={errorImage || "https://via.placeholder.com/400"}
         alt="Error Illustration"
-        className="mt-8 w-80 h-80 object-cover rounded-lg shadow-lg"
+        className="mt-8 w-80 h-80 object-cover"
       />
     </div>
   );

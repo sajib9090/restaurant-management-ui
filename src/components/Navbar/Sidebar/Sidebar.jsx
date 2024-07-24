@@ -11,14 +11,12 @@ import {
   DeleteFilled,
   FileSearchOutlined,
   HistoryOutlined,
-  StopOutlined,
   BgColorsOutlined,
   JavaOutlined,
   ScissorOutlined,
   TeamOutlined,
   UserSwitchOutlined,
   BarChartOutlined,
-  PlusCircleOutlined,
   SunFilled,
   MoonOutlined,
   LogoutOutlined,
@@ -43,6 +41,7 @@ import AddMember from "../../Member/AddMember";
 import { useLogoutUserMutation } from "../../../redux/features/auth/authApi";
 import { toast } from "sonner";
 import { useGetCurrentBrandInfoQuery } from "../../../redux/features/brand/brandApi";
+import { PiUsersThreeFill } from "react-icons/pi";
 
 const Sidebar = ({ setDark, dark, collapsed }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -61,7 +60,7 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
         navigate("/login");
       }
     } catch (error) {
-      toast.error("Logout failed: ");
+      toast.error(`Logout failed: ${error?.message || error?.data?.message}`);
     }
   };
 
@@ -155,16 +154,6 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
               icon: <FileSearchOutlined />,
               title: "Find Void",
             },
-            {
-              label: (
-                <Link to="/user/dashboard/sell-report/unsuccessful-sell">
-                  Unsuccessful Sell
-                </Link>
-              ),
-              key: "/user/dashboard/sell-report/unsuccessful-sell",
-              icon: <StopOutlined />,
-              title: "Unsuccessful Sell",
-            },
           ],
         },
         {
@@ -242,6 +231,12 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
           title: "Staff Records",
         },
         {
+          label: <Link to="/user/dashboard/suppliers">Suppliers</Link>,
+          key: "/user/dashboard/suppliers",
+          icon: <PiUsersThreeFill className="h-4 w-4" />,
+          title: "Suppliers",
+        },
+        {
           label: "Employee Records",
           key: "/user/dashboard/employee-records",
           icon: <GithubFilled />,
@@ -267,24 +262,15 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
           children: [
             {
               label: (
-                <Link to="/user/dashboard/expense-reports/add-daily-expenses">
-                  Add Daily Expenses
+                <Link to="/user/dashboard/expense-reports/expenses">
+                  Expenses
                 </Link>
               ),
-              key: "/user/dashboard/expense-reports/add-daily-expenses",
-              icon: <PlusCircleOutlined />,
-              title: "Add Daily Expenses",
-            },
-            {
-              label: (
-                <Link to="/user/dashboard/expense-reports/find-expenses">
-                  Find Expenses
-                </Link>
-              ),
-              key: "/user/dashboard/expense-reports/find-expenses",
+              key: "/user/dashboard/expense-reports/expenses",
               icon: <FileSearchOutlined />,
-              title: "Find Expenses",
+              title: "Expenses",
             },
+
             {
               label: (
                 <Link to="/user/dashboard/expense-reports/expense-history">

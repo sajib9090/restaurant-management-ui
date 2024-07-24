@@ -12,29 +12,24 @@ const MaintainCategories = () => {
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const {
-    data: categories,
-    isLoading: categoryLoading,
-  } = useGetAllCategoriesQuery({
-    pageValue: currentPage,
-    limitValue: pageSize,
-    searchValue: searchValue,
-  });
-
-
+  const { data: categories, isLoading: categoryLoading } =
+    useGetAllCategoriesQuery({
+      pageValue: currentPage,
+      limitValue: pageSize,
+      searchValue: searchValue,
+    });
 
   return (
     <div>
       <TitleComponent
         title={`${LocationPath(location)}-(${categories?.data_found || 0})`}
       />
-      <div className="grid grid-cols-5 gap-6">
-        <StatisticsCard
-          bg="bg-gray-200"
-          title="Total Categories"
-          value={categories?.data_found}
-        />
-      </div>
+
+      <StatisticsCard
+        bg="bg-gray-200"
+        title="Total Categories"
+        value={categories?.data_found}
+      />
 
       <div className="w-full min-h-screen">
         <Category

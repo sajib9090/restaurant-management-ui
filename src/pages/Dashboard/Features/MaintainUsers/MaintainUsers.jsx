@@ -11,6 +11,9 @@ import DeleteUser from "../../../../components/UserMaintain/DeleteUser";
 import TitleComponent from "../../../../components/TitleComponent/TitleComponent";
 import { useLocation } from "react-router-dom";
 import LocationPath from "../../../../components/LocationPath/LocationPath";
+import Permission from "../../../../components/UserMaintain/Permission";
+import SearchInput from "../../../../components/SearchInput/SearchInput";
+import IndividualLoading from "../../../../components/Loading/IndividualLoading/IndividualLoading";
 
 const MaintainUsers = () => {
   const location = useLocation();
@@ -19,10 +22,7 @@ const MaintainUsers = () => {
   const [searchValue, setSearchValue] = useState("");
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
-  const {
-    data: users,
-    isLoading: usersLoading,
-  } = useGetAllUserQuery({
+  const { data: users, isLoading: usersLoading } = useGetAllUserQuery({
     pageValue: currentPage,
     limitValue: pageSize,
     searchValue: searchValue,
@@ -33,7 +33,6 @@ const MaintainUsers = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      className: "",
     },
     {
       title: "",
@@ -57,7 +56,7 @@ const MaintainUsers = () => {
       title: "Actions",
       dataIndex: "actions",
       key: "actions",
-      className: "uppercase w-[7%]",
+      className: "uppercase w-[10%]",
     },
   ];
 
@@ -103,6 +102,7 @@ const MaintainUsers = () => {
       actions: (
         <div className="flex items-center justify-between">
           <Edit user={user} userInfo={userInfo} />
+          <Permission />
           <DeleteUser user={user} userInfo={userInfo} />
         </div>
       ),
@@ -113,32 +113,28 @@ const MaintainUsers = () => {
     setPageSize(pageSize);
   };
 
-
   return (
     <div>
       <TitleComponent
         title={`${LocationPath(location)}-(${users?.data_found || 0})`}
       />
       <div className="flex items-center justify-between mt-4 mb-10">
-        <div className="search">
-          <input
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-            }}
-            className="rounded"
-            type="search"
-            placeholder="Search..."
-          />
-        </div>
-
+        <SearchInput
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+        />
         <div>
           <AddUser />
         </div>
       </div>
-      <Table columns={columns} dataSource={data} pagination={false} />
+      {usersLoading ? (
+        <IndividualLoading contentLength={20} />
+      ) : (
+        <Table columns={columns} dataSource={data} pagination={false} />
+      )}
       <div className="mt-2">
         <Pagination
+          disabled={usersLoading}
           total={users?.data_found || 0}
           showTotal={(total, range) =>
             `${range[0]}-${range[1]} of ${total} items`
