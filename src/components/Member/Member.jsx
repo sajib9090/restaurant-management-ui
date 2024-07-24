@@ -1,4 +1,5 @@
-import { useState } from "react";
+/* eslint-disable react/prop-types */
+import { useEffect, useState } from "react";
 import { CiFilter } from "react-icons/ci";
 import { Pagination, Table } from "antd";
 import {
@@ -14,8 +15,12 @@ import CustomModal from "../Modal/Modal";
 import EditMember from "./EditMember";
 import IndividualLoading from "../Loading/IndividualLoading/IndividualLoading";
 import DeleteButton from "../Button/DeleteButton";
+import { useSelector } from "react-redux";
+import { currentUser } from "../../redux/features/auth/authSlice";
+import defaultLogo from "../../assets/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
 
-const Member = () => {
+const Member = ({ setTotalMember }) => {
+  const user = useSelector(currentUser);
   const [searchValue, setSearchValue] = useState("");
   const [spentValue, setSpentValue] = useState("");
   const [discountValue, setDiscountValue] = useState("");
@@ -34,6 +39,16 @@ const Member = () => {
       className: "capitalize",
     },
     Table.EXPAND_COLUMN,
+    ...(user?.role === "super admin"
+      ? [
+          {
+            title: "",
+            dataIndex: "brand",
+            key: "brand",
+            className: "w-[12%]",
+          },
+        ]
+      : []),
     {
       title: "Mobile",
       dataIndex: "mobile",
@@ -75,6 +90,12 @@ const Member = () => {
     limitValue: pageSize,
   });
 
+  useEffect(() => {
+    if (members) {
+      setTotalMember(members?.data_found || 0);
+    }
+  }, [setTotalMember, members]);
+
   const data =
     members?.data?.map((member, i) => ({
       key: member?.member_id,
@@ -87,6 +108,16 @@ const Member = () => {
         </div>
       ),
       member: member,
+      brand: (
+        <div className="flex flex-col items-center justify-center">
+          <img
+            className="w-8 h-8 object-fill"
+            src={member?.brand_info?.brand_logo?.url || defaultLogo}
+            alt={member?.brand_info?.brand_name}
+          />
+          <p className="capitalize">{member?.brand_info?.brand_name}</p>
+        </div>
+      ),
       mobile: (
         <div>
           <p className="text-blue-600 font-semibold">{member?.mobile}</p>

@@ -21,8 +21,12 @@ import DeleteButton from "../Button/DeleteButton";
 import SearchInput from "../SearchInput/SearchInput";
 import { formatDistanceToNow } from "date-fns";
 import Input from "../FormInput/Input";
+import defaultLogo from "../../assets/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
+import { currentUser } from "../../redux/features/auth/authSlice.js";
+import { useSelector } from "react-redux";
 
 const MenuCategory = ({ categoriesData, isLoading }) => {
+  const user = useSelector(currentUser);
   const [checkedItems, setCheckedItems] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [categoryValue, setCategoryValue] = useState("");
@@ -205,7 +209,7 @@ const MenuCategory = ({ categoriesData, isLoading }) => {
             <IndividualLoading contentLength={50} />
           ) : (
             <table className="min-w-full border-collapse block md:table">
-              <MenuItemTableHead />
+              <MenuItemTableHead user={user} />
               <tbody className="block md:table-row-group">
                 {uniqueCategories?.map((category, categoryIndex) => (
                   <React.Fragment key={categoryIndex}>
@@ -243,6 +247,24 @@ const MenuCategory = ({ categoriesData, isLoading }) => {
                               </span>
                             </div>
                           </td>
+
+                          {user?.role === "super admin" && (
+                            <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
+                              <div className="flex flex-col items-center justify-center">
+                                <img
+                                  className="w-8 h-8 object-fill"
+                                  src={
+                                    item?.brand_info?.brand_logo?.url ||
+                                    defaultLogo
+                                  }
+                                  alt={item?.brand_info?.brand_name}
+                                />
+                                <p className="capitalize">
+                                  {item?.brand_info?.brand_name}
+                                </p>
+                              </div>
+                            </td>
+                          )}
                           <td className="p-2 md:border md:border-gray-200 text-center block md:table-cell">
                             {item?.discount ? (
                               <button className="bg-green-600 w-[30px] text-white rounded ml-2">

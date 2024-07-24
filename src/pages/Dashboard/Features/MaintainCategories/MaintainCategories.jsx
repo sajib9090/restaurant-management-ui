@@ -5,8 +5,11 @@ import { useState } from "react";
 import TitleComponent from "../../../../components/TitleComponent/TitleComponent";
 import { useLocation } from "react-router-dom";
 import LocationPath from "../../../../components/LocationPath/LocationPath";
+import { useSelector } from "react-redux";
+import { currentUser } from "../../../../redux/features/auth/authSlice";
 
 const MaintainCategories = () => {
+  const user = useSelector(currentUser);
   const location = useLocation();
   const [searchValue, setSearchValue] = useState("");
   const [pageSize, setPageSize] = useState(20);
@@ -41,6 +44,7 @@ const MaintainCategories = () => {
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           categoryLoading={categoryLoading}
+          user={user}
         />
       </div>
     </div>

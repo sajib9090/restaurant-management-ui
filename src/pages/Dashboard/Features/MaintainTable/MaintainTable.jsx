@@ -21,8 +21,12 @@ import Button from "../../../../components/Button/Button";
 import DeleteButton from "../../../../components/Button/DeleteButton";
 import SearchInput from "../../../../components/SearchInput/SearchInput";
 import Input from "../../../../components/FormInput/Input";
+import { currentUser } from "../../../../redux/features/auth/authSlice";
+import { useSelector } from "react-redux";
+import defaultLogo from "../../../../assets/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
 
 const MaintainTable = () => {
+  const user = useSelector(currentUser);
   const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
@@ -40,6 +44,16 @@ const MaintainTable = () => {
       key: "table_name",
       className: "uppercase",
     },
+    ...(user?.role === "super admin"
+      ? [
+          {
+            title: "",
+            dataIndex: "brand",
+            key: "brand",
+            className: "w-[12%]",
+          },
+        ]
+      : []),
     {
       title: "Date",
       dataIndex: "createdAt",
@@ -70,6 +84,16 @@ const MaintainTable = () => {
           </span>{" "}
           {table?.table_name}
         </>
+      ),
+      brand: (
+        <div className="flex flex-col items-center justify-center">
+          <img
+            className="w-8 h-8 object-fill"
+            src={table?.brand_info?.brand_logo?.url || defaultLogo}
+            alt={table?.brand_info?.brand_name}
+          />
+          <p className="capitalize">{table?.brand_info?.brand_name}</p>
+        </div>
       ),
       createdAt: <DateFormatter dateString={table?.createdAt} />,
       actions: (

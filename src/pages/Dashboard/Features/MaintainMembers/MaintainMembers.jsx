@@ -3,31 +3,24 @@ import LocationPath from "../../../../components/LocationPath/LocationPath";
 import Member from "../../../../components/Member/Member";
 import StatisticsCard from "../../../../components/StatisticsCard/StatisticsCard";
 import TitleComponent from "../../../../components/TitleComponent/TitleComponent";
-import { useGetAllMembersQuery } from "../../../../redux/features/member/memberApi";
+import { useState } from "react";
 
 const MaintainMembers = () => {
   const location = useLocation();
-  const { data: members } = useGetAllMembersQuery({
-    searchValue: "",
-    spentValue: "",
-    discountValue: "",
-    pageValue: "",
-    limitValue: "",
-  });
-
+  const [totalMember, setTotalMember] = useState(0);
   return (
     <div>
       <TitleComponent
-        title={`${LocationPath(location)}-(${members?.data_found || 0})`}
+        title={`${LocationPath(location)}-(${totalMember || 0})`}
       />
 
       <StatisticsCard
         bg="bg-gray-200"
         title="Total Members"
-        value={members?.data_found}
+        value={totalMember}
       />
 
-      <Member />
+      <Member setTotalMember={setTotalMember} />
     </div>
   );
 };

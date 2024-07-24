@@ -4,7 +4,10 @@ import { useState } from "react";
 import DateFormatter from "../../../../components/DateFormatter/DateFormatter";
 import defaultAvatar from "../../../../assets/image/avatar/6791548_avatar_person_profile_profile icon_user_icon.png";
 import { useSelector } from "react-redux";
-import { currentUserInfo } from "../../../../redux/features/auth/authSlice";
+import {
+  currentUser,
+  currentUserInfo,
+} from "../../../../redux/features/auth/authSlice";
 import AddUser from "../../../../components/UserMaintain/AddUser";
 import Edit from "../../../../components/UserMaintain/Edit";
 import DeleteUser from "../../../../components/UserMaintain/DeleteUser";
@@ -14,10 +17,11 @@ import LocationPath from "../../../../components/LocationPath/LocationPath";
 import Permission from "../../../../components/UserMaintain/Permission";
 import SearchInput from "../../../../components/SearchInput/SearchInput";
 import IndividualLoading from "../../../../components/Loading/IndividualLoading/IndividualLoading";
+import defaultLogo from "../../../../assets/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
 
 const MaintainUsers = () => {
+  const user = useSelector(currentUser);
   const location = useLocation();
-
   const userInfo = useSelector(currentUserInfo);
   const [searchValue, setSearchValue] = useState("");
   const [pageSize, setPageSize] = useState(20);
@@ -34,6 +38,16 @@ const MaintainUsers = () => {
       dataIndex: "name",
       key: "name",
     },
+    ...(user?.role === "super admin"
+      ? [
+          {
+            title: "",
+            dataIndex: "brand",
+            key: "brand",
+            className: "w-[12%]",
+          },
+        ]
+      : []),
     {
       title: "",
       dataIndex: "avatar",
@@ -69,6 +83,16 @@ const MaintainUsers = () => {
             {i + 1 + users?.pagination?.currentPage * pageSize - pageSize}.
           </span>
           {user?.name}
+        </div>
+      ),
+      brand: (
+        <div className="flex flex-col items-center justify-center">
+          <img
+            className="w-8 h-8 object-fill"
+            src={user?.brand_info?.brand_logo?.url || defaultLogo}
+            alt={user?.brand_info?.brand_name}
+          />
+          <p className="capitalize">{user?.brand_info?.brand_name}</p>
         </div>
       ),
       avatar: (

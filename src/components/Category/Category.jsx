@@ -16,6 +16,7 @@ import Button from "../Button/Button";
 import DeleteButton from "../Button/DeleteButton";
 import SearchInput from "../SearchInput/SearchInput";
 import Input from "../FormInput/Input";
+import defaultLogo from "../../assets/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
 
 const Category = ({
   categories,
@@ -26,6 +27,7 @@ const Category = ({
   currentPage,
   setCurrentPage,
   categoryLoading,
+  user,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categoryName, setCategoryName] = useState("");
@@ -42,6 +44,16 @@ const Category = ({
       key: "category",
       className: "uppercase",
     },
+    ...(user?.role === "super admin"
+      ? [
+          {
+            title: "",
+            dataIndex: "brand",
+            key: "brand",
+            className: "w-[12%]",
+          },
+        ]
+      : []),
     {
       title: "Date",
       dataIndex: "createdAt",
@@ -61,6 +73,16 @@ const Category = ({
       categories?.data?.map((category) => ({
         key: category?.category_id,
         category: category?.category,
+        brand: (
+          <div className="flex flex-col items-center justify-center">
+            <img
+              className="w-8 h-8 object-fill"
+              src={category?.brand_info?.brand_logo?.url || defaultLogo}
+              alt={category?.brand_info?.brand_name}
+            />
+            <p className="capitalize">{category?.brand_info?.brand_name}</p>
+          </div>
+        ),
         createdAt: new Date(category?.createdAt).toLocaleString(),
         actions: (
           <button

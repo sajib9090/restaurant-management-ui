@@ -1,8 +1,12 @@
-const MenuItemTableHead = () => {
+/* eslint-disable react/prop-types */
+const MenuItemTableHead = ({user}) => {
   return (
     <thead className="block md:table-header-group">
       <tr className="border border-gray-100 md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto md:relative">
         <th className="p-2 text-gray-600 font-bold md:border md:border-gray-200 text-left block md:table-cell"></th>
+        {user?.role === "super admin" && (
+          <th className="p-2 text-gray-600 font-bold md:border md:border-gray-200 text-left block md:table-cell"></th>
+        )}
         <th className="p-2 text-gray-600 font-bold md:border md:border-gray-200 text-center block md:table-cell">
           Discount
         </th>
