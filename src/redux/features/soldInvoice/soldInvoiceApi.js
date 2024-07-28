@@ -10,11 +10,13 @@ const soldInvoiceApi = baseApi.injectEndpoints({
         start_date,
         end_date,
         month,
+        brandValue,
       } = {}) => {
         let url = "/sold-invoices/get-sold-invoices";
         const params = new URLSearchParams();
 
         if (pageValue) params.append("page", pageValue);
+        if (brandValue) params.append("brand", brandValue);
         if (limitValue) params.append("limit", limitValue);
         if (date) params.append("date", date);
         if (start_date) params.append("start_date", start_date);

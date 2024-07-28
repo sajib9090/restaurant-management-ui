@@ -10,16 +10,37 @@ import FindSpecificInvoice from "../../../../components/SellReport/FindSpecificI
 import TitleComponent from "../../../../components/TitleComponent/TitleComponent";
 import { useLocation } from "react-router-dom";
 import LocationPath from "../../../../components/LocationPath/LocationPath";
+import BrandFilter from "../../../../components/Filter/BrandFilter";
+import { useSelector } from "react-redux";
+import { currentUser } from "../../../../redux/features/auth/authSlice";
 
 const DailySellReport = () => {
+  const user = useSelector(currentUser);
   const location = useLocation();
-
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
   );
   const [selectedRange, setSelectedRange] = useState([]);
   const [pageSize, setPageSize] = useState(100);
   const [currentPage, setCurrentPage] = useState(1);
+  const [brandValue, setBrandValue] = useState("");
+
+  const { data: soldInvoices, isLoading: sellReportLoading } =
+    useGetAllSellAlsoDateFilterQuery(
+      {
+        pageValue: currentPage,
+        limitValue: pageSize,
+        date: selectedDate,
+        start_date: selectedRange[0],
+        end_date: selectedRange[1],
+        brandValue: brandValue,
+      },
+      {
+        skip:
+          !selectedDate &&
+          (!selectedRange || !selectedRange[0] || !selectedRange[1]),
+      }
+    );
 
   const columns = [
     {
@@ -53,23 +74,6 @@ const DailySellReport = () => {
       className: "w-[15%] text-end",
     },
   ];
-
-  const { data: soldInvoices, isLoading: sellReportLoading } =
-    useGetAllSellAlsoDateFilterQuery(
-      {
-        pageValue: currentPage,
-        limitValue: pageSize,
-        date: selectedDate,
-        start_date: selectedRange[0],
-        end_date: selectedRange[1],
-      },
-      {
-        skip:
-          !selectedDate &&
-          (!selectedRange || !selectedRange[0] || !selectedRange[1]),
-      }
-    );
-
   const data =
     soldInvoices?.data?.map((invoice, i) => ({
       key: invoice?.invoice_id,
@@ -143,7 +147,18 @@ const DailySellReport = () => {
         setSelectedDate={setSelectedDate}
         selectedRange={selectedRange}
         setSelectedRange={setSelectedRange}
+        setBrandValue={setBrandValue}
       />
+
+      {user?.role === "super admin" && (
+        <div className="my-6 flex justify-end">
+          <BrandFilter
+            user={user}
+            brandValue={brandValue}
+            setBrandValue={setBrandValue}
+          />
+        </div>
+      )}
 
       {sellReportLoading ? (
         <SellReportSkeleton />

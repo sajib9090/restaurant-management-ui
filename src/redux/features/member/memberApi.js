@@ -9,11 +9,13 @@ const memberApi = baseApi.injectEndpoints({
         discountValue,
         pageValue,
         limitValue,
+        brandValue,
       }) => {
         let url = "/members/get-all";
         const params = new URLSearchParams();
 
         if (searchValue) params.append("search", searchValue);
+        if (brandValue) params.append("brand", brandValue);
         if (spentValue) params.append("spent", spentValue);
         if (discountValue) params.append("discount", discountValue);
         if (pageValue) params.append("page", pageValue);

@@ -2,6 +2,26 @@ import { baseApi } from "../api/baseApi";
 
 const brandApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    getAllBrands: builder.query({
+      query: ({ pageValue, limitValue, searchValue } = {}) => {
+        let url = "/brands/get-all";
+        const params = new URLSearchParams();
+
+        if (searchValue) params.append("search", searchValue);
+        if (limitValue) params.append("limit", limitValue);
+        if (pageValue) params.append("page", pageValue);
+
+        if (params.toString()) {
+          url += `?${params.toString()}`;
+        }
+
+        return {
+          url,
+          method: "GET",
+        };
+      },
+      providesTags: ["Brand"],
+    }),
     updateBrandLogo: builder.mutation({
       query: ({ brandLogo }) => {
         const formData = new FormData();
@@ -34,6 +54,7 @@ const brandApi = baseApi.injectEndpoints({
 });
 
 export const {
+  useGetAllBrandsQuery,
   useGetCurrentBrandInfoQuery,
   useUpdateBrandLogoMutation,
   useUpdateBrandInfoMutation,

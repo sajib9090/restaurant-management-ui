@@ -33,7 +33,7 @@ const Sell = () => {
     return (
       <AccessError
         errorMessage={error?.data?.message || brandError?.data?.message}
-        paymentError={error?.data?.status === 402}
+        paymentError={error?.status === 402 || error?.data?.status === 402}
         selectedPlanId={brand?.data?.selected_plan?.id || ""}
       />
     );

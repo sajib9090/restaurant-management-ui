@@ -10,13 +10,18 @@ import IndividualLoading from "../../../components/Loading/IndividualLoading/Ind
 import LocationPath from "../../../components/LocationPath/LocationPath";
 import TitleComponent from "../../../components/TitleComponent/TitleComponent";
 import SearchInput from "../../../components/SearchInput/SearchInput";
+import BrandFilter from "../../../components/Filter/BrandFilter";
+import { useSelector } from "react-redux";
+import { currentUser } from "../../../redux/features/auth/authSlice";
 
 const StaffRecords = () => {
+  const user = useSelector(currentUser);
   const location = useLocation();
   const [searchValue, setSearchValue] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
+  const [brandValue, setBrandValue] = useState("");
 
   const columns = [
     Table.SELECTION_COLUMN,
@@ -38,6 +43,7 @@ const StaffRecords = () => {
     searchValue,
     pageValue: currentPage,
     limitValue: pageSize,
+    brandValue: brandValue,
   });
 
   const data =
@@ -88,13 +94,20 @@ const StaffRecords = () => {
 
       <div className="flex items-center justify-between mt-4 mb-10">
         <SearchInput
-          searchValue={searchValue}
-          setSearchValue={setSearchValue}
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
         />
         <DeleteStaff
           selectedRowKeys={selectedRowKeys}
           setSelectedRowKeys={setSelectedRowKeys}
         />
+        {user?.role === "super admin" && (
+          <BrandFilter
+            user={user}
+            brandValue={brandValue}
+            setBrandValue={setBrandValue}
+          />
+        )}
       </div>
 
       {staffLoading ? (

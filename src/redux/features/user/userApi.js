@@ -3,11 +3,12 @@ import { baseApi } from "../api/baseApi";
 const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllUser: builder.query({
-      query: ({ pageValue, limitValue, searchValue } = {}) => {
+      query: ({ pageValue, limitValue, searchValue, brandValue } = {}) => {
         let url = "/users/find-users";
         const params = new URLSearchParams();
 
         if (searchValue) params.append("search", searchValue);
+        if (brandValue) params.append("brand", brandValue);
         if (limitValue) params.append("limit", limitValue);
         if (pageValue) params.append("page", pageValue);
 

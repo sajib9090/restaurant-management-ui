@@ -18,6 +18,8 @@ import Permission from "../../../../components/UserMaintain/Permission";
 import SearchInput from "../../../../components/SearchInput/SearchInput";
 import IndividualLoading from "../../../../components/Loading/IndividualLoading/IndividualLoading";
 import defaultLogo from "../../../../assets/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
+import StatisticsCard from "../../../../components/StatisticsCard/StatisticsCard";
+import BrandFilter from "../../../../components/Filter/BrandFilter";
 
 const MaintainUsers = () => {
   const user = useSelector(currentUser);
@@ -26,10 +28,13 @@ const MaintainUsers = () => {
   const [searchValue, setSearchValue] = useState("");
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
+  const [brandValue, setBrandValue] = useState("");
+
   const { data: users, isLoading: usersLoading } = useGetAllUserQuery({
     pageValue: currentPage,
     limitValue: pageSize,
     searchValue: searchValue,
+    brandValue: brandValue,
   });
 
   const columns = [
@@ -142,15 +147,31 @@ const MaintainUsers = () => {
       <TitleComponent
         title={`${LocationPath(location)}-(${users?.data_found || 0})`}
       />
-      <div className="flex items-center justify-between mt-4 mb-10">
+      <StatisticsCard
+        bg={"bg-blue-100"}
+        title={"Total User"}
+        value={users?.data_found}
+      />
+      <div className="flex items-center justify-between mt-4 mb-8">
         <SearchInput
-          searchValue={searchValue}
-          setSearchValue={setSearchValue}
+          value={searchValue}
+          onChange={(e) => {
+            setSearchValue(e.target.value);
+          }}
         />
         <div>
           <AddUser />
         </div>
       </div>
+      {user?.role === "super admin" && (
+        <div className="flex items-center justify-end mb-8">
+          <BrandFilter
+            user={user}
+            brandValue={brandValue}
+            setBrandValue={setBrandValue}
+          />
+        </div>
+      )}
       {usersLoading ? (
         <IndividualLoading contentLength={20} />
       ) : (

@@ -9,11 +9,13 @@ const menuItemApi = baseApi.injectEndpoints({
         limitValue,
         categoryValue,
         priceFilterValue,
+        brandValue,
       } = {}) => {
         let url = "/menu-items/get-all";
         const params = new URLSearchParams();
 
         if (searchValue) params.append("search", searchValue);
+        if (brandValue) params.append("brand", brandValue);
         if (pageValue) params.append("page", pageValue);
         if (limitValue) params.append("limit", limitValue);
         if (categoryValue) params.append("category", categoryValue);

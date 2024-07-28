@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-import { CiFilter } from "react-icons/ci";
 import { Pagination, Table } from "antd";
 import {
   useDeleteMemberMutation,
@@ -17,7 +16,11 @@ import IndividualLoading from "../Loading/IndividualLoading/IndividualLoading";
 import DeleteButton from "../Button/DeleteButton";
 import { useSelector } from "react-redux";
 import { currentUser } from "../../redux/features/auth/authSlice";
-import defaultLogo from "../../assets/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
+import PriceFilter from "../Filter/PriceFilter";
+import ResetFilter from "../Filter/ResetFilter";
+import SearchInput from "../SearchInput/SearchInput";
+import BrandFilter from "../Filter/BrandFilter";
+import BrandInfo from "../Brand/BrandInfo/BrandInfo";
 
 const Member = ({ setTotalMember }) => {
   const user = useSelector(currentUser);
@@ -29,6 +32,7 @@ const Member = ({ setTotalMember }) => {
   const [pageSize, setPageSize] = useState(20);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [memberData, setMemberData] = useState({});
+  const [brandValue, setBrandValue] = useState("");
 
   const columns = [
     Table.SELECTION_COLUMN,
@@ -88,6 +92,7 @@ const Member = ({ setTotalMember }) => {
     discountValue,
     pageValue: currentPage,
     limitValue: pageSize,
+    brandValue: brandValue,
   });
 
   useEffect(() => {
@@ -109,14 +114,10 @@ const Member = ({ setTotalMember }) => {
       ),
       member: member,
       brand: (
-        <div className="flex flex-col items-center justify-center">
-          <img
-            className="w-8 h-8 object-fill"
-            src={member?.brand_info?.brand_logo?.url || defaultLogo}
-            alt={member?.brand_info?.brand_name}
-          />
-          <p className="capitalize">{member?.brand_info?.brand_name}</p>
-        </div>
+        <BrandInfo
+          logo={member?.brand_info?.brand_logo?.url}
+          name={member?.brand_info?.brand_name}
+        />
       ),
       mobile: (
         <div>
@@ -198,19 +199,15 @@ const Member = ({ setTotalMember }) => {
   return (
     <div>
       <div className="flex items-center justify-between mt-4 mb-10">
-        <div className="search">
-          <input
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              setDiscountValue("");
-              setSpentValue("");
-            }}
-            className="rounded"
-            type="search"
-            placeholder="Search..."
-          />
-        </div>
+        <SearchInput
+          value={searchValue}
+          onChange={(e) => {
+            setSearchValue(e.target.value);
+            setDiscountValue("");
+            setSpentValue("");
+          }}
+        />
+
         {selectedRowKeys?.length > 0 && (
           <DeleteButton
             deleteTitle={"Members"}
@@ -220,62 +217,43 @@ const Member = ({ setTotalMember }) => {
           />
         )}
 
+        {user?.role === "super admin" && (
+          <BrandFilter
+            user={user}
+            brandValue={brandValue}
+            setBrandValue={setBrandValue}
+          />
+        )}
+
         <div className="relative">
           <div className="space-y-2">
-            <div className="selectOp flex items-center">
-              <CiFilter className="h-6 w-6 mr-2" />
-              <select
-                value={spentValue}
-                onChange={(e) => {
-                  setSpentValue(e.target.value);
-                  setDiscountValue("");
-                }}
-                name=""
-                id=""
-                className="rounded"
-              >
-                <option value="" selected disabled>
-                  Filter with Spent Amount
-                </option>
-                <option value="low-to-high">Low to High</option>
-                <option value="high-to-low">High to Low</option>
-              </select>
-            </div>
-            <div className="selectOp flex items-center">
-              <CiFilter className="h-6 w-6 mr-2" />
-              <select
-                value={discountValue}
-                onChange={(e) => {
-                  setDiscountValue(e.target.value);
-                  setSpentValue("");
-                }}
-                name=""
-                id=""
-                className="rounded"
-              >
-                <option value="" selected disabled>
-                  Filter with Discount
-                </option>
-                <option value="low-to-high">Low to High</option>
-                <option value="high-to-low">High to Low</option>
-              </select>
-            </div>
+            <PriceFilter
+              value={spentValue}
+              onChange={(e) => {
+                setSpentValue(e.target.value);
+                setDiscountValue("");
+              }}
+              placeholder={"Filter with Spent Amount"}
+            />
+
+            <PriceFilter
+              value={discountValue}
+              onChange={(e) => {
+                setDiscountValue(e.target.value);
+                setSpentValue("");
+              }}
+              placeholder={"Filter with Discount"}
+            />
           </div>
 
           {discountValue || spentValue ? (
-            <div className="mt-2 flex items-center justify-end absolute right-2">
-              <button
-                onClick={() => {
-                  setSearchValue("");
-                  setDiscountValue("");
-                  setSpentValue("");
-                }}
-                className="flex items-center justify-center text-red-600 underline"
-                title="reset filter"
-              >
-                <CiFilter className="h-6 w-6 mr-1" /> Reset filter
-              </button>
-            </div>
+            <ResetFilter
+              onClick={() => {
+                setSearchValue("");
+                setDiscountValue("");
+                setSpentValue("");
+              }}
+            />
           ) : null}
         </div>
       </div>

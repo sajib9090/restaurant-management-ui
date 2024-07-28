@@ -16,7 +16,8 @@ import Button from "../Button/Button";
 import DeleteButton from "../Button/DeleteButton";
 import SearchInput from "../SearchInput/SearchInput";
 import Input from "../FormInput/Input";
-import defaultLogo from "../../assets/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
+import BrandInfo from "../Brand/BrandInfo/BrandInfo";
+import BrandFilter from "../Filter/BrandFilter";
 
 const Category = ({
   categories,
@@ -28,6 +29,8 @@ const Category = ({
   setCurrentPage,
   categoryLoading,
   user,
+  brandValue,
+  setBrandValue,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categoryName, setCategoryName] = useState("");
@@ -74,14 +77,10 @@ const Category = ({
         key: category?.category_id,
         category: category?.category,
         brand: (
-          <div className="flex flex-col items-center justify-center">
-            <img
-              className="w-8 h-8 object-fill"
-              src={category?.brand_info?.brand_logo?.url || defaultLogo}
-              alt={category?.brand_info?.brand_name}
-            />
-            <p className="capitalize">{category?.brand_info?.brand_name}</p>
-          </div>
+          <BrandInfo
+            logo={category?.brand_info?.brand_logo?.url}
+            name={category?.brand_info?.brand_name}
+          />
         ),
         createdAt: new Date(category?.createdAt).toLocaleString(),
         actions: (
@@ -201,10 +200,18 @@ const Category = ({
         )}
       </div>
 
-      <div className="my-4">
+      <div className="flex items-center justify-between mt-2 mb-8">
         <SearchInput
-          searchValue={searchValue}
-          setSearchValue={setSearchValue}
+          value={searchValue}
+          onChange={(e) => {
+            setSearchValue(e.target.value);
+            setBrandValue("");
+          }}
+        />
+        <BrandFilter
+          user={user}
+          brandValue={brandValue}
+          setBrandValue={setBrandValue}
         />
       </div>
 

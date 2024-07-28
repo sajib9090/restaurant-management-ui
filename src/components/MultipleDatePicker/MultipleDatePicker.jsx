@@ -8,15 +8,18 @@ const MultipleDatePicker = ({
   setSelectedDate,
   selectedRange,
   setSelectedRange,
+  setBrandValue,
 }) => {
   const handleDateChange = (_, dateString) => {
     setSelectedDate(dateString);
     setSelectedRange([]);
+    setBrandValue("");
   };
 
   const handleRangeChange = (_, dateStrings) => {
     setSelectedRange(dateStrings);
     setSelectedDate(null);
+    setBrandValue("");
   };
 
   return (

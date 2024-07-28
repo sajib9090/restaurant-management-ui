@@ -1,12 +1,10 @@
 /* eslint-disable react/prop-types */
-const SearchInput = ({ searchValue, setSearchValue }) => {
+const SearchInput = ({ value, onChange }) => {
   return (
     <div className="search">
       <input
-        value={searchValue}
-        onChange={(e) => {
-          setSearchValue(e.target.value);
-        }}
+        value={value}
+        onChange={onChange}
         className="rounded"
         type="search"
         placeholder="Search..."

@@ -24,6 +24,9 @@ import Input from "../FormInput/Input";
 import defaultLogo from "../../assets/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
 import { currentUser } from "../../redux/features/auth/authSlice.js";
 import { useSelector } from "react-redux";
+import BrandFilter from "../Filter/BrandFilter.jsx";
+import PriceFilter from "../Filter/PriceFilter.jsx";
+import Filter from "../Filter/Filter.jsx";
 
 const MenuCategory = ({ categoriesData, isLoading }) => {
   const user = useSelector(currentUser);
@@ -40,6 +43,7 @@ const MenuCategory = ({ categoriesData, isLoading }) => {
   const [editedPrice, setEditedPrice] = useState("");
   const [pageSize, setPageSize] = useState(50);
   const [currentPage, setCurrentPage] = useState(1);
+  const [brandValue, setBrandValue] = useState("");
 
   const {
     data: menuItems,
@@ -51,6 +55,7 @@ const MenuCategory = ({ categoriesData, isLoading }) => {
     priceFilterValue,
     pageValue: currentPage,
     limitValue: pageSize,
+    brandValue: brandValue,
   });
 
   const handlePaginationChange = (page, pageSize) => {
@@ -130,9 +135,20 @@ const MenuCategory = ({ categoriesData, isLoading }) => {
       />
       <div className="flex items-center justify-between mt-4 mb-10">
         <SearchInput
-          searchValue={searchValue}
-          setSearchValue={setSearchValue}
+          value={searchValue}
+          onChange={(e) => {
+            setSearchValue(e.target.value);
+            setCategoryValue("");
+            setPriceFilterValue("");
+          }}
         />
+        {user?.role === "super admin" && (
+          <BrandFilter
+            user={user}
+            brandValue={brandValue}
+            setBrandValue={setBrandValue}
+          />
+        )}
 
         {checkedItems?.length > 0 && (
           <DeleteButton
@@ -145,45 +161,27 @@ const MenuCategory = ({ categoriesData, isLoading }) => {
 
         <div className="relative">
           <div className="space-y-2">
-            <div className="selectOp flex items-center">
-              <CiFilter className="h-6 w-6 mr-2" />
-              <select
-                value={categoryValue}
-                onChange={(e) => setCategoryValue(e.target.value)}
-                name=""
-                id=""
-                className="rounded px-2"
-              >
-                <option value="" selected disabled>
-                  Filter with Category
+            <Filter
+              value={categoryValue}
+              onChange={(e) => setCategoryValue(e.target.value)}
+              loading={isLoading}
+              placeholder={"Filter with Category"}
+              data={categoriesData?.data?.map((ui) => (
+                <option
+                  key={ui?._id}
+                  value={ui?.category}
+                  className="capitalize"
+                >
+                  {ui?.category}
                 </option>
-                {categoriesData?.data?.map((ui) => (
-                  <option
-                    key={ui?._id}
-                    value={ui?.category}
-                    className="capitalize"
-                  >
-                    {ui?.category}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="selectOp flex items-center">
-              <CiFilter className="h-6 w-6 mr-2" />
-              <select
-                value={priceFilterValue}
-                onChange={(e) => setPriceFilterValue(e.target.value)}
-                name=""
-                id=""
-                className="rounded px-2"
-              >
-                <option value="" selected disabled>
-                  Filter with Price
-                </option>
-                <option value="low-to-high">Low to High</option>
-                <option value="high-to-low">High to Low</option>
-              </select>
-            </div>
+              ))}
+            />
+
+            <PriceFilter
+              value={priceFilterValue}
+              onChange={(e) => setPriceFilterValue(e.target.value)}
+              placeholder={"Filter with price"}
+            />
           </div>
 
           {categoryValue || priceFilterValue ? (

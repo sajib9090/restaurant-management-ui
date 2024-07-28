@@ -21,9 +21,10 @@ import Button from "../../../../components/Button/Button";
 import DeleteButton from "../../../../components/Button/DeleteButton";
 import SearchInput from "../../../../components/SearchInput/SearchInput";
 import Input from "../../../../components/FormInput/Input";
-import { currentUser } from "../../../../redux/features/auth/authSlice";
-import { useSelector } from "react-redux";
 import defaultLogo from "../../../../assets/image/brandlogo/5929158_cooking_food_hot_kitchen_restaurant_icon.png";
+import { useSelector } from "react-redux";
+import { currentUser } from "../../../../redux/features/auth/authSlice";
+import BrandFilter from "../../../../components/Filter/BrandFilter";
 
 const MaintainTable = () => {
   const user = useSelector(currentUser);
@@ -35,6 +36,7 @@ const MaintainTable = () => {
   const [searchValue, setSearchValue] = useState("");
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
+  const [brandValue, setBrandValue] = useState("");
 
   const columns = [
     Table.SELECTION_COLUMN,
@@ -72,6 +74,7 @@ const MaintainTable = () => {
     pageValue: currentPage,
     limitValue: pageSize,
     searchValue: searchValue,
+    brandValue: brandValue,
   });
 
   const data =
@@ -222,11 +225,21 @@ const MaintainTable = () => {
           />
         )}
       </div>
-      <div className="my-4">
+      <div className="mt-2 mb-8 flex items-center justify-between">
         <SearchInput
-          searchValue={searchValue}
-          setSearchValue={setSearchValue}
+          value={searchValue}
+          onChange={(e) => {
+            setSearchValue(e.target.value);
+            setBrandValue("");
+          }}
         />
+        {user?.role === "super admin" && (
+          <BrandFilter
+            user={user}
+            brandValue={brandValue}
+            setBrandValue={setBrandValue}
+          />
+        )}
       </div>
 
       {isLoading ? (

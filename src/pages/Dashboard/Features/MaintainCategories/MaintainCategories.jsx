@@ -14,12 +14,14 @@ const MaintainCategories = () => {
   const [searchValue, setSearchValue] = useState("");
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
+  const [brandValue, setBrandValue] = useState("");
 
   const { data: categories, isLoading: categoryLoading } =
     useGetAllCategoriesQuery({
       pageValue: currentPage,
       limitValue: pageSize,
       searchValue: searchValue,
+      brandValue: brandValue,
     });
 
   return (
@@ -45,6 +47,8 @@ const MaintainCategories = () => {
           setCurrentPage={setCurrentPage}
           categoryLoading={categoryLoading}
           user={user}
+          brandValue={brandValue}
+          setBrandValue={setBrandValue}
         />
       </div>
     </div>

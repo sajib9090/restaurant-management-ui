@@ -3,11 +3,12 @@ import { baseApi } from "../api/baseApi";
 const staffApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllStaffs: builder.query({
-      query: ({ searchValue, pageValue, limitValue } = {}) => {
+      query: ({ searchValue, pageValue, limitValue, brandValue } = {}) => {
         let url = "/staffs/get-all";
         const params = new URLSearchParams();
 
         if (searchValue) params.append("search", searchValue);
+        if (brandValue) params.append("brand", brandValue);
         if (pageValue) params.append("page", pageValue);
         if (limitValue) params.append("limit", limitValue);
 

@@ -11,18 +11,25 @@ import DateFormatter from "../../../components/DateFormatter/DateFormatter";
 import StatisticsCard from "../../../components/StatisticsCard/StatisticsCard";
 import IndividualLoading from "../../../components/Loading/IndividualLoading/IndividualLoading";
 import SearchInput from "../../../components/SearchInput/SearchInput";
+import { useSelector } from "react-redux";
+import { currentUser } from "../../../redux/features/auth/authSlice";
+import BrandInfo from "../../../components/Brand/BrandInfo/BrandInfo";
+import BrandFilter from "../../../components/Filter/BrandFilter";
 
 const Suppliers = () => {
+  const user = useSelector(currentUser);
   const location = useLocation();
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [pageSize, setPageSize] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
+  const [brandValue, setBrandValue] = useState("");
 
   const { data: suppliers, isLoading } = useGetAllSuppliersQuery({
     searchValue: searchValue,
     limitValue: pageSize,
     pageValue: currentPage,
+    brandValue: brandValue,
   });
 
   const columns = [
@@ -33,6 +40,27 @@ const Suppliers = () => {
       key: "name",
       className: "capitalize",
     },
+    ...(user?.role === "super admin"
+      ? [
+          {
+            title: "",
+            dataIndex: "brand",
+            key: "brand",
+            className: "w-[12%]",
+          },
+        ]
+      : []),
+    ...(user?.role !== "super admin"
+      ? [
+          {
+            title: "Joining date",
+            dataIndex: "date",
+            key: "date",
+            className: "text-gray-500 w-[15%]",
+          },
+        ]
+      : []),
+
     {
       title: "Email",
       dataIndex: "email",
@@ -50,12 +78,6 @@ const Suppliers = () => {
       dataIndex: "mobile",
       key: "mobile",
       className: "text-gray-500 w-[10%]",
-    },
-    {
-      title: "Joining date",
-      dataIndex: "date",
-      key: "date",
-      className: "text-gray-500 w-[15%]",
     },
     {
       title: "Actions",
@@ -76,6 +98,13 @@ const Suppliers = () => {
           {supplier?.name}
         </>
       ),
+      brand: (
+        <BrandInfo
+          logo={supplier?.brand_info?.brand_logo?.url}
+          name={supplier?.brand_info?.brand_name}
+        />
+      ),
+      date: <DateFormatter dateString={supplier?.createdAt} />,
       email: supplier?.email || "N/A",
       company: supplier?.company_name,
       mobile: (
@@ -84,7 +113,6 @@ const Suppliers = () => {
           <span>{supplier?.mobile2}</span>
         </span>
       ),
-      date: <DateFormatter dateString={supplier?.createdAt} />,
       actions: (
         <button title="Edit" className="text-blue-600 text-xl ml-4">
           edit
@@ -128,13 +156,23 @@ const Suppliers = () => {
 
       <div className="flex items-center justify-between mt-4 mb-10">
         <SearchInput
-          searchValue={searchValue}
-          setSearchValue={setSearchValue}
+          value={searchValue}
+          onChange={(e) => {
+            setSearchValue(e.target.value);
+            setBrandValue("");
+          }}
         />
         <DeleteSupplier
           selectedRowKeys={selectedRowKeys}
           setSelectedRowKeys={setSelectedRowKeys}
         />
+        {user?.role === "super admin" && (
+          <BrandFilter
+            user={user}
+            brandValue={brandValue}
+            setBrandValue={setBrandValue}
+          />
+        )}
       </div>
 
       {/* table */}

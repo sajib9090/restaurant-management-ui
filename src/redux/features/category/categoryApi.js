@@ -3,11 +3,12 @@ import { baseApi } from "../api/baseApi";
 const categoryApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllCategories: builder.query({
-      query: ({ pageValue, limitValue, searchValue } = {}) => {
+      query: ({ pageValue, limitValue, searchValue, brandValue } = {}) => {
         let url = "/categories/get-all";
         const params = new URLSearchParams();
 
         if (searchValue) params.append("search", searchValue);
+        if (brandValue) params.append("brand", brandValue);
         if (limitValue) params.append("limit", limitValue);
         if (pageValue) params.append("page", pageValue);
 

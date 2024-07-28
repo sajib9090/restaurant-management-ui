@@ -3,11 +3,12 @@ import { baseApi } from "../api/baseApi";
 const tableApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllTables: builder.query({
-      query: ({ pageValue, limitValue, searchValue } = {}) => {
+      query: ({ pageValue, brandValue, limitValue, searchValue } = {}) => {
         let url = "/tables/get-all";
         const params = new URLSearchParams();
 
         if (searchValue) params.append("search", searchValue);
+        if (brandValue) params.append("brand", brandValue);
         if (limitValue) params.append("limit", limitValue);
         if (pageValue) params.append("page", pageValue);
 
