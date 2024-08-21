@@ -367,7 +367,11 @@ const Sidebar = ({ setDark, dark, collapsed }) => {
         selectedKeys={selectedKeys}
         defaultOpenKeys={openKeys}
       />
-      <CustomModal setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen}>
+      <CustomModal
+        setIsModalOpen={setIsModalOpen}
+        isModalOpen={isModalOpen}
+        closeSymbolFalse={true}
+      >
         <AddMember setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
       </CustomModal>
     </>

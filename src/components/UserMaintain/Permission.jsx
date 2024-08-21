@@ -4,12 +4,21 @@ import CustomModal from "../Modal/Modal";
 
 const Permission = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [checkedItems, setCheckedItems] = useState([]);
+
+  const alreadyPermitted = [
+    "viewSellReport",
+    "viewSellHistory",
+    "addNewTable",
+    "addNewMember",
+  ];
+
+  const [checkedItems, setCheckedItems] = useState(alreadyPermitted);
+
   const handleCheckboxChange = (event, item) => {
     const { checked } = event.target;
     setCheckedItems((prev) => {
       if (checked) {
-        return [...prev, item];
+        return [...new Set([...prev, item])];
       } else {
         return prev.filter((i) => i !== item);
       }
@@ -29,7 +38,7 @@ const Permission = () => {
         closeSymbolFalse={true}
         width={650}
       >
-        <form className="bg-gray-100 p-12 rounded">
+        <form className="bg-gray-100 px-12 pt-12 pb-2 rounded">
           <div className="border-b border-gray-300 my-4">
             <label className="block text-gray-800 text-xl font-bold mb-2">
               Sell Access

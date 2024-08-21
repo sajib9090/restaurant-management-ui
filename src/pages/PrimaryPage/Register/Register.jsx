@@ -1,5 +1,5 @@
 import Lottie from "lottie-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import restaurant from "../../../assets/animation/Animation - 1716694632912.json";
 import { useState } from "react";
 import { EyeFilled, EyeInvisibleFilled } from "@ant-design/icons";
@@ -8,9 +8,9 @@ import { useRegisterMutation } from "../../../redux/features/auth/authApi";
 import useGreetings from "../../../components/Greetings/Greetings";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     brand_name: "",
@@ -21,7 +21,6 @@ const Register = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setSuccessMessage("");
     setFormData({
       ...formData,
       [name]: value,
@@ -73,13 +72,12 @@ const Register = () => {
     };
     try {
       const res = await register(data).unwrap();
-      if (res.success) {
+      if (res?.success) {
+        navigate(`/otp-check?otp=${res?.data}`);
         setErrorMessage("");
-        setSuccessMessage(res.message);
       }
     } catch (error) {
       setErrorMessage("Registration failed: " + error?.data?.message);
-      setSuccessMessage("");
     }
   };
   const { currentDateTime, greeting } = useGreetings();
@@ -98,14 +96,6 @@ const Register = () => {
               role="alert"
             >
               <span className="block sm:inline">{errorMessage}</span>
-            </div>
-          )}
-          {successMessage && (
-            <div
-              className="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
-              role="alert"
-            >
-              <span className="block sm:inline">{successMessage}</span>
             </div>
           )}
           <form onSubmit={handleRegister}>

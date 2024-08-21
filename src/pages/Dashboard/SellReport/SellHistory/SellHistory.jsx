@@ -5,12 +5,16 @@ import TitleComponent from "../../../../components/TitleComponent/TitleComponent
 import { useLocation } from "react-router-dom";
 import LocationPath from "../../../../components/LocationPath/LocationPath";
 import IndividualLoading from "../../../../components/Loading/IndividualLoading/IndividualLoading";
+import BrandFilter from "../../../../components/Filter/BrandFilter";
+import { useSelector } from "react-redux";
+import { currentUser } from "../../../../redux/features/auth/authSlice";
 
 const SellHistory = () => {
+  const user = useSelector(currentUser);
   const location = useLocation();
-
   const [selectedDate, setSelectedDate] = useState(null);
   const [daysInMonth, setDaysInMonth] = useState(null);
+  const [brandValue, setBrandValue] = useState("");
 
   const handleDateChange = (_, dateString) => {
     setSelectedDate(dateString);
@@ -26,7 +30,7 @@ const SellHistory = () => {
   };
 
   const { data, isLoading } = useGetAllSellAlsoDateFilterQuery(
-    { month: selectedDate },
+    { month: selectedDate, brandValue: brandValue },
     { skip: !selectedDate }
   );
 
@@ -186,6 +190,15 @@ const SellHistory = () => {
         <>
           {data != undefined && (
             <>
+              {user?.role === "super admin" && (
+                <div className="flex justify-end my-8">
+                  <BrandFilter
+                    user={user}
+                    brandValue={brandValue}
+                    setBrandValue={setBrandValue}
+                  />
+                </div>
+              )}
               {data?.data_found == 0 ? (
                 "Nothing found"
               ) : (

@@ -69,23 +69,28 @@ const Login = () => {
 
     try {
       const res = await login(data).unwrap();
-      const token = res?.accessToken;
-      const decoded = jwtDecode(token);
 
-      const user = {
-        user: decoded,
-        token: token,
-      };
+      if (res?.id) {
+        navigate(`/otp-check?otp=${res?.id}`);
+      } else {
+        const token = res?.accessToken;
+        const decoded = jwtDecode(token);
 
-      dispatch(setUser(user));
+        const user = {
+          user: decoded,
+          token: token,
+        };
 
-      try {
-        const userInfoRes = await fetchCurrentUser().unwrap();
-        dispatch(setUserInfo(userInfoRes?.data));
-        navigate("/user");
-      } catch (error) {
-        dispatch(logout());
-        toast.error("Failed to fetch user info");
+        dispatch(setUser(user));
+
+        try {
+          const userInfoRes = await fetchCurrentUser().unwrap();
+          dispatch(setUserInfo(userInfoRes?.data));
+          navigate("/user");
+        } catch (error) {
+          dispatch(logout());
+          toast.error("Failed to fetch user info");
+        }
       }
     } catch (error) {
       setErrorMessage("Login failed: " + error?.data?.message);

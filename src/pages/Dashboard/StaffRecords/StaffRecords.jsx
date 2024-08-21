@@ -13,6 +13,7 @@ import SearchInput from "../../../components/SearchInput/SearchInput";
 import BrandFilter from "../../../components/Filter/BrandFilter";
 import { useSelector } from "react-redux";
 import { currentUser } from "../../../redux/features/auth/authSlice";
+import StatisticsCard from "../../../components/StatisticsCard/StatisticsCard";
 
 const StaffRecords = () => {
   const user = useSelector(currentUser);
@@ -81,6 +82,12 @@ const StaffRecords = () => {
       <TitleComponent
         title={`${LocationPath(location)}-(${staffs?.data_found || 0})`}
       />
+      <StatisticsCard
+        bg={"bg-blue-100"}
+        title={"Total Staff Found"}
+        value={staffs?.data_found}
+      />
+
       <div className="flex justify-between">
         <AddStaff setSelectedRowKeys={setSelectedRowKeys} />
         <Link

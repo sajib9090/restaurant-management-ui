@@ -10,6 +10,7 @@ import ErrorPage from "../pages/Error/Error";
 import LoadingSpinner from "../components/Loading/LoadingSpinner/LoadingSpinner";
 const Login = lazy(() => import("../pages/PrimaryPage/Login/Login"));
 const Register = lazy(() => import("../pages/PrimaryPage/Register/Register"));
+const OTP = lazy(() => import("../pages/PrimaryPage/OTP/OTP"));
 const Sell = lazy(() => import("../pages/Sell/Sell"));
 const DailySellReport = lazy(() =>
   import("../pages/Dashboard/SellReport/DailySellReport/DailySellReport")
@@ -17,9 +18,6 @@ const DailySellReport = lazy(() =>
 const PrimaryHome = lazy(() => import("../pages/PrimaryPage/Home/Home"));
 const About = lazy(() => import("../pages/PrimaryPage/About/About"));
 const Services = lazy(() => import("../pages/PrimaryPage/Services/Services"));
-const ExpiredCredentials = lazy(() =>
-  import("../pages/PrimaryPage/ExpiredCredentials/ExpiredCredentials")
-);
 const Profile = lazy(() => import("../pages/Profile/Profile"));
 const ReportBugs = lazy(() => import("../pages/ReportBugs/ReportBugs"));
 const SelectOrder = lazy(() => import("../pages/Sell/SelectOrder/SelectOrder"));
@@ -115,10 +113,10 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "/expired-credentials",
+        path: "/otp-check?",
         element: (
           <Suspense fallback={<LoadingSpinner />}>
-            <ExpiredCredentials />
+            <OTP />
           </Suspense>
         ),
       },
